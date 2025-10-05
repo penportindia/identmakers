@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Create New Record - Modern UI</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<style>
+/* Base Styles */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Poppins', sans-serif; 
+}
+:root {
+    --primary-color: #3b82f6; /* Blue */
+    --primary-dark: #2563eb;
+    --background-color: #f4f7f9; /* Light background */
+    --card-background: #ffffff;
+    --text-color: #1f2937; /* Dark text */
+    --light-text: #6b7280;
+    --border-color: #d1d5db;
+    --secondary-btn: #6b7280;
+    --secondary-btn-hover: #4b5563;
+}
+
+body { 
+    background: var(--background-color); 
+    color: var(--text-color); 
+    min-height: 100vh; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 20px;
+}
+.stage1-container { 
+    width: 100%; 
+    max-width: 1100px; 
+}
+.app-container { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 30px; 
+}
+
+/* Card Styling */
+.card { 
+    background: var(--card-background); 
+    border-radius: 18px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+    padding: 35px; 
+    animation: fadeIn 0.5s ease-out; 
+    border: 1px solid #e5e7eb; 
+}
+.card-title { 
+    font-size: 24px; 
+    font-weight: 700; 
+    margin-bottom: 8px; 
+    color: var(--primary-dark); 
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.subtitle { 
+    font-size: 15px; 
+    color: var(--light-text); 
+    margin-bottom: 30px; 
+}
+
+/* --- Selection Block Specific Styles (Step 1) --- */
+.select-group { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px; 
+    margin-bottom: 30px;
+}
+
+.selection-block {
+    background: #f8faff; 
+    border: 2px solid #e0e7ff; 
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.selection-block:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+    transform: translateY(-2px);
+}
+
+.selection-block.active {
+    border-color: var(--primary-dark);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    background: #eef4ff;
+}
+
+.selection-block label { 
+    font-size: 16px; 
+    font-weight: 700; 
+    color: var(--primary-dark); 
+    margin-bottom: 5px; 
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#nextStepBtn {
+    width: 100%; 
+    max-width: 300px; 
+    margin: 0 auto; 
+    display: flex;
+}
+/* --- End Selection Block Styles --- */
+
+
+/* Custom Select2 Styling */
+.select2-container--default .select2-selection--single { 
+    height: 48px; 
+    border: 1px solid var(--border-color); 
+    border-radius: 10px; 
+    padding: 10px 15px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 28px;
+    padding-left: 0;
+}
+.select2-container--default.select2-container--focus .select2-selection--single,
+.select2-container--default:hover .select2-selection--single {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); 
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #6b7280 transparent transparent transparent !important;
+}
+
+/* Button Styling */
+button { 
+    background: var(--primary-color); 
+    color: var(--card-background); 
+    font-weight: 600; 
+    border: none; 
+    padding: 12px 20px; 
+    border-radius: 10px; 
+    cursor: pointer; 
+    transition: background 0.3s ease, transform 0.1s ease; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+button:disabled { 
+    background: #a5b4fc; 
+    cursor: not-allowed; 
+}
+button:hover:not(:disabled) { 
+    background: var(--primary-dark);
+    transform: translateY(-1px); 
+}
+.btn-secondary { 
+    background: var(--secondary-btn); 
+}
+.btn-secondary:hover:not(:disabled) { 
+    background: var(--secondary-btn-hover); 
+}
+
+/* Layout Grid (Step 2) */
+.card-content-grid { 
+    display: grid; 
+    grid-template-columns: 3fr 1.5fr; 
+    gap: 40px; 
+}
+.form-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+}
+
+/* Input Fields (Step 2) */
+.form-group { display: flex; flex-direction: column; }
+.form-group label { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--text-color); display: block; }
+.form-group input, .form-group select, .form-group textarea { 
+    border: 1px solid var(--border-color); 
+    border-radius: 8px; 
+    padding: 12px 15px; 
+    font-size: 15px; 
+    outline: none; 
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
+    border-color: var(--primary-color); 
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+textarea { 
+    resize: vertical; 
+    min-height: 100px;
+}
+.action-buttons { 
+    display: flex; 
+    gap: 15px; 
+    margin-top: 30px; 
+}
+
+/* Progress Bar (Step 2) */
+.progress-bar-container { 
+    width: 100%; 
+    height: 8px; 
+    background: #e5e7eb; 
+    border-radius: 4px; 
+    margin-top: 25px; 
+    overflow: hidden; 
+}
+#uploadProgressBar { 
+    height: 100%; 
+    width: 0%; 
+    background: var(--primary-color); 
+    border-radius: 4px; 
+    transition: width 0.5s ease; 
+}
+
+/* Photo Upload (Step 2) */
+.photo-upload-section { 
+    background: #f9fbfc; 
+    border: 2px dashed #a5b4fc; 
+    border-radius: 15px; 
+    padding: 30px; 
+    text-align: center; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 15px; 
+}
+#photo-preview { 
+    width: 100%; 
+    height: 260px; 
+    border-radius: 10px; 
+    border: 3px solid #e0e7ff; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    background: var(--card-background); 
+    overflow: hidden; 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; 
+    flex-direction: column;
+    gap: 10px;
+}
+#photo-preview:hover { 
+    border-color: var(--primary-color); 
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+#photo-preview img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+.placeholder-text { 
+    color: var(--light-text); 
+    font-weight: 500; 
+    font-size: 15px; 
+    text-align: center; 
+}
+.placeholder-text .fa-4x {
+    color: #cbd5e1;
+    margin-bottom: 10px;
+}
+.photo-upload-section small { 
+    color: var(--light-text); 
+    font-size: 13px; 
+}
+#currentSchoolName, #currentEntryType {
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) { 
+    .card-content-grid { 
+        grid-template-columns: 1fr; 
+    } 
+    .form-grid { 
+        grid-template-columns: 1fr; 
+    } 
+    #photo-preview { 
+        height: 220px; 
+    } 
+}
+@media (max-width: 768px) { 
+    .select-group { 
+        grid-template-columns: 1fr;
+    } 
+}
+@media (max-width: 600px) {
+    .card {
+        padding: 25px;
+    }
+    .card-title {
+        font-size: 20px;
+    }
+    .action-buttons {
+        flex-direction: column;
+    }
+}
+
+/* Keyframe Animation */
+@keyframes fadeIn { 
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    } 
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    } 
+}
+</style>
+</head>
+
+<body>
+<div class="stage1-container" id="stage1Wrapper">
+    <div class="app-container">
+        
+        <div class="card" id="selectionCard">
+            <h3 class="card-title"><i class="fas fa-rocket"></i> Start New Record</h3>
+            <p class="subtitle">Select your institution and the record type to begin the data entry process.</p>
+            
+            <div class="select-group">
+                
+                <div class="selection-block" id="schoolSelectBlock">
+                    <label for="schoolSelect"><i class="fas fa-university"></i> Select Institution</label>
+                    <select id="schoolSelect" style="width: 100%;" required></select>
+                </div>
+                
+                <div class="selection-block" id="entryTypeBlock">
+                    <label for="entryType"><i class="fas fa-id-card-alt"></i> Select Record Type</label>
+                    <select id="entryType" style="width: 100%;" required>
+                        <option value="">-- Select Type --</option>
+                        <option value="student">Student Record</option>
+                        <option value="staff">Staff Record</option>
+                    </select>
+                </div>
+                
+            </div>
+
+            <button id="nextStepBtn" disabled style="height: 48px;">
+                <i class="fas fa-arrow-circle-right"></i> PROCEED TO DETAILS
+            </button>
+        </div>
+
+        <div class="card" id="dataCard" style="display: none;">
+            <div class="card-content-grid">
+                
+                <div class="form-section">
+                    <h3 class="card-title"><i class="fas fa-pencil-alt"></i> Enter Details</h3>
+                    <p class="subtitle">
+                        Creating ID for: <span id="currentSchoolName">...</span> (<span id="currentEntryType">...</span>)
+                    </p>
+                    
+                    <div class="form-grid" id="formFields">
+                        </div>
+                    
+                    <div class="action-buttons">
+                        <button id="backToSelectionBtn" class="btn-secondary"><i class="fas fa-arrow-left"></i> Change Selection</button>
+                        <button id="submitSingle"><i class="fas fa-save"></i> Save & Complete</button>
+                    </div>
+                    
+                    <div class="progress-bar-container">
+                        <div id="uploadProgressBar"></div>
+                    </div>
+                </div>
+
+                <div class="photo-upload-section">
+                    <h3 class="card-title" style="color: var(--text-color); margin-bottom: 25px;"><i class="fas fa-camera-retro"></i> Profile Photo</h3>
+                    <label for="photoFile" id="photo-preview">
+                        <span class="placeholder-text">
+                            <i class="fas fa-cloud-upload-alt fa-4x"></i><br>
+                            Click to Upload Image
+                            <small style="display: block; margin-top: 5px;">(JPEG/PNG, Max 30KB Recommended)</small>
+                        </span>
+                    </label>
+                    <input type="file" id="photoFile" accept="image/*" style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+
+<script type="module" src="Script.js"></script>
+</body>
+</html>

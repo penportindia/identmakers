@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>School Dashboard</title>
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-inter">
+
+  <!-- Top Stats Section -->
+  <section class="top-stats grid grid-cols-2 md:grid-cols-4 gap-6 p-6">
+    <div class="stat-card card-hover">
+      <i class="ri-graduation-cap-line stat-icon text-indigo-600"></i>
+      <div>
+        <h4>Students</h4>
+        <span id="studentCount">0</span>
+      </div>
+    </div>
+    <div class="stat-card card-hover">
+      <i class="ri-user-star-line stat-icon text-pink-600"></i>
+      <div>
+        <h4>Staff</h4>
+        <span id="staffCount">0</span>
+      </div>
+    </div>
+    <div class="stat-card card-hover">
+      <i class="ri-pie-chart-2-line stat-icon text-green-600"></i>
+      <div>
+        <h4>Total Enrollment</h4>
+        <span id="totalEnrollment">0</span>
+      </div>
+    </div>
+    <div class="stat-card card-hover">
+      <i class="ri-community-line stat-icon text-orange-600"></i>
+      <div>
+        <h4>Schools</h4>
+        <span id="uniqueSchools">0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Row -->
+  <section class="main-row flex flex-col md:flex-row gap-6 p-6">
+
+    <!-- Filters Sidebar -->
+    <aside class="filters bg-white rounded-2xl shadow card-hover w-full md:w-1/4 p-5">
+      <div class="header flex items-center gap-2 mb-4">
+        <i class="ri-filter-3-line text-indigo-600"></i>
+        <h3>Filters</h3>
+      </div>
+      <div class="search mb-4">
+        <div class="relative">
+          <i class="ri-search-line absolute left-3 top-3 text-gray-400"></i>
+          <input type="text" id="searchBox" placeholder="Search school..." 
+                class="pl-10 w-full rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 p-2">
+        </div>
+      </div>
+      <div class="sort">
+        <label for="sortType">Sort By</label>
+        <select id="sortType" 
+                class="w-full mt-1 rounded-xl border-gray-200 p-2 focus:ring-2 focus:ring-indigo-500">
+          <option value="az">A → Z</option>
+          <option value="za">Z → A</option>
+          <option value="high">Highest Enrollment</option>
+          <option value="low">Lowest Enrollment</option>
+        </select>
+      </div>
+
+      <!-- Done Button -->
+      <div class="mt-6 flex justify-end">
+        <button onclick="window.location.href='https://penportindia.github.io/lak/Pages/Report/index.html'" 
+                class="flex items-center gap-2 px-4 py-2 
+                      rounded-md 
+                      bg-gradient-to-r from-lime-400 to-emerald-600 
+                      text-white font-semibold text-sm tracking-wide
+                      shadow-md hover:shadow-emerald-500/40
+                      hover:from-lime-500 hover:to-emerald-700
+                      transition-all duration-300 ease-out hover:scale-105">
+          <i class="ri-check-double-line text-base"></i>
+          Done
+        </button>
+      </div>
+    </aside>
+
+
+    <!-- Date-wise Report -->
+    <div class="report bg-white rounded-2xl shadow card-hover flex-1 p-5">
+      <div class="report-header flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div class="online-info flex items-center gap-3 flex-wrap">
+          <div id="onlineSchoolsCount" class="flex items-center gap-2">
+            <i class="ri-user-line text-green-600"></i>
+            <span class="font-semibold">0</span>
+            <span class="w-2 h-2 rounded-full bg-green-500 blink"></span>
+          </div>
+          <div id="onlineSchoolsList" class="flex flex-wrap gap-2"></div>
+        </div>
+        <h2 class="text-lg font-semibold flex items-center gap-2 text-indigo-600">
+          <i class="ri-calendar-event-line"></i>
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="dateWiseList"></div>
+    </div>
+  </section>
+
+  <!-- School List -->
+  <section class="school-list p-6">
+    <h2 class="text-lg font-semibold mb-4 flex items-center gap-2 text-indigo-600">
+      <i class="ri-building-4-line"></i>
+      School List
+    </h2>
+    <div id="schoolList" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer bg-gray-100 border-t p-6 text-center mt-6">
+    <div class="flex justify-center items-center gap-2 text-gray-600">
+      <i class="ri-shield-check-line"></i>
+      Designed & Developed 
+      <a href="https://penportindia.github.io/penport/" target="_blank" class="text-indigo-600 font-medium hover:underline">
+        Penport India
+      </a>
+    </div>
+    <p class="text-sm text-gray-500 mt-1">Simplifying Complexity Through Code</p>
+  </footer>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

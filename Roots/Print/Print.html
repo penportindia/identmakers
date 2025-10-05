@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Pro-ID Generator Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Fonts & Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet" />
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- Page 1: Data Hub -->
+    <section id="page-1" class="app-section active">
+        <header class="platform-header">
+            <h1 class="platform-title">Print Junction</h1>
+            <div class="header-status">
+                <span data-lucide="database" class="status-icon"></span>
+                <span class="status-text">Data Source Connected</span>
+            </div>
+        </header>
+
+        <div class="main-layout-grid">
+            <!-- Control Panel -->
+            <aside class="control-panel">
+                <h2 class="panel-title">Filter Records</h2>
+
+                <div class="filter-group">
+                    <label for="schoolFilter">School Name</label>
+                    <select id="schoolFilter" class="modern-select">
+                        <option value="">Select School</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="schoolIDSelect">School ID</label>
+                    <select id="schoolIDSelect" class="modern-select">
+                        <option value="">Select School ID</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="dataTypeSelect">ID Type</label>
+                    <select id="dataTypeSelect" class="modern-select">
+                        <option value="">Select ID Type</option>
+                        <option value="STUDENT">Students</option>
+                        <option value="STAFF">Staff</option>
+                    </select>
+                </div>
+
+                <div class="summary-box">
+                    <div class="summary-item">
+                        <span data-lucide="users" class="summary-icon"></span>
+                        <div class="summary-details">
+                            <div class="summary-label"></div>
+                            <div id="recordCount" class="summary-value">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons-stack">
+                    <button id="resetBtn" class="action-btn secondary-style">
+                        <i data-lucide="rotate-ccw" class="icon-sm"></i>
+                        Reset Filters
+                    </button>
+
+                    <button id="generateBtn" class="action-btn primary-style">
+                        <i data-lucide="scan-face" class="icon-sm"></i>
+                        Generate IDs
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Data Display Area -->
+            <div class="data-display-area">
+                <div class="data-table-container">
+                    <div class="table-header-controls">
+                        <h3 class="data-title">Available Data</h3>
+                        <button id="columnSettingBtn" class="action-btn tertiary-style">
+                            <i data-lucide="settings-2" class="icon-sm"></i>
+                            Column Settings
+                        </button>
+                    </div>
+
+                    <div class="table-wrapper-advanced">
+                        <table id="data-table">
+                            <thead id="tableHead"></thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page 2: Card Preview & Render -->
+    <section id="page-2" class="app-section">
+        <header class="platform-header">
+            <h1 class="platform-title">Card Render & Preview</h1>
+            <div id="goToBatchBtn" class="header-status action-link">
+                <span data-lucide="package-open" class="status-icon"></span>
+                <span class="status-text">Batch Hub</span>
+            </div>
+        </header>
+
+        <div class="render-controls-bar">
+            <button id="goToDataBtn" class="action-btn secondary-style">
+                <i data-lucide="arrow-left-circle" class="icon-sm"></i>
+                Back to Data Hub
+            </button>
+
+            <div class="control-actions-right">
+                <label for="templateUpload" class="action-btn upload-style">
+                    <i data-lucide="upload-cloud" class="icon-sm"></i>
+                    Upload Template
+                </label>
+                <input type="file" id="templateUpload" accept=".json" hidden />
+
+                <button id="renderBtn" class="action-btn primary-style">
+                    <i data-lucide="rocket" class="icon-sm"></i>
+                    Render Cards
+                </button>
+
+                <button id="printBtn" class="action-btn print-style">
+                    <i data-lucide="printer" class="icon-sm"></i>
+                    Print Current Batch
+                </button>
+            </div>
+        </div>
+
+        <div class="card-preview-area">
+            <h3 class="preview-title">Generated ID Previews</h3>
+            <div class="slides-wrapper" id="slidesWrapper"></div>
+        </div>
+    </section>
+
+    <!-- Page 3: Batch Management Hub -->
+    <section id="page-3" class="app-section">
+        <header class="platform-header">
+            <h1 class="platform-title">Batch Management Hub</h1>
+            <div id="backToRendererBtn" class="header-status action-link">
+                <span data-lucide="arrow-left-circle" class="status-icon"></span>
+                <span class="status-text">Back to Renderer</span>
+            </div>
+        </header>
+
+        <div class="batch-hub-content">
+            <h2 class="panel-title">Batch Actions</h2>
+            <div id="page-3-controls" class="batch-controls"></div>
+        </div>
+    </section>
+
+    <!-- Crop Modal -->
+    <div id="cropContainer" class="crop-modal-overlay">
+        <div class="crop-modal-content">
+            <h3 class="crop-modal-title">Crop Profile Image</h3>
+            <img id="cropImage" class="crop-image-preview" alt="Crop Preview" />
+
+            <div class="modal-buttons">
+                <button id="cropConfirm" class="action-btn primary-style">Crop & Save</button>
+                <button id="cropCancel" class="action-btn secondary-style">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="Data.js"></script>
+    <script type="module" src="Render.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Template</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0b0f16" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg: #0b0f16;            /* app background */
+  --panel: #121826;         /* panels */
+  --panel-2: #0f1522;       /* deeper panel */
+  --stroke: #1f2a3d;        /* borders */
+  --muted: #94a3b8;         /* label text */
+  --text: #e5e7eb;          /* main text */
+  --title: #f8fafc;         /* headings */
+  --primary: #3b82f6;       /* neon blue */
+  --primary-2:#60a5fa;
+  --accent: #22d3ee;        /* cyan hint */
+  --danger: #f43f5e;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow-1: 0 10px 30px rgba(0,0,0,.45);
+  --shadow-2: 0 8px 18px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:"Inter",system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:
+    radial-gradient(1200px 800px at 20% -10%, rgba(59,130,246,.12), transparent 60%),
+    radial-gradient(1200px 800px at 120% 20%, rgba(34,211,238,.10), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+}
+
+/* ───────── App Bar (top) ───────── */
+.appbar{
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  background: linear-gradient(180deg, #0d1320, #0b0f16);
+  border-bottom:1px solid var(--stroke);
+  position:sticky; top:0; z-index:50;
+  backdrop-filter: saturate(130%) blur(6px);
+}
+.brand{
+  display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px;color:var(--title)
+}
+.brand .dot{
+  width:12px;height:12px;border-radius:50%;
+  background: radial-gradient(60% 60% at 40% 30%, var(--accent), var(--primary));
+  box-shadow:0 0 14px rgba(59,130,246,.85), 0 0 24px rgba(34,211,238,.45);
+}
+.app-actions{display:flex;gap:8px;align-items:center}
+.app-actions .pill{
+  height:32px; padding:0 12px;border:1px solid var(--stroke);
+  border-radius:999px; display:inline-flex; align-items:center; gap:8px;
+  background:linear-gradient(180deg, #0e1626, #0b111d);
+  color:var(--muted); font-size:12.5px; cursor:default;
+}
+
+/* ───────── Shell Layout ───────── */
+.shell{
+  display:grid;
+  grid-template-columns: 280px 1fr 340px;
+  gap:16px;
+  padding:16px;
+  height: calc(100vh - 56px);
+}
+
+/* ───────── Left Sidebar: Tools ───────── */
+.sidebar{
+  background: linear-gradient(180deg, #121a2a, #0f1624);
+  border:1px solid var(--stroke);
+  border-radius: var(--radius);
+  padding:14px;
+  box-shadow: var(--shadow-2);
+  display:flex; flex-direction:column; gap:12px;
+}
+.sidebar h2{
+  font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.14em;
+  color:var(--muted); opacity:.9; margin:2px 4px 6px;
+}
+
+/* Toolbar buttons (vertical like Photoshop) */
+.toolgrid{
+  display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-bottom:8px;
+}
+.toolbtn{
+  border:1px solid var(--stroke);
+  border-radius:12px;
+  background: linear-gradient(180deg, #121a2a, #0f1524);
+  padding:10px 12px; font-size:12.5px; color:var(--text);
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.25);
+  transition: transform .16s ease, box-shadow .2s ease, border-color .2s ease, filter .2s ease;
+}
+.toolbtn:hover{ transform: translateY(-1px); border-color:#2b3d57; box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.toolbtn:active{ transform: translateY(0); filter: brightness(0.98) }
+.toolbtn.alt{ color:#e2e8f0; background:linear-gradient(180deg, #141c2e, #101727)}
+.toolbtn .ic{width:14px;height:14px;display:inline-block;filter: drop-shadow(0 0 1px rgba(0,0,0,.2))}
+
+/* Form Cards */
+.card{
+  background: linear-gradient(180deg, #111827, #0e1626);
+  border:1px solid var(--stroke);
+  border-radius: var(--radius);
+  padding:14px;
+  box-shadow: var(--shadow-1);
+}
+.group{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.label{font-size:12.5px;color:var(--muted)}
+.input, .select, .file{
+  width:100%; height:38px;
+  background:#0c1424;
+  color:var(--text);
+  border:1px solid var(--stroke);
+  border-radius:12px;
+  padding:0 12px; font-size:13.5px;
+  outline:none; transition:border-color .2s, box-shadow .2s, background .2s;
+}
+.input:focus, .select:focus, .file:focus{
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(59,130,246,.18);
+  background:#0b1322;
+}
+
+/* Primary CTA */
+.btn{
+  height:42px; width:100%;
+  border:none; border-radius:12px;
+  background: linear-gradient(180deg, #2563eb, #1e40af);
+  color: white; font-weight:600; letter-spacing:.2px;
+  box-shadow:0 12px 28px rgba(37,99,235,.28), inset 0 1px 0 rgba(255,255,255,.08);
+  cursor:pointer; transition: transform .14s ease, box-shadow .2s ease, filter .2s ease;
+}
+.btn:hover{ transform: translateY(-1px); filter:saturate(1.1); box-shadow:0 16px 36px rgba(37,99,235,.36)}
+.btn:active{ transform:none; filter:saturate(1); }
+
+/* ───────── Center: Canvas / Previews ───────── */
+.canvas{
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border:1px solid var(--stroke);
+  border-radius: var(--radius);
+  padding:16px;
+  box-shadow: var(--shadow-1);
+  display:flex; flex-direction:column; gap:14px; overflow:hidden;
+}
+.canvas-top{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:6px 8px 2px 8px; border-bottom:1px dashed rgba(148,163,184,.18);
+}
+.canvas-title{font-size:13px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.canvas-zoom{display:flex; gap:8px; align-items:center}
+.zoomchip{
+  border:1px solid var(--stroke);
+  background:#0f1626; color:#cbd5e1; border-radius:999px;
+  height:30px; padding:0 10px; font-size:12px; display:flex; align-items:center; gap:6px; cursor:pointer
+}
+.stage{
+  display:flex; gap:18px; align-items:flex-start;
+  padding:14px; overflow:auto; height:100%;
+}
+
+/* Preview cards */
+.preview-box{
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  padding:12px 12px 14px;
+  background: linear-gradient(180deg, #0e1626, #0b121f);
+  border:1px solid var(--stroke); border-radius:16px;
+  box-shadow:0 8px 26px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.02);
+  min-width: 320px;
+}
+.preview-box h4{font-size:12.5px; color:#cbd5e1; text-transform:uppercase; letter-spacing:.12em}
+
+/* Card container (drop zone) */
+.card-container{
+  position:relative;
+  width:300px;
+  aspect-ratio: 2.125 / 3.375; /* CR80 */
+  border-radius:18px;
+  background: #101827;
+  border:1px solid #243347;
+  overflow:hidden;
+  transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.03),
+    0 14px 40px rgba(0,0,0,.45);
+}
+.card-container:hover{
+  transform: translateY(-1px);
+  border-color:#2f4566;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04), 0 18px 54px rgba(0,0,0,.55);
+}
+
+/* items inside card (your JS controls positions) */
+.card-item{ position:absolute; color:#e5e7eb; cursor:grab; user-select:none; }
+.card-item:active{ cursor:grabbing; }
+
+/* ───────── Right: Properties / Field List ───────── */
+.prop{
+  background: linear-gradient(180deg, #111827, #0e1626);
+  border:1px solid var(--stroke);
+  border-radius: var(--radius);
+  padding:14px;
+  box-shadow: var(--shadow-2);
+  display:flex; flex-direction:column; gap:12px;
+  overflow:auto;
+}
+.prop h3{
+  font-size:12.8px; font-weight:700; text-transform:uppercase; letter-spacing:.14em;
+  color:var(--muted); margin:2px 2px 0;
+}
+
+/* individual field card */
+.fieldcard{
+  border:1px solid var(--stroke);
+  border-radius:12px;
+  padding:12px;
+  background: linear-gradient(180deg, #0f1626, #0c1424);
+  box-shadow:0 6px 18px rgba(0,0,0,.32);
+  display:flex; flex-direction:column; gap:8px; margin-bottom:10px;
+  transition: border-color .2s ease, transform .12s ease, box-shadow .2s ease;
+}
+.fieldcard:hover{ border-color:#2b3d57; transform:translateY(-1px); box-shadow:0 10px 24px rgba(0,0,0,.38)}
+.row{display:flex; gap:8px; flex-wrap:wrap}
+.row .tiny{flex:1 1 72px}
+.tiny input[type="number"], .tiny input[type="color"], .tiny input[type="text"]{
+  width:100%; height:34px; border-radius:10px; border:1px solid var(--stroke);
+  background:#0b1322; color:var(--text); padding:0 8px; font-size:12.5px; outline:none;
+}
+.tiny input:focus{ border-color:var(--primary); box-shadow:0 0 0 3px rgba(59,130,246,.16)}
+
+/* Utility states */
+.hidden{display:none !important}
+
+/* Scrollbar styling */
+*::-webkit-scrollbar{ width:10px; height:10px }
+*::-webkit-scrollbar-thumb{
+  background: linear-gradient(180deg, #1c2940, #162236);
+  border:1px solid #22324b; border-radius:10px;
+}
+*::-webkit-scrollbar-track{ background:#0b0f16 }
+
+/* Responsive */
+@media (max-width: 1200px){
+  .shell{ grid-template-columns: 260px 1fr 320px }
+}
+@media (max-width: 980px){
+  .shell{ grid-template-columns: 1fr; height:auto }
+  .prop{ order:3 }
+  .sidebar{ order:1 }
+  .canvas{ order:2; min-height:60vh }
+}
+
+/* ───────── Minor Freshness Enhancements (opt‑in, nothing removed) ───────── */
+:focus-visible{ outline: none; box-shadow: 0 0 0 3px rgba(34,211,238,.22) }
+.hr{ height:1px; background: linear-gradient(90deg, transparent, #1f2a3d, transparent); border:0; }
+.preview-box::after{ content:""; position:absolute; inset:-2px; border-radius:18px; pointer-events:none; background: radial-gradient(60% 80% at 50% -10%, rgba(96,165,250,.12), transparent 60%); }
+</style>
+</head>
+<body>
+
+<!-- Top App Bar -->
+<header class="appbar" role="banner">
+  <div class="brand">
+    <span class="dot" aria-hidden="true"></span>
+    Template Builder<span style="opacity:.6;font-weight:600">Pro</span>
+  </div>
+  <div class="app-actions" aria-label="app actions">
+    <div class="pill">Penport India</div>
+  </div>
+</header>
+
+<!-- Shell -->
+<main class="shell" role="main">
+
+  <!-- LEFT: Photoshop-like Tools + Inputs -->
+  <aside class="sidebar" id="leftSidebar" aria-label="tools and inputs">
+    <h2>Tools</h2>
+
+    <div class="toolgrid">
+      <button class="toolbtn" id="selectAll" type="button"><span class="ic">🪄</span>Select All</button>
+      <button class="toolbtn alt" id="clearAll" type="button"><span class="ic">🧹</span>Clear</button>
+      <button class="toolbtn" id="resetBtn" type="button"><span class="ic">♻️</span>Reset</button>
+      <button class="toolbtn" id="downloadBtn" type="button"><span class="ic">⬇️</span>Export</button>
+    </div>
+
+    <div class="card">
+      <div class="group">
+        <label class="label" for="idType">ID Type</label>
+        <select class="select" id="idType">
+          <option value="student">Student</option>
+          <option value="staff">Staff</option>
+        </select>
+      </div>
+
+      <div class="group">
+        <label class="label" for="templateType">Template Type</label>
+        <select class="select" id="templateType">
+          <option value="1">1 Page</option>
+          <option value="2">2 Page</option>
+          <option value="own">Own</option>
+        </select>
+      </div>
+
+
+        <div class="group" style="display:flex; flex-direction:column; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); padding:16px; border-radius:12px; margin-bottom:15px; backdrop-filter:blur(10px); transition:transform 0.2s ease, box-shadow 0.2s ease;">
+            <label class="label" for="frontBg" style="color:#e0e0e0; font-weight:500; font-size:14px; margin-bottom:8px; letter-spacing:0.5px;">Upload Front Background</label>
+            <input class="file" type="file" id="frontBg" accept="image/*" style="padding:8px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:8px; color:#f5f5f5; font-size:14px; cursor:pointer;">
+        </div>
+
+        <div class="group" id="backBgGroup" style="display:flex; flex-direction:column; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); padding:16px; border-radius:12px; margin-bottom:15px; backdrop-filter:blur(10px); transition:transform 0.2s ease, box-shadow 0.2s ease;">
+            <label class="label" for="backBg" style="color:#e0e0e0; font-weight:500; font-size:14px; margin-bottom:8px; letter-spacing:0.5px;">Upload Back Background</label>
+            <input class="file" type="file" id="backBg" accept="image/*" style="padding:8px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:8px; color:#f5f5f5; font-size:14px; cursor:pointer;">
+        </div>
+
+    </div>
+
+  </aside>
+
+  <!-- CENTER: Canvas / Previews -->
+  <section class="canvas" aria-label="canvas and previews">
+    <div class="canvas-top">
+      <div class="canvas-title">Canvas</div>
+      <div class="canvas-zoom">
+        <div class="zoomchip" data-zoom="90" role="button" tabindex="0" aria-label="Zoom out">−</div>
+        <div class="zoomchip" aria-live="polite">100%</div>
+        <div class="zoomchip" data-zoom="110" role="button" tabindex="0" aria-label="Zoom in">+</div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="preview-box" id="frontPreviewBox">
+        <h4>Front Preview</h4>
+        <div class="card-container" id="frontCard"></div>
+      </div>
+
+      <div class="preview-box" id="backPreviewBox">
+        <h4>Back Preview</h4>
+        <div class="card-container" id="backCard"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT: Properties / Field List -->
+  <aside class="prop" aria-label="properties and field list">
+    <h3>Properties</h3>
+    <div id="fieldList">
+      <!-- तुम्हारा JS यहाँ field cards inject करेगा -->
+      <!-- Example (placeholder): -->
+      <!--
+      <div class="fieldcard">
+        <div style="font-weight:600">Full Name</div>
+        <div class="row">
+          <div class="tiny"><input type="number" placeholder="X"></div>
+          <div class="tiny"><input type="number" placeholder="Y"></div>
+          <div class="tiny"><input type="number" placeholder="Size"></div>
+          <div class="tiny"><input type="color" value="#ffffff"></div>
+        </div>
+      </div>
+      -->
+    </div>
+  </aside>
+</main>
+
+<!-- Script (as requested) -->
+<script src="Template.js"></script>
+</body>
+</html>
+

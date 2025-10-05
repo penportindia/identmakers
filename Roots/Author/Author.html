@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Author</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+/* White and Green Theme */
+:root {
+    --primary: #10b981; 
+    --primary-dark: #059669; 
+    --success: #059669; 
+    --danger: #ef4444; 
+    --bg: #f9fafb; 
+    --card: #ffffff; 
+    --text: #1f2937;
+    --text-light: #6b7280;
+    --border-color: #e5e7eb;
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+body {
+    background: var(--bg);
+    color: var(--text);
+    padding: 30px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+.container {
+    width: 100%;
+    max-width: 1000px;
+}
+.card {
+    background: var(--card);
+    padding: 28px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+h1 {
+    color: var(--primary-dark);
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+.controls {
+    display: flex;
+    gap: 10px;
+}
+.btn {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+}
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+.btn-ghost {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border-color);
+}
+.btn-ghost:hover {
+    background: #f1f5f9;
+}
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+}
+.btn-danger:hover {
+    background: #c33;
+}
+.btn.active-role {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary-dark);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+.btn.active-role:hover {
+    background: var(--primary-dark);
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 24px;
+    margin-top: 24px;
+}
+.section {
+    padding: 20px;
+    border-radius: 12px;
+    background: var(--card);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 15px;
+}
+.label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-top: 15px;
+}
+.input, select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-size: 1rem;
+    color: var(--text);
+    background-color: #fcfdfe;
+}
+.input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+.small {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 6px;
+    line-height: 1.4;
+}
+.credit-box {
+    padding: 20px;
+    border-radius: 12px;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    text-align: center;
+    margin-top: 10px;
+}
+.big {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 10px 0;
+    color: var(--primary-dark);
+}
+.status {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+.status-active {
+    background: var(--success);
+    color: #fff;
+}
+.status-deactive {
+    background: var(--danger);
+    color: #fff;
+}
+.row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.col {
+    flex: 1;
+}
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+.alert {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    display: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.alert.success {
+    background: #d1fae5;
+    color: var(--success);
+    border: 1px solid #6ee7b7;
+}
+.alert.error {
+    background: #fee2e2;
+    color: var(--danger);
+    border: 1px solid #fca5a5;
+}
+.role-indicator {
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: #f1f5f9;
+    border: 1px solid var(--border-color);
+    margin-bottom: 24px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.brand {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-light);
+    margin-left: 10px;
+}
+.row-gap {
+    margin-bottom: 10px;
+}
+
+@media(max-width: 880px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .controls {
+        width: 100%;
+        justify-content: space-around;
+        margin-top: 10px;
+    }
+    .btn-ghost, .btn.active-role {
+        flex: 1;
+    }
+    h1 {
+        font-size: 1.4rem;
+    }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <h1><i class="fas fa-user-cog"></i> Admin Control Panel <span class="brand">| Penport India</span></h1>
+            <div class="controls">
+                <button id="btnManageDev" class="btn btn-ghost"><i class="fas fa-user-tie"></i> Manage Developer</button>
+                <button id="btnManageVendor" class="btn btn-ghost"><i class="fas fa-store"></i> Manage Vendor</button>
+            </div>
+        </div>
+
+        <div class="card-grid">
+            <div>
+                <div id="roleIndicator" class="role-indicator">
+                </div>
+                <div class="section" id="setupSection">
+                    <h3 id="setupTitle" style="margin-bottom: 5px; height: 1.25rem;"></h3>
+                    
+                    <label class="label">Name *</label>
+                    <input id="nameInput" class="input" placeholder="Full name" />
+
+                    <label class="label">Email *</label>
+                    <input id="emailInput" class="input" placeholder="email@example.com" />
+
+                    <label class="label">Phone</label>
+                    <input id="phoneInput" class="input" placeholder="+91-XXXXXXXXXX" />
+
+                    <div id="creditsBlock">
+                        <label class="label">Initial Credits</label>
+                        <input id="creditsInput" class="input" type="number" min="0" value="1000" />
+                        <div class="small">For vendor only. Base count will be captured when vendor is created.</div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button id="saveBtn" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+                        <button id="deleteBtn" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
+                    </div>
+
+                    <div id="setupAlert" class="alert"></div>
+                </div>
+            </div>
+
+            <div class="section" id="managementSection">
+                <h3>Vendor Credit Dashboard</h3>
+                <div class="credit-box">
+                    <div class="small">Current Credits</div>
+                    <div id="currentCredits" class="big">--</div>
+                    <div><span id="statusBadge" class="status status-deactive">LOADING...</span></div>
+                    <div class="small" style="margin-top:8px">Base Count: <strong id="baseCount">--</strong></div>
+                    <div class="small">Total Work Done: <strong id="totalWork">--</strong></div>
+                </div>
+
+                <div style="margin-top:20px" id="vendorControls">
+                    <div class="row row-gap">
+                        <input id="addCreditsInput" class="input" type="number" min="1" placeholder="Add credits (amount)" />
+                        <button id="addCreditsBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Add & Reset Base</button>
+                    </div>
+
+                    <div class="row row-gap">
+                        <button id="zeroCreditsBtn" class="btn btn-danger"><i class="fas fa-ban"></i> Set Credits to ZERO</button>
+                        <button id="vendorToggleBtn" class="btn btn-ghost"><i class="fas fa-toggle-on"></i> Toggle Active</button>
+                    </div>
+
+                    <div class="row">
+                        <button id="forceSyncBtn" class="btn btn-ghost" style="flex:1;"><i class="fas fa-sync"></i> Force Refresh</button>
+                        <div style="flex:1" class="small">Data updates automatically. Use this to force a full refresh.</div>
+                    </div>
+                </div>
+
+                <div id="moduleAlert" class="alert"></div>
+            </div>
+        </div> <div style="margin-top:18px" class="small">Notes: Only <strong>one</strong> Developer and <strong>one</strong> Vendor are stored at paths <code>roles/developer</code> and <code>roles/vendor</code>. Vendor credits auto-decrease based on <code>workdone</code> node. Vendor will auto-deactivate when remaining credits &le; 0.</div>
+    </div>
+</div>
+
+<script type="module">
+// Firebase RTDB Imports
+import { firebaseConfig } from "../Database/Database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { 
+    getDatabase, 
+    ref as dbRef, 
+    get, 
+    set, 
+    update, 
+    remove, 
+    onValue, 
+    off 
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+// Firebase Initialization
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+/* UI refs */
+const nameInput = document.getElementById('nameInput');
+const emailInput = document.getElementById('emailInput');
+const phoneInput = document.getElementById('phoneInput');
+const creditsInput = document.getElementById('creditsInput');
+const creditsBlock = document.getElementById('creditsBlock');
+const saveBtn = document.getElementById('saveBtn');
+const deleteBtn = document.getElementById('deleteBtn');
+const setupAlert = document.getElementById('setupAlert');
+
+const currentCreditsEl = document.getElementById('currentCredits');
+const baseCountEl = document.getElementById('baseCount');
+const totalWorkEl = document.getElementById('totalWork');
+const statusBadge = document.getElementById('statusBadge');
+const addCreditsInput = document.getElementById('addCreditsInput');
+const addCreditsBtn = document.getElementById('addCreditsBtn');
+const zeroCreditsBtn = document.getElementById('zeroCreditsBtn');
+const vendorToggleBtn = document.getElementById('vendorToggleBtn');
+const moduleAlert = document.getElementById('moduleAlert');
+const forceSyncBtn = document.getElementById('forceSyncBtn'); 
+
+const btnManageDev = document.getElementById('btnManageDev');
+const btnManageVendor = document.getElementById('btnManageVendor');
+const roleIndicator = document.getElementById('roleIndicator');
+
+/* Global State */
+let currentRole = 'developer';
+let vendorData = null;
+let developerData = null; 
+let totalWorkDone = 0;
+let workdoneListenerActive = false;
+let vendorListenerActive = false;
+
+// Helper: Show UI alerts
+function showAlert(el, txt, kind='success', timeout=3000){
+    el.textContent = txt;
+    el.classList.remove('success','error');
+    el.classList.add(kind);
+    el.style.display = 'block';
+    if(timeout) setTimeout(()=>{ el.style.display='none'; }, timeout);
+}
+function hideAlert(el){ el.style.display='none'; }
+
+// Helper: Calculate total work done
+function calculateWorkdoneCount(workdoneData){
+    if(!workdoneData) return 0;
+    let count = 0;
+    for(const school in workdoneData){
+        const sch = workdoneData[school];
+        if(sch.STAFF) count += Object.keys(sch.STAFF).length;
+        if(sch.STUDENT) count += Object.keys(sch.STUDENT).length;
+    }
+    return count;
+}
+
+/* References for listeners */
+const workdoneRef = dbRef(db, 'workdone');
+const vendorRef = dbRef(db, 'roles/vendor');
+
+/* Real-time listener for workdone node */
+function listenWorkdone(){
+    if(workdoneListenerActive) return;
+    onValue(workdoneRef, snap=>{
+        totalWorkDone = calculateWorkdoneCount(snap.val());
+        totalWorkEl.textContent = totalWorkDone;
+        updateCreditDisplayRealtime();
+    });
+    workdoneListenerActive = true;
+}
+
+/* Real-time listener for vendor data */
+function setupVendorRealtime(){
+    if(vendorListenerActive) return;
+    onValue(vendorRef, snap=>{
+        vendorData = snap.exists() ? snap.val() : null;
+        updateCreditDisplayRealtime();
+        if(currentRole === 'vendor' && vendorData){
+             nameInput.value = vendorData.name || '';
+             emailInput.value = vendorData.email || '';
+             phoneInput.value = vendorData.phone || '';
+             creditsInput.value = vendorData.credits || 0;
+        }
+    });
+    vendorListenerActive = true;
+}
+
+/* Update credit dashboard UI */
+function updateCreditDisplayRealtime(){
+    if(!vendorData){
+        currentCreditsEl.textContent = '--';
+        baseCountEl.textContent = '--';
+        statusBadge.textContent = 'NO VENDOR';
+        statusBadge.className = 'status status-deactive';
+        vendorToggleBtn.textContent = 'Toggle Active';
+        return;
+    }
+    
+    const base = Number(vendorData.baseCount || 0);
+    const credits = Number(vendorData.credits || 0);
+    const used = Math.max(0, totalWorkDone - base);
+    const remaining = credits - used;
+    const remDisplay = Math.max(0, remaining);
+    
+    currentCreditsEl.textContent = remDisplay;
+    baseCountEl.textContent = base;
+    
+    const isActiveFlag = !!vendorData.isActive;
+    vendorToggleBtn.textContent = isActiveFlag ? 'Deactivate' : 'Activate'; 
+
+    if(remaining > 0 && isActiveFlag){
+        statusBadge.textContent = 'ACTIVE';
+        statusBadge.className = 'status status-active';
+    } else {
+        statusBadge.textContent = 'DEACTIVATED';
+        statusBadge.className = 'status status-deactive';
+        
+        // Auto-deactivate if credits run out
+        if(remaining <= 0 && isActiveFlag){
+            update(vendorRef, { isActive: false, updatedAt: new Date().toISOString() })
+                .catch(err => console.error("Auto-deactivation failed:", err));
+        }
+    }
+}
+
+/* Load data into form */
+async function loadRoleData(role){
+    hideAlert(setupAlert);
+    const roleRef = dbRef(db, 'roles/' + role);
+    
+    try{
+        const snap = await get(roleRef);
+        const d = snap.exists() ? snap.val() : {};
+
+        nameInput.value = d.name || '';
+        emailInput.value = d.email || '';
+        phoneInput.value = d.phone || '';
+
+        if(role === 'developer'){
+             developerData = d;
+             creditsInput.value = 1000;
+        } 
+        if(snap.exists()){
+             showAlert(setupAlert, `Loaded existing ${role} data`, 'success', 2000);
+        } else {
+             showAlert(setupAlert, `Ready to create new ${role}`, 'success', 2000);
+        }
+    }catch(err){
+         console.error("Error loading role data:", err);
+         showAlert(setupAlert, `Error loading ${role} data`, 'error', 5000);
+    }
+}
+
+/* Switch between Developer and Vendor views */
+function setRoleView(role){
+    currentRole = role;
+    localStorage.setItem('admin_selected_role', role);
+
+    btnManageDev.classList.remove('active-role');
+    btnManageVendor.classList.remove('active-role');
+    
+    const isVendor = role === 'vendor';
+    
+    if(isVendor){
+        btnManageVendor.classList.add('active-role');
+    } else {
+        btnManageDev.classList.add('active-role');
+    }
+
+    creditsBlock.style.display = isVendor ? 'block' : 'none';
+    document.getElementById('managementSection').style.opacity = isVendor ? '1' : '0.5';
+    document.getElementById('vendorControls').style.pointerEvents = isVendor ? 'auto' : 'none';
+    
+    roleIndicator.innerHTML = isVendor 
+        ? '<i class="fas fa-store"></i> Managing <strong>Vendor</strong>'
+        : '<i class="fas fa-user-tie"></i> Managing <strong>Developer</strong>';
+    
+    document.getElementById('setupTitle').textContent = isVendor ? 'Vendor Details' : 'Developer Details'; 
+
+    loadRoleData(role);
+}
+
+/* Save role (create or update) */
+saveBtn.addEventListener('click', async (e)=>{
+    e.preventDefault();
+    hideAlert(setupAlert);
+    const role = currentRole;
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const phone = phoneInput.value.trim() || 'N/A';
+
+    if(!name || !email){ showAlert(setupAlert, 'Name and Email are required', 'error'); return; }
+    
+    const roleRef = dbRef(db, 'roles/' + role);
+    saveBtn.disabled = true;
+
+    try{
+        const snap = await get(roleRef);
+        const now = new Date().toISOString();
+        let message = '';
+
+        if(!snap.exists()){
+            // Create Logic
+            const payload = { name, email, phone, createdAt: now, updatedAt: now };
+            if(role === 'vendor'){
+                const workSnap = await get(workdoneRef);
+                const base = calculateWorkdoneCount(workSnap.val());
+                const initialCredits = Math.max(0, Number(creditsInput.value) || 0); 
+                payload.credits = initialCredits;
+                payload.baseCount = base;
+                payload.isActive = true;
+            }
+            await set(roleRef, payload);
+            message = 'Created ' + role + ' successfully';
+        } else {
+            // Update Logic
+            const updates = { name, email, phone, updatedAt: now };
+            if(role === 'vendor' && snap.val().credits != Number(creditsInput.value) ){
+                updates.credits = Math.max(0, Number(creditsInput.value) || 0);
+            }
+
+            await update(roleRef, updates);
+            message = 'Updated ' + role + ' successfully';
+        }
+        
+        showAlert(setupAlert, message, 'success', 3000);
+        if(role === 'developer') loadRoleData(role); 
+        
+    }catch(err){
+        console.error(err);
+        showAlert(setupAlert, 'Error: ' + (err.message||'Unknown error occurred'), 'error', 5000);
+    } finally {
+        saveBtn.disabled = false;
+    }
+});
+
+
+/* Delete role node */
+deleteBtn.addEventListener('click', async ()=>{
+    hideAlert(setupAlert);
+    const role = currentRole;
+    const roleRef = dbRef(db, 'roles/' + role);
+
+    const snap = await get(roleRef);
+    if(!snap.exists()){
+        showAlert(setupAlert, `The ${role} does not exist to delete.`, 'error', 3000);
+        return;
+    }
+
+    if(!confirm(`Are you sure you want to permanently delete the ${role.toUpperCase()}? This action cannot be undone.`)) return;
+    
+    deleteBtn.disabled = true;
+
+    try{
+        await remove(roleRef);
+        showAlert(setupAlert, role + ' removed successfully', 'success', 3000);
+        
+        nameInput.value=''; emailInput.value=''; phoneInput.value=''; creditsInput.value=1000;
+        
+        if(role === 'vendor'){ 
+             setRoleView('developer'); 
+        } else {
+             developerData = null;
+             loadRoleData(role); 
+        }
+    }catch(err){
+        console.error(err);
+        showAlert(setupAlert, 'Delete failed: ' + (err.message||err), 'error', 5000);
+    } finally {
+        deleteBtn.disabled = false;
+    }
+});
+
+/* Vendor action: Add Credits & Reset Base */
+addCreditsBtn.addEventListener('click', async ()=>{
+    hideAlert(moduleAlert);
+    if(!vendorData){ showAlert(moduleAlert,'No vendor exists','error'); return; }
+    
+    const amount = Number(addCreditsInput.value);
+    if(!amount || amount <= 0 || !Number.isInteger(amount)){ 
+        showAlert(moduleAlert,'Enter a valid positive integer amount to add','error'); 
+        return; 
+    }
+    
+    if(!confirm('Add ' + amount + ' credits and reset base to current workdone?')) return;
+    
+    addCreditsBtn.disabled = true;
+
+    try{
+        const currentCredits = Number(vendorData.credits || 0);
+        const updates = {
+            credits: currentCredits + amount,
+            baseCount: totalWorkDone,
+            isActive: true,
+            updatedAt: new Date().toISOString()
+        };
+        await update(vendorRef, updates);
+        addCreditsInput.value = '';
+        showAlert(moduleAlert, 'Credits added & base reset successfully', 'success', 3000);
+    }catch(err){
+        console.error(err);
+        showAlert(moduleAlert,'Failed: ' + (err.message||err), 'error', 5000);
+    } finally {
+        addCreditsBtn.disabled = false;
+    }
+});
+
+/* Vendor action: Set Credits to ZERO */
+zeroCreditsBtn.addEventListener('click', async ()=>{
+    hideAlert(moduleAlert);
+    if(!vendorData){ showAlert(moduleAlert,'No vendor exists','error'); return; }
+    
+    if(!confirm('Set vendor credits to ZERO? This will deactivate vendor immediately.')) return;
+    
+    zeroCreditsBtn.disabled = true;
+
+    try{
+        const updates = { credits: 0, updatedAt: new Date().toISOString(), isActive: false };
+        await update(vendorRef, updates);
+        showAlert(moduleAlert, 'Vendor credits set to ZERO and deactivated successfully', 'success', 3500);
+    }catch(err){
+        console.error(err);
+        showAlert(moduleAlert,'Failed: ' + (err.message||err), 'error', 5000);
+    } finally {
+        zeroCreditsBtn.disabled = false;
+    }
+});
+
+/* Vendor action: Toggle Active Status */
+vendorToggleBtn.addEventListener('click', async ()=>{
+    hideAlert(moduleAlert);
+    if(!vendorData){ showAlert(moduleAlert,'No vendor exists','error'); return; }
+    
+    vendorToggleBtn.disabled = true;
+
+    try{
+        const newFlag = !vendorData.isActive;
+        const updates = { isActive: newFlag, updatedAt: new Date().toISOString() };
+        await update(vendorRef, updates);
+        showAlert(moduleAlert, 'Vendor is now ' + (newFlag ? 'ACTIVE' : 'DEACTIVATED') + ' successfully', 'success', 2500);
+    }catch(err){
+        console.error(err);
+        showAlert(moduleAlert,'Toggle failed: ' + (err.message||err), 'error', 5000);
+    } finally {
+        vendorToggleBtn.disabled = false;
+    }
+});
+
+/* Force refresh data (Redundant check but useful for manual sync) */
+forceSyncBtn.addEventListener('click', async ()=>{
+    hideAlert(moduleAlert);
+    forceSyncBtn.disabled = true;
+
+    try{
+        const w = await get(workdoneRef);
+        totalWorkDone = calculateWorkdoneCount(w.val());
+        totalWorkEl.textContent = totalWorkDone;
+        
+        await loadRoleData(currentRole); 
+
+        updateCreditDisplayRealtime(); 
+        
+        showAlert(moduleAlert,'Full data refreshed successfully', 'success', 1500);
+    }catch(err){
+        console.error(err);
+        showAlert(moduleAlert,'Refresh failed: ' + (err.message||err),'error',2000);
+    } finally {
+        forceSyncBtn.disabled = false;
+    }
+});
+
+
+/* Switch view buttons */
+btnManageDev.addEventListener('click', ()=>{ setRoleView('developer'); });
+btnManageVendor.addEventListener('click', ()=>{ setRoleView('vendor'); });
+
+/* Start Application */
+(function init(){
+    listenWorkdone();
+    setupVendorRealtime();
+    
+    const savedRole = localStorage.getItem('admin_selected_role') || 'developer';
+    setRoleView(savedRole);
+})();
+</script>
+</body>
+</html>
