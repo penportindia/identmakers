@@ -1,713 +1,928 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title id="pageTitle">Penport India - ID Card Solution</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="pageTitle">Penport India - ID Card Solution</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 
-<style>
-/* --- Global Variables and Reset for Professional Look --- */
-:root {
-    --primary-color: #0077b6; /* Deep Corporate Blue */
-    --secondary-color: #023e8a; /* Darker Blue */
-    --accent-color: #48cae4; /* Light Blue Accent */
-    --bg-dark: #1e293b; /* Sleek Dark Sidebar (Slate 800) */
-    --bg-light: #f1f5f9; /* Off-White Body Background (Slate 100) */
-    --bg-content: #ffffff; /* White Card/Header Background */
-    --text-dark: #0f172a; /* Slate 900 */
-    --text-muted: #64748b; /* Slate 500 */
-    --credit-low: #ef4444;
-    --credit-high: #22c55e; /* Vibrant Green */
-    --credit-normal: #f97316; /* Orange for normal count */
-    --sidebar-width: 70px;
-    --border-radius-xl: 12px; 
+    <style>
+        :root {
+            --primary-color: #0077b6;
+            --secondary-color: #023e8a;
+            --accent-color: #48cae4;
+            --bg-dark: #1e293b;
+            --bg-light: #f1f5f9;
+            --bg-content: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --credit-low: #ef4444;
+            --credit-high: #22c55e;
+            --credit-normal: #f97316;
+            --sidebar-width: 70px;
+            --border-radius-xl: 12px;
 
-    /* LOGO AND IMAGE URLS (UPDATE THESE) */
-    --COMPANY_LOGO_URL: url('https://i.ibb.co/CpFHdBdL/Penport-Background.jpg'); /* Placeholder P for Penport */
-    --LOGIN_BG_IMAGE_URL: url('https://i.ibb.co/vCFMjrn8/vecteezy-abstract-white-and-orange-corporate-background-11171106-1.jpg'); 
-}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins', sans-serif;}
-body{display:flex;flex-direction:column;min-height:100vh;background:var(--bg-light);color:var(--text-dark);overflow:hidden;} /* Added overflow:hidden */
-
-/* ----------------------------------------------------- */
-/* --- 💎 MODERN LOGIN SCREEN STYLES (Unchanged for sleekness) --- */
-/* ----------------------------------------------------- */
-
-#loginScreen{
-    position:absolute;top:0;left:0;width:100%;height:100%;
-    /* Background Image Setup */
-    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), var(--LOGIN_BG_IMAGE_URL); 
-    background-size: cover;
-    background-position: center;
-    display:flex;justify-content:center;align-items:center;padding:20px;
-    transition:opacity 0.5s ease, visibility 0.5s;z-index:10000;
-}
-#loginScreen.hidden{opacity:0;visibility:hidden;pointer-events:none;}
-
-.login-container{
-    width:100%;max-width:440px;
-    background: rgba(255, 255, 255, 0.98); 
-    border-radius: var(--border-radius-xl);
-    padding: 40px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4); 
-    color: var(--text-dark);
-    animation: fadeIn 0.8s ease-out;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.login-logo{text-align:center;margin-bottom:30px;}
-.logo-image {
-    width: 110px;height: 110px;
-    background-image: var(--COMPANY_LOGO_URL);
-    background-size: 100%; /* Adjusted size */
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: var(--bg-content); /* Added background color */
-    margin: 0 auto 15px;
-    border-radius: 50%;
-    border: 4px solid var(--primary-color); 
-}
-.login-logo h1{margin-top: 0;color: var(--text-dark);font-weight: 800; font-size: 2rem;letter-spacing: -1px;}
-.login-logo h2{color: var(--text-muted);font-size: 1rem;font-weight: 500;margin-top: -5px;}
-.login-tagline{text-align: center;color: var(--text-muted);margin-bottom: 30px;font-size: 1rem;font-weight: 500;}
-
-/* Input Styling */
-.input-group{margin-bottom:25px;position:relative;}
-.input-group input{
-    width:100%;padding:15px 20px;padding-left:50px; 
-    border-radius: var(--border-radius-xl);
-    border: 1px solid #e2e8f0; 
-    background: #ffffff; 
-    font-size: 1.05rem;
-    color: var(--text-dark);
-    transition: all 0.3s;
-    font-weight: 500;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
-}
-.input-group input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(0, 119, 182, 0.25); 
-    outline: none;
-}
-.input-group .fas, .input-group .material-icons-round{
-    position:absolute;left:18px;top:50%;transform:translateY(-50%);
-    color: var(--text-muted);
-    font-size:1.2rem;
-}
-.input-group .fas.fa-eye, .input-group .fas.fa-eye-slash{
-    right:18px;cursor:pointer;color:var(--primary-color);left:auto;
-}
-
-/* Button Styling */
-.login-btn{
-    width:100%;padding:16px;
-    background:var(--primary-color);
-    color:#fff;
-    border:none;
-    border-radius: var(--border-radius-xl);
-    font-weight: 600;
-    cursor:pointer;
-    letter-spacing: 1px;
-    font-size: 1.1rem;
-    box-shadow: 0 8px 20px rgba(0, 119, 182, 0.4); 
-    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-}
-.login-btn:hover{
-    background:var(--secondary-color);
-    transform:translateY(-2px);
-    box-shadow: 0 12px 25px rgba(0, 119, 182, 0.5);
-}
-.login-btn:active{transform:translateY(0); box-shadow: 0 4px 10px rgba(0, 119, 182, 0.3);}
-
-.error-message{
-    margin-top:20px;text-align:center;
-    color:var(--credit-low);font-weight:600;display:none;
-    background: #fee2e2; 
-    border: 1px solid var(--credit-low);
-    padding: 12px; 
-    border-radius: 8px;
-    font-size: 0.95rem;
-}
-.footer{
-    margin-top:30px;
-    text-align:center;
-    font-size:12px;
-    color: var(--text-muted);
-}
-/* New Penport Link Style */
-.footer a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.2s;
-}
-.footer a:hover {
-    color: var(--secondary-color);
-    text-decoration: underline;
-}
-
-/* ----------------------------------------------------- */
-/* --- 🚀 DASHBOARD STYLES (Improvements) --- */
-/* ----------------------------------------------------- */
-
-.container{display:none;flex:1;overflow:hidden;}
-.container.visible{display:flex;height:100vh;} /* Ensure full height */
-.sidebar{width:var(--sidebar-width);background:var(--bg-dark);color:#fff;display:flex;flex-direction:column;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.3);z-index: 100;flex-shrink: 0;}
-    
-.sidebar-header{padding:16px 0;text-align:center;border-bottom: 1px solid rgba(255, 255, 255, 0.1);}
-.sidebar-header i{
-    font-size: 30px; 
-    color: var(--accent-color); 
-    background: rgba(255, 255, 255, 0.1); 
-    padding: 6px; 
-    border-radius: 8px; 
-    display: inline-flex; 
-    align-items: center; 
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
-}
-
-/* Menu with Tooltips */
-.menu{flex:1;display:flex;flex-direction:column;margin-top:20px;}
-.menu-item{display:flex;justify-content:center;align-items:center;padding:18px 0;
-    margin: 4px 10px;cursor:pointer;border-radius:8px;color:#94a3b8; 
-    transition: background 0.2s, color 0.2s, transform 0.1s;
-    position: relative;
-}
-.menu-item i{font-size:26px;}
-.menu-item.active{background:var(--primary-color);color:#fff;}
-.menu-item:hover{background:rgba(0, 119, 182, 0.2);color:var(--accent-color);transform:translateY(-1px);}
-
-/* Tooltip Style (New) */
-.menu-item::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    left: calc(var(--sidebar-width) + 15px);
-    top: 50%;
-    transform: translateY(-50%);
-    background: var(--text-dark);
-    color: #fff;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 14px;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-    z-index: 100;
-}
-.menu-item:hover::after {
-    opacity: 1;
-    visibility: visible;
-}
-
-
-.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-
-.header{height:64px;display:flex;justify-content:space-between;align-items:center;
-    padding:0 24px;background:var(--bg-content);border-bottom:1px solid #e5e7eb;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.1); 
-    flex-shrink: 0;
-}
-.header-title{font-size:20px;font-weight:700;color:var(--text-dark);}
-
-/* User Card and Dropdown */
-.user-dropdown-container {
-    position: relative;
-}
-.user-card{
-    display:flex;align-items:center;gap:12px; 
-    padding:8px 15px; 
-    background: var(--bg-light); 
-    border-radius: var(--border-radius-xl); 
-    cursor:pointer;
-    transition: all 0.3s ease;
-    border: 1px solid #d1d5db; 
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
-}
-.user-card:hover {background: #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transform: translateY(-1px);}
-
-.user-text{display: flex; flex-direction: column; line-height: 1.2;}
-.user-text strong{font-weight: 600; font-size: 1rem; color: var(--text-dark);}
-.user-text span{font-size: 0.8rem; color: var(--text-muted);}
-.dropdown-arrow{transition: transform 0.3s;}
-.user-card.open .dropdown-arrow{transform: rotate(180deg);} /* New: Rotate arrow when open */
-
-.user-icon{
-    width:38px;height:38px; 
-    border-radius:8px; 
-    background:var(--primary-color); 
-    display:flex;align-items:center;justify-content:center;color:#fff;
-    font-size: 19px; 
-    flex-shrink: 0;
-}
-
-/* Dropdown Menu Styling */
-.dropdown-menu{
-    position: absolute;
-    top: calc(100% + 10px); 
-    right: 0;
-    width: 200px;
-    background: var(--bg-content);
-    border-radius: var(--border-radius-xl);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    border: 1px solid #e2e8f0;
-    z-index: 50;
-    display: none;
-    overflow: hidden;
-    padding: 10px;
-}
-.credit-status{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin-bottom: 8px;
-    background: var(--bg-light);
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-dark);
-}
-.credit-status span:first-child{color: var(--text-muted);}
-.credit-normal{color: var(--credit-high); font-weight: 700;} /* Updated for normal credit status */
-.credit-low{color: var(--credit-low); font-weight: 700; animation: pulse 1.5s infinite;}
-@keyframes pulse {
-    0%, 100% { box-shadow: none; }
-    50% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.7); }
-}
-
-.logout-btn-dropdown{
-    padding: 10px;
-    text-align: center;
-    color: #fff;
-    background: var(--credit-low);
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background 0.2s, transform 0.1s;
-}
-.logout-btn-dropdown:hover{
-    background: #c53030;
-    transform: translateY(-1px);
-}
-
-/* Main Content Area: Full Display */
-.main-content{
-    flex:1;
-    position:relative;
-    overflow-y: auto; /* Changed to auto for iframe scrolling */
-    background:var(--bg-light);
-    padding: 0; 
-}
-iframe{
-    width:100%;
-    height:100%;
-    border:none;
-    border-radius: 0; 
-    background: var(--bg-content); 
-    box-shadow: none; 
-}
-</style>
-</head>
-<body>
-
-<div id="loginScreen">
-    <div class="login-container">
-        <div class="login-logo">
-            <div class="logo-image"></div> 
-            <h1>Penport India</h1>
-            <h2>ID Card Solution</h2> 
-        </div>
-        <form id="loginForm">
-            <div class="input-group">
-                <i class="material-icons-round">mail_outline</i>
-                <input type="email" id="email" placeholder="Email Address" required autocomplete="username">
-            </div>
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
-                <i class="fas fa-eye" id="togglePassword"></i>
-            </div>
-            <button type="submit" class="login-btn">
-                <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
-                Log In
-            </button>
-            <div id="errorMsg" class="error-message"></div>
-        </form>
-        <div class="footer">
-            Developed by 
-            <a href="https://penportindia.github.io/penport/" target="_blank">Penport India</a>
-            <br>© 2025 ID Card Solution
-        </div>
-    </div>
-</div>
-
-<div class="container" id="dashboardContainer">
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <i class="material-icons-round">credit_card</i> 
-        </div>
-        <div class="menu" id="sidebarMenu">
-            </div>
-    </div>
-
-    <div class="main-area">
-        <div class="header">
-            <div class="header-title" id="dashboardHeaderTitle">Dashboard</div>
-            <div class="header-actions">
-                <div class="user-dropdown-container">
-                    <div class="user-card" id="userCard" onclick="toggleDropdown()">
-                        <div class="user-icon"><i class="material-icons-round">person</i></div>
-                        <div class="user-text">
-                            <strong id="userName">Loading...</strong>
-                            <span id="userRole">...</span>
-                        </div>
-                        <i class="material-icons-round dropdown-arrow">arrow_drop_down</i>
-                    </div>
-                    <div class="dropdown-menu" id="dropdownMenu">
-                        <div class="credit-status" id="creditStatusCard">
-                            <span>Credits:</span>
-                            <span id="creditCount" class="credit-normal">--</span>
-                        </div>
-                        <div class="logout-btn-dropdown" onclick="logout()">Logout</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="main-content">
-            <iframe id="contentFrame" title="Content"></iframe>
-        </div>
-    </div>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getDatabase, ref as dbRef, get, child } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-// WARNING: Ensure the path to your config is correct.
-import { firebaseConfig } from '../Database/Database.js'; 
-
-// --- Constants & Global State ---
-const USER_STORAGE_KEY = 'penport_id_user_data';
-
-// --- Firebase Init ---
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
-const auth = getAuth(app);
-
-// --- Elements ---
-const loginForm = document.getElementById("loginForm");
-const errorDiv = document.getElementById("errorMsg");
-const loginScreen = document.getElementById("loginScreen");
-const dashboardContainer = document.getElementById("dashboardContainer");
-const passwordInput = document.getElementById("password");
-const togglePasswordIcon = document.getElementById("togglePassword");
-const userNameEl = document.getElementById("userName"); // Renamed to avoid collision
-const userRoleEl = document.getElementById("userRole"); // Renamed to avoid collision
-const creditCountEl = document.getElementById("creditCount"); // Renamed to avoid collision
-const dropdownMenu = document.getElementById("dropdownMenu");
-const userCardEl = document.getElementById("userCard"); // New: User Card Element
-const iframe = document.getElementById("contentFrame");
-const headerTitle = document.getElementById("dashboardHeaderTitle");
-const sidebarMenu = document.getElementById("sidebarMenu");
-const creditStatusCard = document.getElementById("creditStatusCard"); 
-
-// --- Menu Configuration ---
-const menuConfig = {
-    dashboard: { icon: 'space_dashboard', tooltip: 'Dashboard', url: "https://penportindia.github.io/identmakers/Roots/Dashboard/Dashboard.html" },
-    schools: { icon: 'business', tooltip: 'Clients ', url: "https://penportindia.github.io/identmakers/Roots/School/School.html" }, 
-    create: { icon: 'add_box', tooltip: 'Create New ID', url: "https://penportindia.github.io/identmakers/Roots/Create/Create.html" },
-    manage: { icon: 'folder_open', tooltip: 'Manage', url: "https://penportindia.github.io/identmakers/Roots/Manage/Manage.html" },
-    template: { icon: 'badge', tooltip: 'Templates', url: "https://penportindia.github.io/identmakers/Roots/Template/Template.html" }, 
-    print: { icon: 'print', tooltip: 'Print Manager', url: "https://penportindia.github.io/identmakers/Roots/Print/Print.html" },
-    data: { icon: 'cloud_download', tooltip: 'Data Export', url: "https://penportindia.github.io/identmakers/Roots/Data Management/Data.html" },
-    accounts: { icon: 'account_balance_wallet', tooltip: 'Accounts', url: "https://penportindia.github.io/identmakers/Roots/Author/Author.html" }
-};
-
-// --- Role-based Menu Sequence ---
-const roleMenus = {
-    vendor: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data'],
-    developer: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'accounts']
-};
-
-
-// --- Helper Functions ---
-
-/** Saves user data to localStorage. */
-function saveUser(data) {
-    try {
-        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data));
-    } catch (e) {
-        console.error("Local storage save failed:", e);
-    }
-}
-
-/** Retrieves user data from localStorage. */
-function loadUser() {
-    try {
-        const data = localStorage.getItem(USER_STORAGE_KEY);
-        return data ? JSON.parse(data) : null;
-    } catch (e) {
-        console.error("Local storage load failed:", e);
-        return null;
-    }
-}
-
-/** Clears user data from localStorage. */
-function clearUser() {
-    localStorage.removeItem(USER_STORAGE_KEY);
-}
-
-/** Updates the header user card with provided data. */
-function updateHeaderUI(userData) {
-    const { name, roleKey, credits } = userData;
-    const roleDisplay = roleKey.charAt(0).toUpperCase() + roleKey.slice(1);
-
-    userNameEl.textContent = name; 
-    userRoleEl.textContent = roleDisplay;
-    
-    if (roleKey === 'vendor') {
-        creditCountEl.textContent = credits || 0;
-        creditCountEl.className = (credits < 100) ? "credit-low" : "credit-normal";
-        creditStatusCard.style.display = 'flex'; 
-    } else {
-        creditStatusCard.style.display = 'none'; 
-    }
-}
-
-
-/**
- * Builds the sidebar menu and initializes the first page.
- * @param {string} role - The user's role key.
- * @param {boolean} isInitialLoad - True if called on first login or state persistence.
- */
-function initializeDashboard(role, isInitialLoad = false) {
-    buildSidebarMenu(role);
-
-    // Load the first page of the role's menu
-    const firstPageKey = roleMenus[role.toLowerCase()][0];
-    if (isInitialLoad && iframe.src) {
-        // Do not reload iframe if state is being preserved.
-        const currentUrlKey = Object.keys(menuConfig).find(key => iframe.src.includes(menuConfig[key].url));
-        if (currentUrlKey) {
-            document.querySelector(`.menu-item[data-page="${currentUrlKey}"]`)?.classList.add('active');
-            headerTitle.textContent = menuConfig[currentUrlKey].tooltip;
-            return;
+            --COMPANY_LOGO_URL: url('https://i.ibb.co/CpFHdBdL/Penport-Background.jpg');
+            --LOGIN_BG_IMAGE_URL: url('https://i.ibb.co/vCFMjrn8/vecteezy-abstract-white-and-orange-corporate-background-11171106-1.jpg');
         }
-    }
-    
-    // Default load
-    loadPage(firstPageKey);
-    document.querySelector(`.menu-item[data-page="${firstPageKey}"]`)?.classList.add('active');
-}
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-// --- Function to build the menu dynamically ---
-function buildSidebarMenu(role) {
-    sidebarMenu.innerHTML = ''; 
-    const menuItems = roleMenus[role.toLowerCase()] || [];
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            /* 👉 FIX 1: body पर से overflow-y: hidden हटा दिया है */
+            /* overflow-y: hidden; */ 
+        }
 
-    menuItems.forEach((pageName) => {
-        const item = menuConfig[pageName];
-        if (!item) return;
+        #loginScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), var(--LOGIN_BG_IMAGE_URL);
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: opacity 0.5s ease, visibility 0.5s;
+            z-index: 10000;
+        }
 
-        const menuItemDiv = document.createElement('div');
-        menuItemDiv.className = 'menu-item';
-        menuItemDiv.dataset.page = pageName;
-        menuItemDiv.dataset.tooltip = item.tooltip; // Set tooltip
-        
-        menuItemDiv.innerHTML = `<i class="material-icons-round">${item.icon}</i>`;
-        
-        menuItemDiv.addEventListener("click", handleMenuClick);
-        
-        sidebarMenu.appendChild(menuItemDiv);
-    });
-}
+        #loginScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
 
-// --- Menu Click Handler ---
-function handleMenuClick(e) {
-    const item = e.currentTarget;
-    const page = item.dataset.page;
-    
-    document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
-    item.classList.add("active");
-    
-    loadPage(page);
-    toggleDropdown(false); // Close dropdown on menu click
-}
+        .login-container {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: var(--border-radius-xl);
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            color: var(--text-dark);
+            animation: fadeIn 0.8s ease-out;
+        }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
 
-// --- Load Page ---
-function loadPage(page){
-    const item = menuConfig[page];
-    if (!item) return;
-
-    iframe.src = item.url;
-    headerTitle.textContent = item.tooltip;
-}
-
-// --- Password toggle ---
-togglePasswordIcon.addEventListener('click', () => {
-    passwordInput.type = passwordInput.type==="password"?"text":"password";
-    togglePasswordIcon.classList.toggle('fa-eye-slash');
-});
-
-// --- Toggle Dropdown (Made more robust) ---
-window.toggleDropdown = (show) => {
-    const isVisible = dropdownMenu.style.display === "block";
-    const shouldShow = typeof show === 'boolean' ? show : !isVisible;
-
-    dropdownMenu.style.display = shouldShow ? "block" : "none";
-    userCardEl.classList.toggle('open', shouldShow); // Toggle arrow rotation
-};
-
-// --- Global Click Handler to close dropdown when clicking outside ---
-document.addEventListener('click', (e) => {
-    if (dropdownMenu.style.display === "block" && !userCardEl.contains(e.target) && !dropdownMenu.contains(e.target)) {
-        toggleDropdown(false);
-    }
-});
-
-
-// --- Logout (Full-proof) ---
-window.logout = async () => {
-    try {
-        await signOut(auth);
-        clearUser(); // Clear local storage on logout
-        loginScreen.classList.remove("hidden");
-        dashboardContainer.classList.remove("visible");
-        loginForm.reset();
-        errorDiv.style.display="none";
-        iframe.src='';
-        toggleDropdown(false); 
-        sidebarMenu.innerHTML = ''; 
-        userNameEl.textContent = 'User';
-        userRoleEl.textContent = 'Role';
-    } catch(error) {
-        console.error("Logout Error:", error);
-        alert("Logout failed. Please try again.");
-    }
-}
-
-// --- Core Login Logic ---
-loginForm.addEventListener("submit", async (e)=>{
-    e.preventDefault();
-    errorDiv.style.display="none";
-
-    const email = document.getElementById("email").value.trim();
-    const password = passwordInput.value.trim();
-    
-    if (!email || !password) {
-        errorDiv.textContent="❌ Please enter both email and password.";
-        errorDiv.style.display="block";
-        return;
-    }
-
-    try{
-        // 1. Firebase Authentication
-        const userCredential = await signInWithEmailAndPassword(auth,email,password);
-        const user = userCredential.user;
-
-        // 2. Fetch Role Data
-        const rolesSnapshot = await get(child(dbRef(database),'roles'));
-        const rolesData = rolesSnapshot.val();
-
-        let userRoleKey = null;
-        let userData = null;
-        
-        // Find user by email in roles data
-        for(const [role,data] of Object.entries(rolesData)){
-            if(data.email && data.email.toLowerCase()===email.toLowerCase()){ 
-                userRoleKey = role.toLowerCase(); // Convert to lowercase for consistent keys
-                userData = data;
-                break;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        // 3. Role Validation
-        if(!userRoleKey || !roleMenus[userRoleKey]){
-            errorDiv.textContent="❌ Your account role is not defined or supported.";
-            errorDiv.style.display="block";
-            await signOut(auth); // Force sign out if role is invalid
-            return;
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        // 4. Vendor Account Active Check
-        if(userRoleKey==="vendor" && !userData.isActive){
-            alert("⚠️ Please contact the author to activate your account first.");
-            await signOut(auth);
-            return;
+        .logo-image {
+            width: 110px;
+            height: 110px;
+            background-image: var(--COMPANY_LOGO_URL);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: var(--bg-content);
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
         }
 
-        // 5. Success: Prepare User Data for Storage and UI
-        const finalUserData = {
-            name: userData.name || user.email.split('@')[0], 
-            roleKey: userRoleKey,
-            email: user.email,
-            credits: userData.credits || 0,
-            uid: user.uid
+        .login-logo h1 {
+            margin-top: 0;
+            color: var(--text-dark);
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: -1px;
+        }
+
+        .login-logo h2 {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: -5px;
+        }
+
+        .login-tagline {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 20px;
+            padding-left: 50px;
+            border-radius: var(--border-radius-xl);
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            transition: all 0.3s;
+            font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0, 119, 182, 0.25);
+            outline: none;
+        }
+
+        .input-group .fas,
+        .input-group .material-icons-round {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .input-group .fas.fa-eye,
+        .input-group .fas.fa-eye-slash {
+            right: 18px;
+            cursor: pointer;
+            color: var(--primary-color);
+            left: auto;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: var(--border-radius-xl);
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 20px rgba(0, 119, 182, 0.4);
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0, 119, 182, 0.5);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 10px rgba(0, 119, 182, 0.3);
+        }
+
+        .error-message {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--credit-low);
+            font-weight: 600;
+            display: none;
+            background: #fee2e2;
+            border: 1px solid var(--credit-low);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .footer a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .container {
+            display: none;
+            flex: 1;
+            /* यह कंटेनर को बॉडी में बची हुई पूरी ऊँचाई देता है */
+            overflow: hidden;
+        }
+
+        .container.visible {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-dark);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 16px 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header i {
+            font-size: 30px;
+            color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 18px 0;
+            margin: 4px 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            color: #94a3b8;
+            transition: background 0.2s, color 0.2s, transform 0.1s;
+            position: relative;
+        }
+
+        .menu-item i {
+            font-size: 26px;
+        }
+
+        .menu-item.active {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 80%;
+            width: 4px;
+            background: var(--accent-color);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 119, 182, 0.2);
+            color: var(--accent-color);
+            transform: translateY(-1px);
+        }
+
+        .menu-item::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: calc(var(--sidebar-width) + 15px);
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--text-dark);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 100;
+        }
+
+        .menu-item:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            /* main-area में स्क्रॉलिंग नहीं होनी चाहिए, यह main-content में होगी */
+        }
+
+        .header {
+            height: 64px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            background: var(--bg-content);
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .user-dropdown-container {
+            position: relative;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 15px;
+            background: var(--bg-light);
+            border-radius: var(--border-radius-xl);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .user-card:hover {
+            background: #e2e8f0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .user-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .user-text strong {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-dark);
+        }
+
+        .user-text span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.3s;
+        }
+
+        .user-card.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .user-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 19px;
+            flex-shrink: 0;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 200px;
+            background: var(--bg-content);
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid #e2e8f0;
+            z-index: 50;
+            display: none;
+            overflow: hidden;
+            padding: 10px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+        }
+
+        .user-card.open+.dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .credit-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .credit-status span:first-child {
+            color: var(--text-muted);
+        }
+
+        .credit-normal {
+            color: var(--credit-high);
+            font-weight: 700;
+        }
+
+        .credit-low {
+            color: var(--credit-low);
+            font-weight: 700;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: none;
+            }
+
+            50% {
+                box-shadow: 0 0 5px rgba(239, 68, 68, 0.7);
+            }
+        }
+
+        .logout-btn-dropdown {
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+            background: var(--credit-low);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .logout-btn-dropdown:hover {
+            background: #c53030;
+            transform: translateY(-1px);
+        }
+
+        .main-content {
+            flex: 1;
+            /* header के बाद बची हुई पूरी जगह लेता है */
+            position: relative;
+            /* 👉 FIX 2: overflow-y: auto जोड़ा ताकि कंटेंट स्क्रॉल हो सके */
+            overflow-y: auto; 
+            background: var(--bg-light);
+            padding: 0;
+            /* iframe को 100% हाइट देने के लिए Flexbox सेटअप */
+            display: flex;
+            flex-direction: column;
+        }
+
+        iframe {
+            width: 100%;
+            /* 👉 FIX 3: iframe को पूरी जगह मिले इसके लिए flex-grow: 1 */
+            height: 100%; 
+            border: none;
+            border-radius: 0;
+            background: var(--bg-content);
+            box-shadow: none;
+            flex-grow: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loginScreen">
+        <div class="login-container">
+            <div class="login-logo">
+                <div class="logo-image"></div>
+                <h1>Penport India</h1>
+                <h2>ID Card Solution</h2>
+            </div>
+            <form id="loginForm">
+                <div class="input-group">
+                    <i class="material-icons-round">mail_outline</i>
+                    <input type="email" id="email" placeholder="Email Address" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Password" required
+                        autocomplete="current-password">
+                    <i class="fas fa-eye" id="togglePassword"></i>
+                </div>
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+                    Log In
+                </button>
+                <div id="errorMsg" class="error-message"></div>
+            </form>
+            <div class="footer">
+                Developed by
+                <a href="https://penportindia.github.io/penport/" target="_blank">Penport India</a>
+                <br>© 2025 ID Card Solution
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="dashboardContainer">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <i class="material-icons-round">credit_card</i>
+            </div>
+            <div class="menu" id="sidebarMenu"></div>
+        </div>
+
+        <div class="main-area">
+            <div class="header">
+                <div class="header-title" id="dashboardHeaderTitle">Dashboard</div>
+                <div class="header-actions">
+                    <div class="user-dropdown-container">
+                        <div class="user-card" id="userCard" onclick="toggleDropdown()">
+                            <div class="user-icon"><i class="material-icons-round">person</i>
+                            </div>
+                            <div class="user-text">
+                                <strong id="userName">Loading...</strong>
+                                <span id="userRole">...</span>
+                            </div>
+                            <i class="material-icons-round dropdown-arrow">arrow_drop_down</i>
+                        </div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <div class="credit-status" id="creditStatusCard">
+                                <span>Credits:</span>
+                                <span id="creditCount" class="credit-normal">--</span>
+                            </div>
+                            <div class="logout-btn-dropdown" onclick="logout()">Logout</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-content">
+                <iframe id="contentFrame" title="Content"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getDatabase, ref as dbRef, get, child } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+        import { firebaseConfig } from 'https://penportindia.github.io/identmakers/Roots/Database/Database.js';
+
+        const USER_STORAGE_KEY = 'penport_id_user_data';
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        const loginForm = document.getElementById("loginForm");
+        const errorDiv = document.getElementById("errorMsg");
+        const loginScreen = document.getElementById("loginScreen");
+        const dashboardContainer = document.getElementById("dashboardContainer");
+        const passwordInput = document.getElementById("password");
+        const togglePasswordIcon = document.getElementById("togglePassword");
+        const userNameEl = document.getElementById("userName");
+        const userRoleEl = document.getElementById("userRole");
+        const creditCountEl = document.getElementById("creditCount");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        const userCardEl = document.getElementById("userCard");
+        const iframe = document.getElementById("contentFrame");
+        const headerTitle = document.getElementById("dashboardHeaderTitle");
+        const sidebarMenu = document.getElementById("sidebarMenu");
+        const creditStatusCard = document.getElementById("creditStatusCard");
+
+        const menuConfig = {
+            dashboard: { icon: 'space_dashboard', tooltip: 'Dashboard', url: "https://penportindia.github.io/identmakers/Roots/Dashborad/Dashboard.html" },
+            schools: { icon: 'business', tooltip: 'Clients ', url: "https://penportindia.github.io/identmakers/Roots/Schools/User.html" },
+            create: { icon: 'add_box', tooltip: 'Create New ID', url: "https://penportindia.github.io/identmakers/Roots/Create/Create.html" },
+            manage: { icon: 'folder_open', tooltip: 'Manage', url: "https://penportindia.github.io/identmakers/Roots/Manage/Manage.html" },
+            template: { icon: 'badge', tooltip: 'Templates', url: "https://penportindia.github.io/identmakers/Roots/Template/Template.html" },
+            print: { icon: 'print', tooltip: 'Print Manager', url: "https://penportindia.github.io/identmakers/Roots/Print/Print.html" },
+            data: { icon: 'cloud_download', tooltip: 'Data Export', url: "https://penportindia.github.io/identmakers/Roots/Data Management/Data.html" },
+            accounts: { icon: 'account_balance_wallet', tooltip: 'Accounts', url: "https://penportindia.github.io/identmakers/Roots/Author/Author.html" }
         };
-        saveUser(finalUserData);
-        updateHeaderUI(finalUserData);
-        
-        // 6. Initialize Dashboard UI
-        initializeDashboard(userRoleKey);
 
-        loginScreen.classList.add("hidden");
-        dashboardContainer.classList.add("visible");
-        
-    } catch(error){
-        console.error("Login Failed:", error.code, error.message);
-        let message = "❌ Invalid Email or Password.";
-        if(error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password'){
-             message = "❌ Invalid Email or Password.";
-        } else if(error.code === 'auth/too-many-requests'){
-             message = "❌ Too many failed attempts. Try again later.";
+        const roleMenus = {
+            vendor: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data'],
+            developer: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'accounts']
+        };
+
+
+        // --- Helper Functions ---
+
+        /** Saves user data to localStorage. */
+        function saveUser(data) {
+            try {
+                localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data));
+            } catch (e) {
+                console.error("Local storage save failed:", e);
+            }
         }
-        errorDiv.textContent=message;
-        errorDiv.style.display="block";
-        passwordInput.value="";
-    }
-});
 
-
-// --- State Persistence (Full-proof for page reload) ---
-
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // User is signed in, check local storage for role/UI data
-        const userData = loadUser();
-        if (userData && userData.uid === user.uid) {
-            // Data is valid, restore UI
-            updateHeaderUI(userData);
-            initializeDashboard(userData.roleKey, true); // true for initial load
-            loginScreen.classList.add("hidden");
-            dashboardContainer.classList.add("visible");
-        } else {
-            // User signed in, but local data missing/mismatched. 
-            // Fetch the role again (or force logout if too complex)
-            // For simplicity, we'll force a clean login in this edge case:
-            console.warn("Auth state found, but local data is missing/mismatched. Forcing logout.");
-            signOut(auth); 
+        /** Retrieves user data from localStorage. */
+        function loadUser() {
+            try {
+                const data = localStorage.getItem(USER_STORAGE_KEY);
+                return data ? JSON.parse(data) : null;
+            } catch (e) {
+                console.error("Local storage load failed:", e);
+                return null;
+            }
         }
-    } else {
-        // User is signed out (or on initial page load without being signed in)
-        loginScreen.classList.remove("hidden");
-        dashboardContainer.classList.remove("visible");
-        clearUser();
-    }
-});
 
-</script>
+        /** Clears user data from localStorage. */
+        function clearUser() {
+            localStorage.removeItem(USER_STORAGE_KEY);
+        }
+
+        /** Updates the header user card with provided data. */
+        function updateHeaderUI(userData) {
+            const { name, roleKey, credits } = userData;
+            const roleDisplay = roleKey.charAt(0).toUpperCase() + roleKey.slice(1);
+
+            userNameEl.textContent = name;
+            userRoleEl.textContent = roleDisplay;
+
+            if (roleKey === 'vendor') {
+                creditCountEl.textContent = credits || 0;
+                creditCountEl.className = (credits < 100) ? "credit-low" : "credit-normal";
+                creditStatusCard.style.display = 'flex';
+            } else {
+                creditStatusCard.style.display = 'none';
+            }
+        }
+
+
+        /**
+         * Builds the sidebar menu and initializes the first page.
+         * @param {string} role - The user's role key.
+         * @param {boolean} isInitialLoad - True if called on first login or state persistence.
+         */
+        function initializeDashboard(role, isInitialLoad = false) {
+            buildSidebarMenu(role);
+
+            // Load the first page of the role's menu
+            const firstPageKey = roleMenus[role.toLowerCase()][0];
+            if (isInitialLoad && iframe.src) {
+                // Do not reload iframe if state is being preserved.
+                const currentUrlKey = Object.keys(menuConfig).find(key => iframe.src.includes(menuConfig[key].url));
+                if (currentUrlKey) {
+                    document.querySelector(`.menu-item[data-page="${currentUrlKey}"]`)?.classList.add('active');
+                    headerTitle.textContent = menuConfig[currentUrlKey].tooltip;
+                    return;
+                }
+            }
+
+            // Default load
+            loadPage(firstPageKey);
+            document.querySelector(`.menu-item[data-page="${firstPageKey}"]`)?.classList.add('active');
+        }
+
+
+        // --- Function to build the menu dynamically ---
+        function buildSidebarMenu(role) {
+            sidebarMenu.innerHTML = '';
+            const menuItems = roleMenus[role.toLowerCase()] || [];
+
+            menuItems.forEach((pageName) => {
+                const item = menuConfig[pageName];
+                if (!item) return;
+
+                const menuItemDiv = document.createElement('div');
+                menuItemDiv.className = 'menu-item';
+                menuItemDiv.dataset.page = pageName;
+                menuItemDiv.dataset.tooltip = item.tooltip; // Set tooltip
+
+                menuItemDiv.innerHTML = `<i class="material-icons-round">${item.icon}</i>`;
+
+                menuItemDiv.addEventListener("click", handleMenuClick);
+
+                sidebarMenu.appendChild(menuItemDiv);
+            });
+        }
+
+        // --- Menu Click Handler ---
+        function handleMenuClick(e) {
+            const item = e.currentTarget;
+            const page = item.dataset.page;
+
+            document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
+            item.classList.add("active");
+
+            loadPage(page);
+            toggleDropdown(false); // Close dropdown on menu click
+        }
+
+
+        // --- Load Page ---
+        function loadPage(page) {
+            const item = menuConfig[page];
+            if (!item) return;
+
+            iframe.src = item.url;
+            headerTitle.textContent = item.tooltip;
+        }
+
+        // --- Password toggle ---
+        togglePasswordIcon.addEventListener('click', () => {
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+            togglePasswordIcon.classList.toggle('fa-eye-slash');
+        });
+
+        // --- Toggle Dropdown (Made more robust) ---
+        window.toggleDropdown = (show) => {
+            const isVisible = userCardEl.classList.contains('open');
+            const shouldShow = typeof show === 'boolean' ? show : !isVisible;
+
+            userCardEl.classList.toggle('open', shouldShow); // Toggle arrow rotation and menu visibility
+        };
+
+        // --- Global Click Handler to close dropdown when clicking outside ---
+        document.addEventListener('click', (e) => {
+            if (userCardEl.classList.contains('open') && !userCardEl.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                toggleDropdown(false);
+            }
+        });
+
+
+        // --- Logout (Full-proof) ---
+        window.logout = async () => {
+            try {
+                await signOut(auth);
+                clearUser(); // Clear local storage on logout
+                loginScreen.classList.remove("hidden");
+                dashboardContainer.classList.remove("visible");
+                loginForm.reset();
+                errorDiv.style.display = "none";
+                iframe.src = '';
+                toggleDropdown(false);
+                sidebarMenu.innerHTML = '';
+                userNameEl.textContent = 'User';
+                userRoleEl.textContent = 'Role';
+            } catch (error) {
+                console.error("Logout Error:", error);
+                alert("Logout failed. Please try again.");
+            }
+        }
+
+        // --- Core Login Logic ---
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            errorDiv.style.display = "none";
+
+            const email = document.getElementById("email").value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!email || !password) {
+                errorDiv.textContent = "❌ Please enter both email and password.";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            try {
+                // 1. Firebase Authentication
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. Fetch Role Data
+                const rolesSnapshot = await get(child(dbRef(database), 'roles'));
+                const rolesData = rolesSnapshot.val();
+
+                let userRoleKey = null;
+                let userData = null;
+
+                // Find user by email in roles data
+                for (const [role, data] of Object.entries(rolesData)) {
+                    if (data.email && data.email.toLowerCase() === email.toLowerCase()) {
+                        userRoleKey = role.toLowerCase(); // Convert to lowercase for consistent keys
+                        userData = data;
+                        break;
+                    }
+                }
+
+                // 3. Role Validation
+                if (!userRoleKey || !roleMenus[userRoleKey]) {
+                    errorDiv.textContent = "❌ Your account role is not defined or supported.";
+                    errorDiv.style.display = "block";
+                    await signOut(auth); // Force sign out if role is invalid
+                    return;
+                }
+
+                // 4. Vendor Account Active Check
+                if (userRoleKey === "vendor" && !userData.isActive) {
+                    alert("⚠️ Please contact the author to activate your account first.");
+                    await signOut(auth);
+                    return;
+                }
+
+                // 5. Success: Prepare User Data for Storage and UI
+                const finalUserData = {
+                    name: userData.name || user.email.split('@')[0],
+                    roleKey: userRoleKey,
+                    email: user.email,
+                    credits: userData.credits || 0,
+                    uid: user.uid
+                };
+                saveUser(finalUserData);
+                updateHeaderUI(finalUserData);
+
+                // 6. Initialize Dashboard UI
+                initializeDashboard(userRoleKey);
+
+                loginScreen.classList.add("hidden");
+                dashboardContainer.classList.add("visible");
+
+            } catch (error) {
+                console.error("Login Failed:", error.code, error.message);
+                let message = "❌ Invalid Email or Password.";
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    message = "❌ Invalid Email or Password.";
+                } else if (error.code === 'auth/too-many-requests') {
+                    message = "❌ Too many failed attempts. Try again later.";
+                }
+                errorDiv.textContent = message;
+                errorDiv.style.display = "block";
+                passwordInput.value = "";
+            }
+        });
+
+
+        // --- State Persistence (Full-proof for page reload) ---
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, check local storage for role/UI data
+                const userData = loadUser();
+                if (userData && userData.uid === user.uid) {
+                    // Data is valid, restore UI
+                    updateHeaderUI(userData);
+                    initializeDashboard(userData.roleKey, true); // true for initial load
+                    loginScreen.classList.add("hidden");
+                    dashboardContainer.classList.add("visible");
+                } else {
+                    // User signed in, but local data missing/mismatched. 
+                    // Fetch the role again (or force logout if too complex)
+                    console.warn("Auth state found, but local data is missing/mismatched. Forcing logout.");
+                    signOut(auth);
+                }
+            } else {
+                // User is signed out (or on initial page load without being signed in)
+                loginScreen.classList.remove("hidden");
+                dashboardContainer.classList.remove("visible");
+                clearUser();
+            }
+        });
+
+    </script>
 
 </body>
+
 </html>
