@@ -1,499 +1,653 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Data Management</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script type="module" src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js"></script>
-<script type="module" src="https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js"></script>
 
-<style>
-/* --- Modern Design Variables --- */
-:root {
-    --primary-color: #1976D2; /* Blue - Export/Accent */
-    --delete-color: #D32F2F; /* Red - Delete/Danger */
-    --success-color: #388E3C; /* Green - Success */
-    --background-color: #f4f6f9; /* Light Grey Background */
-    --card-background: #ffffff;
-    --text-color: #37474F; /* Dark Slate Grey */
-    --sub-text-color: #78909C; /* Subtle Grey */
-    --shadow-light: 0 4px 12px rgba(0,0,0,0.08);
-    --shadow-hover: 0 8px 20px rgba(0,0,0,0.15);
-    --border-radius: 12px;
-}
-/* --- Global Styles --- */
-body { 
-    font-family: 'Poppins', sans-serif; 
-    background: var(--background-color); 
-    margin: 0; 
-    padding: 30px; 
-    color: var(--text-color); 
-    line-height: 1.6; 
-}
-/* --- Header and Search --- */
-.header-section { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-bottom: 30px;
-    padding: 15px 0;
-    border-bottom: 2px solid #E0E0E0;
-}
-#searchInput { 
-    width: 350px; 
-    padding: 12px 20px; 
-    border-radius: 30px; 
-    border: 1px solid #B0BEC5; 
-    box-shadow: var(--shadow-light); 
-    font-size: 1rem; 
-    outline: none; 
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-#searchInput:focus { 
-    border-color: var(--primary-color); 
-    box-shadow: 0 0 0 4px rgba(25,118,210,0.15); 
-}
-/* --- Notification Toast --- */
-.notification { 
-    position: fixed; 
-    top: 30px; 
-    right: 30px; 
-    padding: 14px 25px; 
-    border-radius: 30px; 
-    box-shadow: var(--shadow-hover); 
-    font-weight: 500; 
-    z-index: 1000; 
-    opacity: 0; 
-    transform: translateX(100%); 
-    transition: opacity 0.4s, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-.notification.show { 
-    opacity: 1; 
-    transform: translateX(0); 
-}
-.notification-success { background: var(--success-color); color: white; }
-.notification-error { background: var(--delete-color); color: white; }
+    <style>
+        /* --- Modern Design Variables --- */
+        :root {
+            --primary-color: #1976D2;
+            /* Blue - Export/Accent */
+            --delete-color: #D32F2F;
+            /* Red - Delete/Danger */
+            --success-color: #388E3C;
+            /* Green - Success */
+            --background-color: #f4f6f9;
+            /* Light Grey Background */
+            --card-background: #ffffff;
+            --text-color: #37474F;
+            /* Dark Slate Grey */
+            --sub-text-color: #78909C;
+            /* Subtle Grey */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+        }
 
-/* --- Card Grid Layout --- */
-.card-container { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-    gap: 25px; 
-}
-/* --- School Card Style --- */
-.school-card { 
-    background: var(--card-background); 
-    border-radius: var(--border-radius); 
-    padding: 20px; 
-    box-shadow: var(--shadow-light); 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: space-between; 
-    transition: transform 0.3s, box-shadow 0.3s;
-    border: 1px solid #ECEFF1;
-}
-.school-card:hover { 
-    transform: translateY(-5px); 
-    box-shadow: var(--shadow-hover); 
-}
-.school-card h3 { 
-    margin: 0; 
-    font-size: 1.3rem; 
-    font-weight: 600; 
-    color: var(--primary-color); 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    /* border-bottom: 1px solid #E0E0E0; */
-    padding-bottom: 5px; /* Adjusted padding */
-    display: flex;
-    align-items: center;
-}
-.school-card h3 .material-icons {
-    font-size: 1.5rem;
-    margin-right: 8px;
-    color: #FFB300; /* School icon color */
-}
+        /* --- Global Styles --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-color);
+            margin: 0;
+            padding: 30px;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
 
-/* --- NEW: School ID Display --- */
-.school-card .school-id-display {
-    margin: -5px 0 15px; /* Position it right below H3 with a small top margin */
-    font-size: 0.85rem;
-    color: var(--sub-text-color);
-    border-bottom: 1px solid #E0E0E0;
-    padding-bottom: 15px;
-    word-break: break-all; /* Ensure long IDs wrap */
-}
-.school-card .school-id-display span {
-    font-weight: 500;
-    color: var(--text-color);
-}
+        /* --- Header and Search --- */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px 0;
+            border-bottom: 2px solid #E0E0E0;
+        }
+
+        #searchInput {
+            width: 350px;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: 1px solid #B0BEC5;
+            box-shadow: var(--shadow-light);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        #searchInput:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.15);
+        }
+
+        /* --- Notification Toast --- */
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 14px 25px;
+            border-radius: 30px;
+            box-shadow: var(--shadow-hover);
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.4s, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .notification-error {
+            background: var(--delete-color);
+            color: white;
+        }
+
+        /* --- Card Grid Layout --- */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* --- School Card Style --- */
+        .school-card {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #ECEFF1;
+        }
+
+        .school-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .school-card h3 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            /* border-bottom: 1px solid #E0E0E0; */
+            padding-bottom: 5px;
+            /* Adjusted padding */
+            display: flex;
+            align-items: center;
+        }
+
+        .school-card h3 .material-icons {
+            font-size: 1.5rem;
+            margin-right: 8px;
+            color: #FFB300;
+            /* School icon color */
+        }
+
+        /* --- NEW: School ID Display --- */
+        .school-card .school-id-display {
+            margin: -5px 0 15px;
+            /* Position it right below H3 with a small top margin */
+            font-size: 0.85rem;
+            color: var(--sub-text-color);
+            border-bottom: 1px solid #E0E0E0;
+            padding-bottom: 15px;
+            word-break: break-all;
+            /* Ensure long IDs wrap */
+        }
+
+        .school-card .school-id-display span {
+            font-weight: 500;
+            color: var(--text-color);
+        }
 
 
-/* --- Data Stats Section --- */
-.data-stats { 
-    margin-bottom: 20px; 
-}
-.data-stats p { 
-    margin: 8px 0; 
-    font-size: 0.95rem; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    color: var(--sub-text-color);
-}
-.data-stats p .material-icons {
-    font-size: 1.1rem;
-    margin-right: 5px;
-}
-.data-stats strong { 
-    font-weight: 700; 
-    color: var(--text-color); 
-    display: flex;
-    align-items: center;
-}
-.data-stats p:last-child { 
-    font-weight: 600; 
-    color: var(--primary-color); 
-    font-size: 1.1rem; 
-    margin-top: 12px; 
-    padding-top: 10px;
-    border-top: 1px dashed #CFD8DC;
-}
-.data-stats p:last-child strong {
-    color: var(--primary-color); 
-}
+        /* --- Data Stats Section --- */
+        .data-stats {
+            margin-bottom: 20px;
+        }
 
-/* --- Controls Section --- */
-.controls { display: flex; flex-direction: column; }
-.checkbox-group { 
-    display: flex; 
-    justify-content: space-around; 
-    gap: 15px; 
-    margin-bottom: 15px; 
-    padding: 10px; 
-    border-radius: 6px; 
-    background-color: #F5F5F5; 
-    border: 1px solid #E0E0E0;
-}
-.checkbox-group label { 
-    font-size: 0.9rem; 
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    color: var(--text-color);
-}
-.checkbox-group input[type="checkbox"] {
-    margin-right: 6px;
-    width: 16px;
-    height: 16px;
-    accent-color: var(--primary-color);
-}
-.btn-group { display: flex; gap: 10px; }
-.school-card button { 
-    flex-grow: 1; 
-    padding: 12px 10px; 
-    border: none; 
-    border-radius: 6px; 
-    cursor: pointer; 
-    font-weight: 600; 
-    font-size: 0.95rem; 
-    transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.school-card button .material-icons {
-    font-size: 1.2rem;
-    margin-right: 5px;
-}
-.export-btn { 
-    background: var(--primary-color); 
-    color: white; 
-    box-shadow: 0 4px 8px rgba(25,118,210,0.3);
-}
-.export-btn:hover { 
-    background: #1565C0; 
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(25,118,210,0.4); 
-}
-.delete-btn { 
-    background: var(--delete-color); 
-    color: white; 
-    box-shadow: 0 4px 8px rgba(211,47,47,0.3);
-}
-.delete-btn:hover { 
-    background: #C62828; 
-    transform: translateY(-2px); 
-    box-shadow: 0 6px 12px rgba(211,47,47,0.4);
-}
-/* --- Empty State --- */
-.card-container .empty-state { 
-    grid-column: 1 / -1; 
-    text-align: center; 
-    padding: 50px; 
-    font-size: 1.1rem; 
-    color: var(--sub-text-color); 
-    background: #ffffff; 
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-light);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-.empty-state .material-icons {
-    font-size: 3rem;
-    color: #B0BEC5;
-    margin-bottom: 10px;
-}
-</style>
+        .data-stats p {
+            margin: 8px 0;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--sub-text-color);
+        }
+
+        .data-stats p .material-icons {
+            font-size: 1.1rem;
+            margin-right: 5px;
+        }
+
+        .data-stats strong {
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .data-stats p:last-child {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed #CFD8DC;
+        }
+
+        .data-stats p:last-child strong {
+            color: var(--primary-color);
+        }
+
+        /* --- Controls Section --- */
+        .controls {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkbox-group {
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: #F5F5F5;
+            border: 1px solid #E0E0E0;
+        }
+
+        .checkbox-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 6px;
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary-color);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .school-card button {
+            flex-grow: 1;
+            padding: 12px 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .school-card button .material-icons {
+            font-size: 1.2rem;
+            margin-right: 5px;
+        }
+
+        .export-btn {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
+        }
+
+        .export-btn:hover {
+            background: #1565C0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(25, 118, 210, 0.4);
+        }
+
+        .delete-btn {
+            background: var(--delete-color);
+            color: white;
+            box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
+        }
+
+        .delete-btn:hover {
+            background: #C62828;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(211, 47, 47, 0.4);
+        }
+
+        /* --- Empty State --- */
+        .card-container .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px;
+            font-size: 1.1rem;
+            color: var(--sub-text-color);
+            background: #ffffff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-state .material-icons {
+            font-size: 3rem;
+            color: #B0BEC5;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
+
 <body>
 
-<div id="notification" class="notification"></div>
+    <div id="notification" class="notification"></div>
 
-<div class="header-section">
-    <h1><span class="material-icons" style="font-size: 2rem; vertical-align: middle; margin-right: 10px; color: var(--primary-color);">admin_panel_settings</span> Data Management</h1>
-    <input type="text" id="searchInput" placeholder="Search School by Name..."/>
-</div>
+    <div class="header-section">
+        <h1><span class="material-icons"
+                style="font-size: 2rem; vertical-align: middle; margin-right: 10px; color: var(--primary-color);">admin_panel_settings</span>
+            Data Management</h1>
+        <input type="text" id="searchInput" placeholder="Search School by Name..." />
+    </div>
 
-<div id="cardContainer" class="card-container"></div>
+    <div id="cardContainer" class="card-container"></div>
 
-<script type="module">
-// 🚨 NOTE: The import paths for 'Database.js' and Firebase modules MUST be correct relative to your setup.
-import { firebaseConfig } from "../Database/Database.js"; 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getDatabase, ref, get, remove, set } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    <script type="module">
+        /* ✅ Updated & hardened script (kept your original flow, fixed bugs & edge-cases)
+           - Uses e.currentTarget instead of e.target (buttons with inner icons won't break)
+           - Safer showToast handling (avoids clobbering classes)
+           - Escapes/sanitizes strings used inside HTML
+           - Uses runTransaction for credit deduction (as you already imported)
+           - Re-fetches summary after operations instead of hard full reload (smoother UX)
+        */
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const cardContainer = document.getElementById("cardContainer");
-const notification = document.getElementById("notification");
-const searchInput = document.getElementById("searchInput");
+        import { firebaseConfig } from "../Database/Database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getDatabase, ref, get, remove, set, runTransaction } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-// Modified cache to store IDs
-let schoolsDataCache = {}; // { schoolName: { ids: [], studentEnroll: [], staffEnroll: [], totalCount } }
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const cardContainer = document.getElementById("cardContainer");
+        const notification = document.getElementById("notification");
+        const searchInput = document.getElementById("searchInput");
 
-function showToast(msg,type='success'){
-    notification.textContent = msg;
-    notification.className=`notification notification-${type} show`;
-    setTimeout(()=>{ notification.className=`notification notification-${type}`; },3000);
-}
+        // Modified cache to store IDs
+        let schoolsDataCache = {}; // { schoolName: { ids: [], studentEnroll: [], staffEnroll: [], totalCount } }
 
-// 1️⃣ Fetch only enrollment keys for all schools
-async function fetchSchoolSummary(){
-    try{
-        showToast("Loading school data...");
-        const snapshot = await get(ref(db,'DATA-MASTER'));
-        schoolsDataCache={};
-        if(snapshot.exists()){
-            const masterData = snapshot.val();
-            for(const schoolName in masterData){
-                let studentEnroll=[], staffEnroll=[], ids=[]; // 🚨 Added ids array
-                const schoolIDs = masterData[schoolName];
-                for(const schoolID in schoolIDs){
-                    ids.push(schoolID); // 🚨 Capture the ID
-                    const students = schoolIDs[schoolID]?.STUDENT || {};
-                    const staffs = schoolIDs[schoolID]?.STAFF || {};
-                    studentEnroll.push(...Object.keys(students));
-                    staffEnroll.push(...Object.keys(staffs));
+        // small helper: escape text for safe insertion into innerHTML fragments
+        function escapeHtml(unsafe) {
+            if (unsafe === null || unsafe === undefined) return '';
+            return String(unsafe)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // small helper: sanitize filename for exports
+        function sanitizeFilename(name) {
+            return String(name).replace(/[\\\/:*?"<>|]+/g, '_');
+        }
+
+        // Improved toast
+        function showToast(msg, type = 'success') {
+            if (!notification) {
+                console.warn('Notification element not found:', msg);
+                return;
+            }
+            notification.textContent = msg;
+            // Reset classes reliably
+            notification.className = 'notification';
+            notification.classList.add('show');
+            notification.classList.add(type === 'error' ? 'notification-error' : 'notification-success');
+            if (notification._hideTimer) clearTimeout(notification._hideTimer);
+            notification._hideTimer = setTimeout(() => {
+                notification.classList.remove('show', 'notification-success', 'notification-error');
+            }, 3000);
+        }
+
+        // 1️⃣ Fetch only enrollment keys for all schools
+        async function fetchSchoolSummary() {
+            try {
+                showToast("Loading school data...");
+                const snapshot = await get(ref(db, 'DATA-MASTER'));
+                schoolsDataCache = {};
+                if (snapshot.exists()) {
+                    const masterData = snapshot.val();
+                    for (const schoolName in masterData) {
+                        let studentEnroll = [], staffEnroll = [], ids = [];
+                        const schoolIDs = masterData[schoolName] || {};
+                        for (const schoolID in schoolIDs) {
+                            ids.push(schoolID);
+                            const students = schoolIDs[schoolID]?.STUDENT || {};
+                            const staffs = schoolIDs[schoolID]?.STAFF || {};
+                            studentEnroll.push(...Object.keys(students));
+                            staffEnroll.push(...Object.keys(staffs));
+                        }
+                        schoolsDataCache[schoolName] = { ids, studentEnroll, staffEnroll, totalCount: studentEnroll.length + staffEnroll.length };
+                    }
+                    renderSchoolCards();
+                    showToast("Schools loaded!", 'success');
+                } else {
+                    if (cardContainer) cardContainer.innerHTML = '<p class="empty-state"><span class="material-icons">folder_open</span>No schools found.</p>';
+                    showToast("No schools found", 'error');
                 }
-                // 🚨 Updated schoolsDataCache entry
-                schoolsDataCache[schoolName]={ ids, studentEnroll, staffEnroll, totalCount: studentEnroll.length+staffEnroll.length }; 
+            } catch (err) {
+                console.error(err);
+                showToast('Failed to load schools', 'error');
             }
-            renderSchoolCards();
-            showToast("Schools loaded!",'success');
-        } else cardContainer.innerHTML='<p class="empty-state"><span class="material-icons">folder_open</span>No schools found.</p>';
-    }catch(err){ console.error(err); showToast('Failed to load schools','error'); }
-}
+        }
 
-// 2️⃣ Render school cards
-function renderSchoolCards(){
-    const filter = searchInput.value.toLowerCase();
-    cardContainer.innerHTML='';
-    let count=0;
-    for(const schoolName in schoolsDataCache){
-        if(filter && !schoolName.toLowerCase().includes(filter)) continue;
-        const data = schoolsDataCache[schoolName];
-        const { ids, studentEnroll, staffEnroll, totalCount } = data; // 🚨 Destructure ids
-        const card=document.createElement('div');
-        card.className='school-card';
-        card.innerHTML=`
-            <h3><span class="material-icons">school</span>${schoolName}</h3>
-            <p class="school-id-display">IDs: <span>${ids.join(', ')}</span></p> <div class="data-stats">
-                <p><span class="material-icons" style="color:#03A9F4;">face</span> Students: <strong>${studentEnroll.length}</strong></p>
-                <p><span class="material-icons" style="color:#FF9800;">people</span> Staff: <strong>${staffEnroll.length}</strong></p>
-                <p><span class="material-icons">storage</span> Total Entries: <strong>${totalCount}</strong></p>
-            </div>
-            <div class="controls">
-                <div class="checkbox-group">
-                    <label><input type="checkbox" class="student-check" checked> Students</label>
-                    <label><input type="checkbox" class="staff-check" checked> Staff</label>
+        // 2️⃣ Render school cards
+        function renderSchoolCards() {
+            if (!cardContainer) return;
+            const filter = (searchInput?.value || '').toLowerCase();
+            cardContainer.innerHTML = '';
+            let count = 0;
+            for (const schoolName in schoolsDataCache) {
+                if (filter && !schoolName.toLowerCase().includes(filter)) continue;
+                const data = schoolsDataCache[schoolName];
+                const { ids, studentEnroll, staffEnroll, totalCount } = data;
+                const card = document.createElement('div');
+                card.className = 'school-card';
+
+                // Build safe inner HTML (escape dynamic values)
+                card.innerHTML = `
+                <h3><span class="material-icons">school</span><span class="school-title">${escapeHtml(schoolName)}</span></h3>
+                <p class="school-id-display">IDs: <span title="${escapeHtml(ids.join(', '))}">${escapeHtml(ids.join(', '))}</span></p>
+                <div class="data-stats">
+                    <p><span class="material-icons" style="color:#03A9F4;">face</span> Students: <strong>${studentEnroll.length}</strong></p>
+                    <p><span class="material-icons" style="color:#FF9800;">people</span> Staff: <strong>${staffEnroll.length}</strong></p>
+                    <p><span class="material-icons">storage</span> Total Entries: <strong>${totalCount}</strong></p>
                 </div>
-                <div class="btn-group">
-                    <button class="export-btn" data-school="${schoolName}"><span class="material-icons">download</span>Export Data</button>
-                    <button class="delete-btn" data-school="${schoolName}"><span class="material-icons">delete</span>Delete Data</button>
+                <div class="controls">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" class="student-check" checked> Students</label>
+                        <label><input type="checkbox" class="staff-check" checked> Staff</label>
+                    </div>
+                    <div class="btn-group">
+                        <button class="export-btn" data-school="${escapeHtml(schoolName)}"><span class="material-icons">download</span>Export Data</button>
+                        <button class="delete-btn" data-school="${escapeHtml(schoolName)}"><span class="material-icons">delete</span>Delete Data</button>
+                    </div>
                 </div>
-            </div>
-        `;
-        // Export
-        card.querySelector('.export-btn').addEventListener('click', async e=>{
-            const name=e.target.dataset.school;
-            const expStudents=card.querySelector('.student-check').checked;
-            const expStaff=card.querySelector('.staff-check').checked;
-            if(!expStudents && !expStaff){ showToast('Select at least one to export','error'); return; }
-            showToast(`Exporting ${name}...`);
-            try{ await exportSchoolData(name, expStudents, expStaff); }
-            catch(err){ console.error(err); showToast(`Export failed for ${name}`,'error'); }
-        });
-        // Delete
-        card.querySelector('.delete-btn').addEventListener('click', async e=>{
-            const name=e.target.dataset.school;
-            const delStudents=card.querySelector('.student-check').checked;
-            const delStaff=card.querySelector('.staff-check').checked;
-            if(!delStudents && !delStaff){ showToast('Select at least one to delete','error'); return; }
-            if(!confirm(`Delete selected data for ${name}? This cannot be undone.`)) return;
-            try{ showToast(`Deleting ${name}...`); await deleteSchoolData(name, delStudents, delStaff); }
-            catch(err){ console.error(err); showToast(`Delete failed for ${name}`,'error'); }
-        });
-        cardContainer.appendChild(card);
-        count++;
-    }
-    if(count===0) cardContainer.innerHTML='<p class="empty-state"><span class="material-icons">search_off</span>No matching schools found.</p>';
-}
+            `;
 
-// 3️⃣ Export full data dynamically (Logic is unchanged, added reload)
-async function exportSchoolData(schoolName, expStudents=true, expStaff=true){
-    const zip = new JSZip();
-    const photoFolder = zip.folder("Photos");
-    const schoolSnapshot = await get(ref(db, `DATA-MASTER/${schoolName}`));
-    if(!schoolSnapshot.exists()){ showToast('No data for this school','error'); return; }
-    const schoolData = schoolSnapshot.val();
-    let totalExported = 0;
+                // Export - use currentTarget so inner icon clicks still work
+                const exportBtn = card.querySelector('.export-btn');
+                if (exportBtn) {
+                    exportBtn.addEventListener('click', async (e) => {
+                        const btn = e.currentTarget;
+                        const name = btn.dataset.school;
+                        const expStudents = card.querySelector('.student-check').checked;
+                        const expStaff = card.querySelector('.staff-check').checked;
+                        if (!expStudents && !expStaff) { showToast('Select at least one to export', 'error'); return; }
+                        showToast(`Exporting ${name}...`);
+                        try { await exportSchoolData(name, expStudents, expStaff); }
+                        catch (err) { console.error(err); showToast(`Export failed for ${name}`, 'error'); }
+                    });
+                }
 
-    if(expStudents){
-        let studentData=[];
-        for(const schoolID in schoolData){
-            const studentKeys = schoolData[schoolID]?.STUDENT ? Object.keys(schoolData[schoolID].STUDENT) : [];
-            for(const key of studentKeys){
-                const record = schoolData[schoolID].STUDENT[key];
-                if(!record) continue;
-                studentData.push({...record});
-                if(record.photo) try{
-                    const resp = await fetch(record.photo);
-                    if(resp.ok){ const blob = await resp.blob(); photoFolder.file(`${record.student_enroll||key}.jpg`, blob); }
-                }catch(err){ console.warn(err); }
+                // Delete - use currentTarget as well
+                const deleteBtn = card.querySelector('.delete-btn');
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', async (e) => {
+                        const btn = e.currentTarget;
+                        const name = btn.dataset.school;
+                        const delStudents = card.querySelector('.student-check').checked;
+                        const delStaff = card.querySelector('.staff-check').checked;
+                        if (!delStudents && !delStaff) { showToast('Select at least one to delete', 'error'); return; }
+                        if (!confirm(`Delete selected data for ${name}? This will also deduct credits and cannot be undone.`)) return;
+                        try { showToast(`Deleting ${name}...`); await deleteSchoolData(name, delStudents, delStaff); }
+                        catch (err) { console.error(err); showToast(`Delete failed for ${name}`, 'error'); }
+                    });
+                }
+
+                cardContainer.appendChild(card);
+                count++;
+            }
+            if (count === 0) cardContainer.innerHTML = '<p class="empty-state"><span class="material-icons">search_off</span>No matching schools found.</p>';
+        }
+
+        // 3️⃣ Export full data dynamically
+        async function exportSchoolData(schoolName, expStudents = true, expStaff = true) {
+            try {
+                const zip = new JSZip();
+                const photoFolder = zip.folder("Photos");
+                const schoolSnapshot = await get(ref(db, `DATA-MASTER/${schoolName}`));
+                if (!schoolSnapshot.exists()) { showToast('No data for this school', 'error'); return; }
+                const schoolData = schoolSnapshot.val();
+                let totalExported = 0;
+
+                if (expStudents) {
+                    let studentData = [];
+                    for (const schoolID in schoolData) {
+                        const studentKeys = schoolData[schoolID]?.STUDENT ? Object.keys(schoolData[schoolID].STUDENT) : [];
+                        for (const key of studentKeys) {
+                            const record = schoolData[schoolID].STUDENT[key];
+                            if (!record) continue;
+                            studentData.push({ ...record });
+                            if (record.photo) try {
+                                const resp = await fetch(record.photo);
+                                if (resp.ok) { const blob = await resp.blob(); photoFolder.file(`${sanitizeFilename(record.student_enroll || key)}.jpg`, blob); }
+                            } catch (err) { console.warn(err); }
+                        }
+                    }
+                    if (studentData.length) {
+                        totalExported += studentData.length;
+                        const ws = XLSX.utils.json_to_sheet(studentData);
+                        const wb = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(wb, ws, 'Students');
+                        zip.file(`${sanitizeFilename(schoolName)}-Students.xlsx`, XLSX.write(wb, { bookType: 'xlsx', type: 'array' }));
+                    }
+                }
+
+                if (expStaff) {
+                    let staffData = [];
+                    for (const schoolID in schoolData) {
+                        const staffKeys = schoolData[schoolID]?.STAFF ? Object.keys(schoolData[schoolID].STAFF) : [];
+                        for (const key of staffKeys) {
+                            const record = schoolData[schoolID].STAFF[key];
+                            if (!record) continue;
+                            staffData.push({ ...record });
+                            if (record.photo) try {
+                                const resp = await fetch(record.photo);
+                                if (resp.ok) { const blob = await resp.blob(); photoFolder.file(`${sanitizeFilename(record.staff_enroll || key)}.jpg`, blob); }
+                            } catch (err) { console.warn(err); }
+                        }
+                    }
+                    if (staffData.length) {
+                        totalExported += staffData.length;
+                        const ws = XLSX.utils.json_to_sheet(staffData);
+                        const wb = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(wb, ws, 'Staff');
+                        zip.file(`${sanitizeFilename(schoolName)}-Staff.xlsx`, XLSX.write(wb, { bookType: 'xlsx', type: 'array' }));
+                    }
+                }
+
+                if (totalExported > 0) {
+                    const blob = await zip.generateAsync({ type: 'blob' });
+                    saveAs(blob, `${sanitizeFilename(schoolName)}-Export.zip`);
+                    showToast('Export completed!', 'success');
+                    // Refresh the summary to reflect any changes (soft refresh)
+                    setTimeout(() => fetchSchoolSummary(), 700);
+                } else {
+                    showToast('No data to export', 'error');
+                }
+            } catch (err) {
+                console.error('Export failed:', err);
+                showToast('Export failed due to an error', 'error');
             }
         }
-        if(studentData.length){
-            totalExported += studentData.length;
-            const ws=XLSX.utils.json_to_sheet(studentData);
-            const wb=XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Students');
-            zip.file(`${schoolName}-Students.xlsx`, XLSX.write(wb,{bookType:'xlsx', type:'array'}));
-        }
-    }
 
-    if(expStaff){
-        let staffData=[];
-        for(const schoolID in schoolData){
-            const staffKeys = schoolData[schoolID]?.STAFF ? Object.keys(schoolData[schoolID].STAFF) : [];
-            for(const key of staffKeys){
-                const record = schoolData[schoolID].STAFF[key];
-                if(!record) continue;
-                staffData.push({...record});
-                if(record.photo) try{
-                    const resp = await fetch(record.photo);
-                    if(resp.ok){ const blob = await resp.blob(); photoFolder.file(`${record.staff_enroll||key}.jpg`, blob); }
-                }catch(err){ console.warn(err); }
+        // 4️⃣ Delete + backup to Delete-Desire (with credit deduction)
+        async function deleteSchoolData(schoolName, delStudents = true, delStaff = true) {
+            try {
+                const schoolSnapshot = await get(ref(db, `DATA-MASTER/${schoolName}`));
+                if (!schoolSnapshot.exists()) { showToast('No data for this school', 'error'); return; }
+
+                const schoolData = schoolSnapshot.val();
+                const promises = [];
+                let totalDeletedCount = 0;
+
+                for (const schoolID in schoolData) {
+                    // Delete Students
+                    if (delStudents && schoolData[schoolID]?.STUDENT) {
+                        for (const key of Object.keys(schoolData[schoolID].STUDENT)) {
+                            const record = { ...schoolData[schoolID].STUDENT[key] };
+                            delete record.photo;
+                            const deletePath = ref(db, `Delete-Desire/${schoolName}/${schoolID}/STUDENT/${key}`);
+                            const workRef = ref(db, `workdone/${schoolName}/STUDENT/${key}`);
+                            const dataRef = ref(db, `DATA-MASTER/${schoolName}/${schoolID}/STUDENT/${key}`);
+                            const ts = new Date().toISOString();
+
+                            promises.push(
+                                set(deletePath, record)
+                                    .then(() => set(workRef, { deletedAt: ts, type: 'STUDENT', key }))
+                                    .then(() => remove(dataRef))
+                                    .catch(err => console.warn(err))
+                            );
+
+                            totalDeletedCount++;
+                        }
+                        if (schoolsDataCache[schoolName]) schoolsDataCache[schoolName].studentEnroll = [];
+                    }
+
+                    // Delete Staff
+                    if (delStaff && schoolData[schoolID]?.STAFF) {
+                        for (const key of Object.keys(schoolData[schoolID].STAFF)) {
+                            const record = { ...schoolData[schoolID].STAFF[key] };
+                            delete record.photo;
+                            const deletePath = ref(db, `Delete-Desire/${schoolName}/${schoolID}/STAFF/${key}`);
+                            const workRef = ref(db, `workdone/${schoolName}/STAFF/${key}`);
+                            const dataRef = ref(db, `DATA-MASTER/${schoolName}/${schoolID}/STAFF/${key}`);
+                            const ts = new Date().toISOString();
+
+                            promises.push(
+                                set(deletePath, record)
+                                    .then(() => set(workRef, { deletedAt: ts, type: 'STAFF', key }))
+                                    .then(() => remove(dataRef))
+                                    .catch(err => console.warn(err))
+                            );
+
+                            totalDeletedCount++;
+                        }
+                        if (schoolsDataCache[schoolName]) schoolsDataCache[schoolName].staffEnroll = [];
+                    }
+                }
+
+                // Wait for all DB operations to finish
+                await Promise.all(promises);
+
+                // Credit deduction using transaction
+                if (totalDeletedCount > 0) {
+                    const vendorCreditRef = ref(db, 'roles/vendor/credits');
+                    try {
+                        const transactionResult = await runTransaction(vendorCreditRef, (currentCredits) => {
+                            const credits = (currentCredits === null || typeof currentCredits !== 'number') ? 0 : currentCredits;
+                            return credits - totalDeletedCount;
+                        });
+
+                        if (transactionResult.committed) {
+                            const newCredits = transactionResult.snapshot.val();
+                            showToast(`Deleted ${totalDeletedCount} entries. ${totalDeletedCount} credits deducted. New balance: ${newCredits}`, 'success');
+                        } else {
+                            showToast(`Deleted successfully, but FAILED to update credits. Please check roles/vendor.`, 'error');
+                        }
+                    } catch (creditError) {
+                        console.error("Credit deduction failed:", creditError);
+                        showToast(`Deleted successfully, but FAILED to deduct credits due to an error.`, 'error');
+                    }
+                } else {
+                    showToast(`No entries were selected or found for deletion.`, 'success');
+                }
+
+                // Refresh summary (soft)
+                setTimeout(() => fetchSchoolSummary(), 800);
+            } catch (err) {
+                console.error('Delete flow failed:', err);
+                showToast('Delete operation failed due to an error', 'error');
             }
         }
-        if(staffData.length){
-            totalExported += staffData.length;
-            const ws=XLSX.utils.json_to_sheet(staffData);
-            const wb=XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Staff');
-            zip.file(`${schoolName}-Staff.xlsx`, XLSX.write(wb,{bookType:'xlsx', type:'array'}));
-        }
-    }
 
-    if(totalExported>0){
-        const blob = await zip.generateAsync({type:'blob'});
-        saveAs(blob, `${schoolName}-Export.zip`);
-        showToast('Export completed!');
-        
-        // 🚨 MODIFICATION: Full Page Reload after successful Export
-        setTimeout(() => window.location.reload(), 500);
-        
-    } else showToast('No data to export','error');
-}
+        // 5️⃣ Search input
+        if (searchInput) searchInput.addEventListener('input', renderSchoolCards);
 
-// 4️⃣ Delete + backup to Delete-Desire (Logic is unchanged, added reload)
-async function deleteSchoolData(schoolName, delStudents=true, delStaff=true){
-    const schoolSnapshot = await get(ref(db,`DATA-MASTER/${schoolName}`));
-    if(!schoolSnapshot.exists()){ showToast('No data for this school','error'); return; }
-    const schoolData = schoolSnapshot.val();
-    const promises=[];
+        // Initial load
+        fetchSchoolSummary();
+    </script>
 
-    for(const schoolID in schoolData){
-        // Delete Students
-        if(delStudents && schoolData[schoolID]?.STUDENT){
-            for(const key of Object.keys(schoolData[schoolID].STUDENT)){
-                const record = {...schoolData[schoolID].STUDENT[key]};
-                delete record.photo; 
-                const deletePath = ref(db, `Delete-Desire/${schoolName}/${schoolID}/STUDENT/${key}`);
-                const workRef = ref(db,`workdone/${schoolName}/STUDENT/${key}`);
-                const dataRef = ref(db,`DATA-MASTER/${schoolName}/${schoolID}/STUDENT/${key}`);
-                const ts = new Date().toISOString();
-
-                promises.push(set(deletePath, record)
-                    .then(()=>set(workRef,{deletedAt:ts,type:'STUDENT',key}))
-                    .then(()=>remove(dataRef))
-                    .catch(err=>console.warn(err)));
-            }
-            // Removing the data from the cache is no longer strictly necessary since we reload, 
-            // but we keep it for consistency before the reload.
-            schoolsDataCache[schoolName].studentEnroll=[];
-        }
-
-        // Delete Staff
-        if(delStaff && schoolData[schoolID]?.STAFF){
-            for(const key of Object.keys(schoolData[schoolID].STAFF)){
-                const record = {...schoolData[schoolID].STAFF[key]};
-                delete record.photo; 
-                const deletePath = ref(db, `Delete-Desire/${schoolName}/${schoolID}/STAFF/${key}`);
-                const workRef = ref(db,`workdone/${schoolName}/STAFF/${key}`);
-                const dataRef = ref(db,`DATA-MASTER/${schoolName}/${schoolID}/STAFF/${key}`);
-                const ts = new Date().toISOString();
-
-                promises.push(set(deletePath, record)
-                    .then(()=>set(workRef,{deletedAt:ts,type:'STAFF',key}))
-                    .then(()=>remove(dataRef))
-                    .catch(err=>console.warn(err)));
-            }
-            schoolsDataCache[schoolName].staffEnroll=[];
-        }
-    }
-
-    await Promise.all(promises);
-    showToast(`Deleted successfully!`, 'success'); 
-    
-    // 🚨 MODIFICATION: Full Page Reload after successful Delete
-    setTimeout(() => window.location.reload(), 500); 
-}
-
-// 5️⃣ Search input
-searchInput.addEventListener('input', renderSchoolCards);
-
-// Initial load
-fetchSchoolSummary();
-</script>
 </body>
+
 </html>
