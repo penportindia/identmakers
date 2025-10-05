@@ -5,28 +5,16 @@
     <title>Pro-ID Generator Platform</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Fonts & Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="Style.css" />
+    <link rel="stylesheet" href="style.css" />
     <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet" />
 
-    <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
-    <!-- Page 1: Data Hub -->
-    <section id="page-1" class="app-section active">
-        <header class="platform-header">
-            <h1 class="platform-title">Print Junction</h1>
-            <div class="header-status">
-                <span data-lucide="database" class="status-icon"></span>
-                <span class="status-text">Data Source Connected</span>
-            </div>
-        </header>
-
+    <section id="page-1" class="app-section active"> 
         <div class="main-layout-grid">
-            <!-- Control Panel -->
             <aside class="control-panel">
                 <h2 class="panel-title">Filter Records</h2>
 
@@ -76,7 +64,6 @@
                 </div>
             </aside>
 
-            <!-- Data Display Area -->
             <div class="data-display-area">
                 <div class="data-table-container">
                     <div class="table-header-controls">
@@ -87,7 +74,7 @@
                         </button>
                     </div>
 
-                    <div class="table-wrapper-advanced">
+                    <div class="table-wrapper-advanced"> 
                         <table id="data-table">
                             <thead id="tableHead"></thead>
                             <tbody id="tableBody"></tbody>
@@ -98,16 +85,7 @@
         </div>
     </section>
 
-    <!-- Page 2: Card Preview & Render -->
     <section id="page-2" class="app-section">
-        <header class="platform-header">
-            <h1 class="platform-title">Card Render & Preview</h1>
-            <div id="goToBatchBtn" class="header-status action-link">
-                <span data-lucide="package-open" class="status-icon"></span>
-                <span class="status-text">Batch Hub</span>
-            </div>
-        </header>
-
         <div class="render-controls-bar">
             <button id="goToDataBtn" class="action-btn secondary-style">
                 <i data-lucide="arrow-left-circle" class="icon-sm"></i>
@@ -130,6 +108,11 @@
                     <i data-lucide="printer" class="icon-sm"></i>
                     Print Current Batch
                 </button>
+                
+                <button id="goToBatchBtn" class="action-btn tertiary-style">
+                    <i data-lucide="package-open" class="icon-sm"></i>
+                    Batch Hub
+                </button>
             </div>
         </div>
 
@@ -139,23 +122,21 @@
         </div>
     </section>
 
-    <!-- Page 3: Batch Management Hub -->
     <section id="page-3" class="app-section">
-        <header class="platform-header">
-            <h1 class="platform-title">Batch Management Hub</h1>
-            <div id="backToRendererBtn" class="header-status action-link">
-                <span data-lucide="arrow-left-circle" class="status-icon"></span>
-                <span class="status-text">Back to Renderer</span>
-            </div>
-        </header>
-
         <div class="batch-hub-content">
             <h2 class="panel-title">Batch Actions</h2>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <button id="backToRendererBtn" class="action-btn secondary-style">
+                    <i data-lucide="arrow-left-circle" class="icon-sm"></i>
+                    Back to Renderer
+                </button>
+            </div>
+
             <div id="page-3-controls" class="batch-controls"></div>
         </div>
     </section>
 
-    <!-- Crop Modal -->
     <div id="cropContainer" class="crop-modal-overlay">
         <div class="crop-modal-content">
             <h3 class="crop-modal-title">Crop Profile Image</h3>
@@ -168,7 +149,6 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script type="module" src="Data.js"></script>
     <script type="module" src="Render.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -181,4 +161,3 @@
 
 </body>
 </html>
-
