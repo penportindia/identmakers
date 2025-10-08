@@ -136,7 +136,7 @@
         }
 
         .ad-image-header {
-            height: 55%; /* Increased height since plans are removed */
+            height: 80%; /* Increased height since plans are removed */
             background-size: cover;
             background-position: center;
             background-color: var(--secondary-color);
@@ -1102,23 +1102,29 @@
 
         // --- MENU CONFIGURATION ---
         const menuConfig = {
-            dashboard: { icon: 'space_dashboard', tooltip: 'Dashboard', url: "https://penportindia.github.io/identmakers/Roots/Dashborad/Dashboard.html", internal: false },
-            schools: { icon: 'business', tooltip: 'Clients', url: "https://penportindia.github.io/identmakers/Roots/Schools/User.html", internal: false },
-            create: { icon: 'add_box', tooltip: 'Create New ID', url: "https://penportindia.github.io/identmakers/Roots/Create/Create.html", internal: false },
-            manage: { icon: 'folder_open', tooltip: 'Manage', url: "https://penportindia.github.io/identmakers/Roots/Manage/Manage.html", internal: false },
-            template: { icon: 'badge', tooltip: 'Templates', url: "https://penportindia.github.io/identmakers/Roots/Template/Template.html", internal: false },
-            print: { icon: 'print', tooltip: 'Print Manager', url: "https://penportindia.github.io/identmakers/Roots/Print/Print.html", internal: false },
-            data: { icon: 'cloud_download', tooltip: 'Data Export', url: "https://penportindia.github.io/identmakers/Roots/Data Management/Data.html", internal: false },
-            // New Ad Management Page (internal: true means we switch the view, not the iframe source)
+            // Original Icons Restored (Except 'account')
+            dashboard: { icon: 'space_dashboard', tooltip: 'Dashboard', url: 'https://penportindia.github.io/identmakers/Roots/Dashborad/Dashboard.html', internal: false },
+            schools: { icon: 'business', tooltip: 'Clients', url: 'https://penportindia.github.io/identmakers/Roots/Schools/User.html', internal: false },
+            create: { icon: 'add_box', tooltip: 'Create New ID', url: 'https://penportindia.github.io/identmakers/Roots/Create/Create.html', internal: false },
+            manage: { icon: 'folder_open', tooltip: 'Manage', url: 'https://penportindia.github.io/identmakers/Roots/Manage/Manage.html', internal: false },
+            template: { icon: 'badge', tooltip: 'Templates', url: 'https://penportindia.github.io/identmakers/Roots/Template/Template.html', internal: false },
+            print: { icon: 'print', tooltip: 'Print Manager', url: 'https://penportindia.github.io/identmakers/Roots/Print/Print.html', internal: false },
+            data: { icon: 'cloud_download', tooltip: 'Data Export', url: 'https://penportindia.github.io/identmakers/Roots/Data%20Management/Data.html', internal: false },
+            
+            // Attractive & Relevant Account Icon Set
+            account: { icon: 'manage_accounts', tooltip: 'Account', url: 'https://penportindia.github.io/identmakers/Roots/Author/Author.html', internal: false },
+            
             adManage: { icon: 'campaign', tooltip: 'Ad Management', internal: true }
         };
 
+        // --- ROLE BASED MENU ACCESS ---
         const roleMenus = {
-            vendor: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data'],
-            developer: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'adManage'],
-            manager: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'adManage']
+            vendor:    ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data'],
+            developer: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'account', 'adManage'],
+            
+            // 'adManage' is still removed from 'manager' role as per your last request
+            manager:   ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'account'] 
         };
-
 
         // --- FIREBASE AD FETCHING (Login Screen) ---
 
