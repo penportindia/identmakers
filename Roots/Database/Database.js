@@ -1,5 +1,6 @@
-// Database/Database.js
-
+// -----------------------------
+// Firebase Configuration
+// -----------------------------
 export const firebaseConfig = {
     apiKey: "AIzaSyDw5K3oMY_fdNvyG29OTGiJtEX-g6j48LY",
     authDomain: "identmakers.firebaseapp.com",
@@ -10,6 +11,13 @@ export const firebaseConfig = {
     measurementId: "G-8CS4FY9G7F"
 };
 
-export const imagebbConfig = {
-    apiKey: "253fd399d243c769931ce9a4ab0ec293" 
+// -----------------------------
+// Cloudinary Configuration
+// -----------------------------
+export const cloudinaryConfig = {
+    // Replace 'YOUR_CLOUD_NAME' with your Cloudinary account cloud name
+    uploadUrl: "https://api.cloudinary.com/v1_1/dlugbxmkm/image/upload",
+    
+    // Replace 'YOUR_UPLOAD_PRESET' with your unsigned upload preset
+    uploadPreset: "photo_uplode"
 };
