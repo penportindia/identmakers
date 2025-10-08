@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Create New Record - Modern UI</title>
+<title>Create New Record - School ERP</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -87,6 +87,9 @@ body {
     padding: 20px;
     transition: all 0.3s ease;
     cursor: pointer;
+    /* ADDED/UPDATED FOR CLEAN ALIGNMENT */
+    display: flex;
+    flex-direction: column;
 }
 
 .selection-block:hover {
@@ -104,12 +107,41 @@ body {
 .selection-block label { 
     font-size: 16px; 
     font-weight: 700; 
-    color: var(--primary-dark); 
+    /* CHANGED COLOR TO DARK TEXT FOR CLEAN LOOK */
+    color: var(--text-color); 
     margin-bottom: 5px; 
     display: flex;
     align-items: center;
     gap: 10px;
 }
+
+.selection-block label i {
+    /* Set icon color to primary blue */
+    color: var(--primary-dark);
+}
+
+/* Specific Select Dropdown Style for consistency with Select2 look */
+.selection-block select {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid var(--border-color); /* Using root variable */
+    border-radius: 10px; /* Matching Select2 radius */
+    background-color: var(--card-background);
+    color: var(--text-color);
+    appearance: none; 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    height: 48px; /* Matching Select2 height */
+}
+
+.selection-block select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); 
+}
+
 
 #nextStepBtn {
     width: 100%; 
@@ -239,6 +271,10 @@ textarea {
     align-items: center; 
     gap: 15px; 
 }
+.photo-upload-section .card-title {
+    color: var(--primary-dark);
+    margin-bottom: 25px;
+}
 #photo-preview { 
     width: 100%; 
     height: 260px; 
@@ -337,16 +373,18 @@ textarea {
                 
                 <div class="selection-block" id="schoolSelectBlock">
                     <label for="schoolSelect"><i class="fas fa-university"></i> Select Institution</label>
-                    <select id="schoolSelect" style="width: 100%;" required></select>
+                    <select id="schoolSelect" required>
+                        <option value="">-- Loading Schools --</option>
+                    </select>
                 </div>
                 
                 <div class="selection-block" id="entryTypeBlock">
                     <label for="entryType"><i class="fas fa-id-card-alt"></i> Select Record Type</label>
-                    <select id="entryType" style="width: 100%;" required>
+                    <select id="entryType" required>
                         <option value="">-- Select Type --</option>
                         <option value="student">Student Record</option>
                         <option value="staff">Staff Record</option>
-                    </select>
+                        </select>
                 </div>
                 
             </div>
@@ -379,7 +417,7 @@ textarea {
                 </div>
 
                 <div class="photo-upload-section">
-                    <h3 class="card-title" style="color: var(--text-color); margin-bottom: 25px;"><i class="fas fa-camera-retro"></i> Profile Photo</h3>
+                    <h3 class="card-title"><i class="fas fa-camera-retro"></i> Profile Photo</h3>
                     <label for="photoFile" id="photo-preview">
                         <span class="placeholder-text">
                             <i class="fas fa-cloud-upload-alt fa-4x"></i><br>
