@@ -1,15 +1,14 @@
-// main.js
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getDatabase, ref as dbRef, get, child, set, update, remove, onDisconnect }
-  from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-import { firebaseConfig, imagebbConfig } from '../Database/Database.js';
+import {
+  getDatabase, ref as dbRef, get, child, set, update, remove, onDisconnect, runTransaction, push
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+import { firebaseConfig, cloudinaryConfig } from '../Database/Database.js';
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-const { apiKey: IMGBB_API_KEY } = imagebbConfig;
+const { uploadUrl: CLOUDINARY_UPLOAD_URL, uploadPreset: CLOUDINARY_UPLOAD_PRESET } = cloudinaryConfig;
 
-export { app, database, dbRef, get, child, set, update, remove, onDisconnect, IMGBB_API_KEY };
+export { app, database, dbRef, get, child, set, update, remove, onDisconnect, runTransaction, push, CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET };
 
 // ============================
 // ✅ Global Variables
@@ -525,36 +524,22 @@ function retakePicture() {
   startCamera();
 }
 
-// -----------------------------
-// ✅ Submit Handler (Foolproof)
-// -----------------------------
 async function handleSubmit(e) {
   try {
     if (e && typeof e.preventDefault === "function") e.preventDefault();
     const { newEntryBtn } = getButtonRefs();
     if (newEntryBtn) newEntryBtn.disabled = true;
 
-    // 🟢 Validation: Photo required
-    if (!imageData) {
-      showModal("Error", "Please Capture Photo before submitting.", true);
-      if (newEntryBtn) newEntryBtn.disabled = false;
-      return;
-    }
+    if (!imageData) { showModal("Error", "Please Capture Photo before submitting.", true); if (newEntryBtn) newEntryBtn.disabled = false; return; }
 
-    // 🟢 Validation: Form fields
     const formFields = document.querySelectorAll("#formFields input, #formFields select, #formFields textarea");
-    if (!formFields || formFields.length === 0) {
-      showModal("Error", "Form fields not found!", true);
-      if (newEntryBtn) newEntryBtn.disabled = false;
-      return;
-    }
+    if (!formFields || formFields.length === 0) { showModal("Error", "Form fields not found!", true); if (newEntryBtn) newEntryBtn.disabled = false; return; }
 
     const rawData = {};
     formFields.forEach(field => {
       let value = (field.value || "").trim();
       const tag = (field.tagName || "").toUpperCase();
-      const isUpperCase = (field.type === "text" || tag === "TEXTAREA" || tag === "SELECT");
-      if (isUpperCase) value = value.toUpperCase();
+      if (field.type === "text" || tag === "TEXTAREA" || tag === "SELECT") value = value.toUpperCase();
       rawData[field.name || `field_${Math.random()}`] = value;
     });
 
@@ -562,15 +547,8 @@ async function handleSubmit(e) {
     const nameKey = `${lastType || 'default'}_name`;
     const dobKey = `${lastType || 'default'}_dob`;
     const enroll = rawData[enrollKey];
+    if (!enroll) { showModal("Error", "❌ Enrollment number is required.", true); if (newEntryBtn) newEntryBtn.disabled = false; return; }
 
-    // 🟢 Validation: Enrollment required
-    if (!enroll) {
-      showModal("Error", "❌ Enrollment number is required.", true);
-      if (newEntryBtn) newEntryBtn.disabled = false;
-      return;
-    }
-
-    // 🟢 Validation: DOB format
     if (rawData[dobKey]) {
       const dobDate = new Date(rawData[dobKey]);
       if (!isNaN(dobDate)) {
@@ -578,56 +556,49 @@ async function handleSubmit(e) {
         const month = dobDate.toLocaleString('en-US', { month: 'short' }).toUpperCase();
         const year = dobDate.getFullYear();
         rawData[dobKey] = `${day}-${month}-${year}`;
-      } else {
-        showModal("Error", "❌ Invalid Date of Birth.", true);
-        if (newEntryBtn) newEntryBtn.disabled = false;
-        return;
-      }
+      } else { showModal("Error", "❌ Invalid Date of Birth.", true); if (newEntryBtn) newEntryBtn.disabled = false; return; }
     }
 
-    // Paths
     const schoolId = schoolCode || "UNKNOWN_ID";
     const schoolNode = (schoolName || "UNKNOWN_SCHOOL").toUpperCase();
-    const dbPath = `DATA-MASTER/${schoolNode}/${schoolId}/${(lastType || "default").toUpperCase()}/${enroll}`;
+    const typeNode = (lastType || "default").toUpperCase();
+    const dbPath = `DATA-MASTER/${schoolNode}/${schoolId}/${typeNode}/${enroll}`;
+    const recordRef = dbRef(database, dbPath);
 
-    // ----------------------------------------
-    // 🟢 STEP 1: Prepare Data & Show Preview Immediately
-    // ----------------------------------------
-    const data = {
-      [enrollKey]: enroll,
-      [nameKey]: rawData[nameKey] || "",
-      schoolName: schoolNode,
-      schoolId: schoolId,
-      photo: "" // अभी खाली, बाद में URL आएगा
-    };
-    Object.keys(rawData).forEach(key => {
-      if (!["photo", "schoolName", "schoolId", nameKey, enrollKey].includes(key)) {
-        data[key] = rawData[key];
-      }
-    });
+    const snapshot = await get(recordRef);
+    const isNewEnrollment = !snapshot.exists();
+
+    const data = { [enrollKey]: enroll, [nameKey]: rawData[nameKey] || "", schoolName: schoolNode, schoolId: schoolId, photo: "" };
+    Object.keys(rawData).forEach(key => { if (!["photo","schoolName","schoolId",nameKey,enrollKey].includes(key)) data[key] = rawData[key]; });
     entryData = data;
 
-    // ✅ Preview अभी दिखाओ (तुरंत feedback)
     showPreviewSafe(imageData, enroll);
 
-    // ----------------------------------------
-    // 🔴 STEP 2: Upload Image to ImgBB
-    // ----------------------------------------
-    const photoURL = await uploadImageToImgBBSafe(enroll);
-    if (!photoURL) {
-      showSubmitFailedAndGoHomeSafe(); // Fail → stop
-      if (newEntryBtn) newEntryBtn.disabled = false;
-      return;
-    }
+    const photoURL = await uploadImageToCloudinarySafe(enroll);
+    if (!photoURL) { showSubmitFailedAndGoHomeSafe(); if (newEntryBtn) newEntryBtn.disabled = false; return; }
+    data.photo = photoURL;
 
-    // ----------------------------------------
-    // 🟢 STEP 3: Save Full Entry to Firebase
-    // ----------------------------------------
-    data.photo = photoURL; // अब photo URL डाल दो
-    const recordRef = dbRef(database, dbPath);
     await setSafe(recordRef, data);
 
-    // ✅ Success message
+    if (isNewEnrollment) {
+      const vendorRef = dbRef(database, 'roles/vendor');
+      await runTransaction(vendorRef, current => {
+        if (!current) return current;
+        let credits = Number(current.credits || 0);
+        let deu = Number(current.deu || 0);
+        if (credits > 0) {
+          credits -= 1;
+          current.credits = credits;
+          if (credits === 0) current.isActive = false;
+        } else {
+          deu += 1;
+          current.deu = deu;
+          current.isActive = false;
+        }
+        return current;
+      });
+    }
+
     showModal("Success", "✅ Submitted Successfully!");
 
   } catch (err) {
@@ -639,109 +610,31 @@ async function handleSubmit(e) {
   }
 }
 
-// -----------------------------
-// ✅ Upload Image to ImgBB
-// -----------------------------
-function uploadImageToImgBBSafe(enroll) {
+function uploadImageToCloudinarySafe(enroll) {
   return new Promise((resolve, reject) => {
     try {
       if (!imageData) return reject("No image data");
-
-      if (!IMGBB_API_KEY) return reject("ImageBB API key is missing or not loaded.");
-
-      const base64 = imageData.replace(/^data:image\/[a-z]+;base64,/, "");
+      if (!CLOUDINARY_UPLOAD_URL) return reject("Cloudinary upload URL is missing.");
       const formData = new FormData();
-
-      formData.append("key", IMGBB_API_KEY);
-      formData.append("image", base64);
-      formData.append("name", enroll);
-
+      formData.append("file", imageData);
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+      formData.append("public_id", enroll);
       updateProgressBarSafe(0);
-
       const xhr = new XMLHttpRequest();
-      xhr.open("POST", "https://api.imgbb.com/1/upload");
-
-      xhr.upload.onprogress = e => {
-        if (e.lengthComputable) {
-          const percent = Math.round((e.loaded / e.total) * 100);
-          updateProgressBarSafe(percent);
-        }
-      };
-
-      xhr.onload = function () {
-        try {
-          if (xhr.status === 200) {
-            const result = JSON.parse(xhr.responseText);
-            if (result.success && result.data && result.data.display_url) {
-              updateProgressBarSafe(100);
-              resolve(result.data.display_url);
-            } else {
-              reject(new Error("ImgBB upload failed: " + JSON.stringify(result)));
-            }
-          } else {
-            reject(new Error(`ImgBB upload failed with HTTP status: ${xhr.status}`));
-          }
-        } catch (e) {
-          reject(e);
-        }
-      };
-
+      xhr.open("POST", CLOUDINARY_UPLOAD_URL);
+      xhr.upload.onprogress = e => { if (e.lengthComputable) { updateProgressBarSafe(Math.round((e.loaded / e.total) * 100)); } };
+      xhr.onload = () => { try { if (xhr.status === 200) { const result = JSON.parse(xhr.responseText); if (result.secure_url) { updateProgressBarSafe(100); resolve(result.secure_url); } else reject(new Error("Cloudinary upload failed: " + JSON.stringify(result))); } else reject(new Error(`Cloudinary upload failed with HTTP status: ${xhr.status}`)); } catch (e) { reject(e); } };
       xhr.onerror = () => reject(new Error("Network error uploading image"));
       xhr.send(formData);
-    } catch (e) {
-      reject(e);
-    }
+    } catch (e) { reject(e); }
   });
 }
 
-// -----------------------------
-// ✅ Safe Wrappers
-// -----------------------------
-function setSafe(ref, data) {
-  try {
-    return set(ref, data);
-  } catch (e) {
-    return Promise.reject(e);
-  }
-}
-
-function showPreviewSafe(img, enroll) {
-  try {
-    showPreview(img, enroll);
-  } catch (e) {
-    console.warn("Preview failed", e);
-  }
-}
-
-function updateProgressBarSafe(percent) {
-  try {
-    const progressEl = safeGet("uploadProgress");
-    if (progressEl) {
-      progressEl.style.width = percent + "%";
-      progressEl.textContent = percent + "%";
-    }
-  } catch (e) {
-    console.warn(e);
-  }
-}
-
-function goHomeSafe() {
-  try {
-    goHome();
-  } catch (e) {
-    console.warn("goHome failed", e);
-  }
-}
-
-function showSubmitFailedAndGoHomeSafe(message = "❌ Submit failed!") {
-  try {
-    showModal("Error", message, true);
-    setTimeout(goHomeSafe, 2000);
-  } catch (e) {
-    console.warn("Submit failed modal error:", e);
-  }
-}
-
+function setSafe(ref, data) { try { return set(ref, data); } catch (e) { return Promise.reject(e); } }
+function showPreviewSafe(img, enroll) { try { showPreview(img, enroll); } catch (e) { console.warn("Preview failed", e); } }
+function updateProgressBarSafe(percent) { try { const progressEl = safeGet("uploadProgress"); if (progressEl) { progressEl.style.width = percent + "%"; progressEl.textContent = percent + "%"; } } catch (e) { console.warn(e); } }
+function goHomeSafe() { try { goHome(); } catch (e) { console.warn("goHome failed", e); } }
+function showSubmitFailedAndGoHomeSafe(message = "❌ Submit failed!") { try { showModal("Error", message, true); setTimeout(goHomeSafe, 2000); } catch (e) { console.warn("Submit failed modal error:", e); } }
 
 
 // ================= Show Preview (Foolproof Premium ID Card) =================
@@ -1039,9 +932,3 @@ window.newEntry = newEntry;
 window.goHome = goHome;
 window.editEntry = editEntry;
 window.saveIDAsImage = saveIDAsImage;
-
-
-
-
-
-
