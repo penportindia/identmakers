@@ -1,742 +1,1098 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Author</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-<style>
-/* White and Green Theme */
-:root {
-    --primary: #10b981; 
-    --primary-dark: #059669; 
-    --success: #059669; 
-    --danger: #ef4444; 
-    --bg: #f9fafb; 
-    --card: #ffffff; 
-    --text: #1f2937;
-    --text-light: #6b7280;
-    --border-color: #e5e7eb;
-}
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Inter', sans-serif;
-}
-body {
-    background: var(--bg);
-    color: var(--text);
-    padding: 30px 15px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-}
-.container {
-    width: 100%;
-    max-width: 1000px;
-}
-.card {
-    background: var(--card);
-    padding: 28px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 10px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-}
-h1 {
-    color: var(--primary-dark);
-    font-size: 1.6rem;
-    font-weight: 700;
-}
-.controls {
-    display: flex;
-    gap: 10px;
-}
-.btn {
-    padding: 10px 15px;
-    border-radius: 10px;
-    border: 1px solid transparent;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.btn-primary {
-    background: var(--primary);
-    color: #fff;
-}
-.btn-primary:hover {
-    background: var(--primary-dark);
-}
-.btn-ghost {
-    background: var(--card);
-    color: var(--text);
-    border: 1px solid var(--border-color);
-}
-.btn-ghost:hover {
-    background: #f1f5f9;
-}
-.btn-danger {
-    background: var(--danger);
-    color: #fff;
-}
-.btn-danger:hover {
-    background: #c33;
-}
-.btn.active-role {
-    background: var(--primary);
-    color: #fff;
-    border-color: var(--primary-dark);
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-}
-.btn.active-role:hover {
-    background: var(--primary-dark);
-}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="pageTitle">Penport India - ID Card Solution</title>
 
-.card-grid {
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: 24px;
-    margin-top: 24px;
-}
-.section {
-    padding: 20px;
-    border-radius: 12px;
-    background: var(--card);
-    border: 1px solid var(--border-color);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.section:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
-h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 15px;
-}
-.label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 6px;
-    font-size: 0.9rem;
-    color: var(--text-light);
-    margin-top: 15px;
-}
-.input, select {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    font-size: 1rem;
-    color: var(--text);
-    background-color: #fcfdfe;
-}
-.input:focus, select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-}
-.small {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    margin-top: 6px;
-    line-height: 1.4;
-}
-.credit-box {
-    padding: 20px;
-    border-radius: 12px;
-    background: #ecfdf5;
-    border: 1px solid #a7f3d0;
-    text-align: center;
-    margin-top: 10px;
-}
-.big {
-    font-size: 3rem;
-    font-weight: 800;
-    margin: 10px 0;
-    color: var(--primary-dark);
-}
-.status {
-    display: inline-block;
-    padding: 7px 14px;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-}
-.status-active {
-    background: var(--success);
-    color: #fff;
-}
-.status-deactive {
-    background: var(--danger);
-    color: #fff;
-}
-.row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-.col {
-    flex: 1;
-}
-.actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-.alert {
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 8px;
-    display: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-.alert.success {
-    background: #d1fae5;
-    color: var(--success);
-    border: 1px solid #6ee7b7;
-}
-.alert.error {
-    background: #fee2e2;
-    color: var(--danger);
-    border: 1px solid #fca5a5;
-}
-.role-indicator {
-    padding: 12px 20px;
-    border-radius: 12px;
-    background: #f1f5f9;
-    border: 1px solid var(--border-color);
-    margin-bottom: 24px;
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: var(--primary-dark);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.brand {
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--text-light);
-    margin-left: 10px;
-}
-.row-gap {
-    margin-bottom: 10px;
-}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 
-@media(max-width: 880px) {
-    .card-grid {
-        grid-template-columns: 1fr;
-    }
-    .header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .controls {
-        width: 100%;
-        justify-content: space-around;
-        margin-top: 10px;
-    }
-    .btn-ghost, .btn.active-role {
-        flex: 1;
-    }
-    h1 {
-        font-size: 1.4rem;
-    }
-}
-</style>
+    <style>
+        :root {
+            --primary-color: #0077b6;
+            --secondary-color: #023e8a;
+            --accent-color: #48cae4;
+            --bg-dark: #1e293b;
+            --bg-light: #f1f5f9;
+            --bg-content: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --credit-low: #ef4444;
+            --credit-high: #22c55e;
+            --credit-normal: #f97316;
+            --sidebar-width: 70px;
+            --border-radius-xl: 12px;
+
+            --COMPANY_LOGO_URL: url('https://i.ibb.co/CpFHdBdL/Penport-Background.jpg');
+            --LOGIN_BG_IMAGE_URL: url('https://i.ibb.co/vCFMjrn8/vecteezy-abstract-white-and-orange-corporate-background-11171106-1.jpg');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        #loginScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), var(--LOGIN_BG_IMAGE_URL);
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: opacity 0.5s ease, visibility 0.5s;
+            z-index: 10000;
+        }
+
+        #loginScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: var(--border-radius-xl);
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            color: var(--text-dark);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-image {
+            width: 110px;
+            height: 110px;
+            background-image: var(--COMPANY_LOGO_URL);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: var(--bg-content);
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+        }
+
+        .login-logo h1 {
+            margin-top: 0;
+            color: var(--text-dark);
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: -1px;
+        }
+
+        .login-logo h2 {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: -5px;
+        }
+
+        .login-tagline {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 20px;
+            padding-left: 50px;
+            border-radius: var(--border-radius-xl);
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            transition: all 0.3s;
+            font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0, 119, 182, 0.25);
+            outline: none;
+        }
+
+        .input-group .fas,
+        .input-group .material-icons-round {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .input-group .fas.fa-eye,
+        .input-group .fas.fa-eye-slash {
+            right: 18px;
+            cursor: pointer;
+            color: var(--primary-color);
+            left: auto;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: var(--border-radius-xl);
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 20px rgba(0, 119, 182, 0.4);
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0, 119, 182, 0.5);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+            box-shadow: 4px 10px rgba(0, 119, 182, 0.3);
+        }
+
+        .error-message {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--credit-low);
+            font-weight: 600;
+            display: none;
+            background: #fee2e2;
+            border: 1px solid var(--credit-low);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .footer a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .container {
+            display: none;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .container.visible {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-dark);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 16px 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header i {
+            font-size: 30px;
+            color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 18px 0;
+            margin: 4px 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            color: #94a3b8;
+            transition: background 0.2s, color 0.2s, transform 0.1s;
+            position: relative;
+        }
+
+        .menu-item.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        .menu-item.vendor-restricted {
+            opacity: 0.5;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .menu-item i {
+            font-size: 26px;
+        }
+
+        .menu-item.active {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 80%;
+            width: 4px;
+            background: var(--accent-color);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 119, 182, 0.2);
+            color: var(--accent-color);
+            transform: translateY(-1px);
+        }
+
+        .menu-item.active:hover {
+            background: var(--primary-color);
+            color: #fff;
+            transform: none;
+        }
+
+        .menu-item.vendor-restricted:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--credit-low);
+            transform: translateY(-1px);
+        }
+
+
+        .menu-item::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: calc(var(--sidebar-width) + 15px);
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--text-dark);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 100;
+        }
+
+        .menu-item:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            height: 64px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            background: var(--bg-content);
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .user-dropdown-container {
+            position: relative;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 15px;
+            background: var(--bg-light);
+            border-radius: var(--border-radius-xl);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .user-card:hover {
+            background: #e2e8f0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .user-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .user-text strong {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-dark);
+        }
+
+        .user-text span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.3s;
+        }
+
+        .user-card.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .user-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 19px;
+            flex-shrink: 0;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 150px;
+            background: var(--bg-content);
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid #e2e8f0;
+            z-index: 50;
+            display: none;
+            overflow: hidden;
+            padding: 10px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+        }
+
+        .user-card.open+.dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .logout-btn-dropdown {
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+            background: var(--credit-low);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .logout-btn-dropdown:hover {
+            background: #c53030;
+            transform: translateY(-1px);
+        }
+
+        .main-content {
+            flex: 1;
+            position: relative;
+            overflow-y: auto;
+            background: var(--bg-light);
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0;
+            background: var(--bg-content);
+            box-shadow: none;
+            flex-grow: 1;
+        }
+
+
+        /* --- MODAL/DIALOG STYLES --- */
+        #restrictionModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 11000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #restrictionModal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--bg-content);
+            padding: 30px;
+            border-radius: var(--border-radius-xl);
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        #restrictionModal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--credit-low);
+            padding-bottom: 10px;
+        }
+
+        .modal-header i {
+            font-size: 36px;
+            color: var(--credit-low);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 1.4rem;
+        }
+
+        .modal-body p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .deu-amount {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--credit-low);
+            margin: 15px 0;
+            text-align: center;
+            padding: 10px;
+            background: #ffe0e0;
+            border-radius: 8px;
+            border: 1px solid var(--credit-low);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .modal-actions button {
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .modal-actions button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-1px);
+        }
+        /* --- END MODAL STYLES --- */
+    </style>
 </head>
+
 <body>
-<div class="container">
-    <div class="card">
-        <div class="header">
-            <h1><i class="fas fa-user-cog"></i> Admin Control Panel <span class="brand">| Penport India</span></h1>
-            <div class="controls">
-                <button id="btnManageDev" class="btn btn-ghost"><i class="fas fa-user-tie"></i> Manage Developer</button>
-                <button id="btnManageVendor" class="btn btn-ghost"><i class="fas fa-store"></i> Manage Vendor</button>
+
+    <div id="loginScreen">
+        <div class="login-container">
+            <div class="login-logo">
+                <div class="logo-image"></div>
+                <h1>Penport India</h1>
+                <h2>ID Card Solution</h2>
+            </div>
+            <form id="loginForm">
+                <div class="input-group">
+                    <i class="material-icons-round">mail_outline</i>
+                    <input type="email" id="email" placeholder="Email Address" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Password" required
+                        autocomplete="current-password">
+                    <i class="fas fa-eye" id="togglePassword"></i>
+                </div>
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+                    Log In
+                </button>
+                <div id="errorMsg" class="error-message"></div>
+            </form>
+            <div class="footer">
+                Developed by
+                <a href="https://penportindia.github.io/penport/" target="_blank">Penport India</a>
+                <br>© 2025 ID Card Solution
             </div>
         </div>
-
-        <div class="card-grid">
-            <div>
-                <div id="roleIndicator" class="role-indicator">
-                </div>
-                <div class="section" id="setupSection">
-                    <h3 id="setupTitle" style="margin-bottom: 5px; height: 1.25rem;"></h3>
-                    
-                    <label class="label">Name *</label>
-                    <input id="nameInput" class="input" placeholder="Full name" />
-
-                    <label class="label">Email *</label>
-                    <input id="emailInput" class="input" placeholder="email@example.com" />
-
-                    <label class="label">Phone</label>
-                    <input id="phoneInput" class="input" placeholder="+91-XXXXXXXXXX" />
-
-                    <div id="creditsBlock">
-                        <label class="label">Initial Credits</label>
-                        <input id="creditsInput" class="input" type="number" min="0" value="1000" />
-                        <div class="small">For vendor only. Base count will be captured when vendor is created.</div>
-                    </div>
-                    
-                    <div class="actions">
-                        <button id="saveBtn" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
-                        <button id="deleteBtn" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
-                    </div>
-
-                    <div id="setupAlert" class="alert"></div>
-                </div>
-            </div>
-
-            <div class="section" id="managementSection">
-                <h3>Vendor Credit Dashboard</h3>
-                <div class="credit-box">
-                    <div class="small">Current Credits</div>
-                    <div id="currentCredits" class="big">--</div>
-                    <div><span id="statusBadge" class="status status-deactive">LOADING...</span></div>
-                    <div class="small" style="margin-top:8px">Base Count: <strong id="baseCount">--</strong></div>
-                    <div class="small">Total Work Done: <strong id="totalWork">--</strong></div>
-                </div>
-
-                <div style="margin-top:20px" id="vendorControls">
-                    <div class="row row-gap">
-                        <input id="addCreditsInput" class="input" type="number" min="1" placeholder="Add credits (amount)" />
-                        <button id="addCreditsBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Add & Reset Base</button>
-                    </div>
-
-                    <div class="row row-gap">
-                        <button id="zeroCreditsBtn" class="btn btn-danger"><i class="fas fa-ban"></i> Set Credits to ZERO</button>
-                        <button id="vendorToggleBtn" class="btn btn-ghost"><i class="fas fa-toggle-on"></i> Toggle Active</button>
-                    </div>
-
-                    <div class="row">
-                        <button id="forceSyncBtn" class="btn btn-ghost" style="flex:1;"><i class="fas fa-sync"></i> Force Refresh</button>
-                        <div style="flex:1" class="small">Data updates automatically. Use this to force a full refresh.</div>
-                    </div>
-                </div>
-
-                <div id="moduleAlert" class="alert"></div>
-            </div>
-        </div> <div style="margin-top:18px" class="small">Notes: Only <strong>one</strong> Developer and <strong>one</strong> Vendor are stored at paths <code>roles/developer</code> and <code>roles/vendor</code>. Vendor credits auto-decrease based on <code>workdone</code> node. Vendor will auto-deactivate when remaining credits &le; 0.</div>
     </div>
-</div>
 
-<script type="module">
-// Firebase RTDB Imports
-import { firebaseConfig } from "../Database/Database.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { 
-    getDatabase, 
-    ref as dbRef, 
-    get, 
-    set, 
-    update, 
-    remove, 
-    onValue, 
-    off 
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    <div class="container" id="dashboardContainer">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <i class="material-icons-round">credit_card</i>
+            </div>
+            <div class="menu" id="sidebarMenu"></div>
+        </div>
 
-// Firebase Initialization
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+        <div class="main-area">
+            <div class="header">
+                <div class="header-title" id="dashboardHeaderTitle">Dashboard</div>
+                <div class="header-actions">
+                    <div class="user-dropdown-container">
+                        <div class="user-card" id="userCard" onclick="toggleDropdown()">
+                            <div class="user-icon"><i class="material-icons-round">person</i>
+                            </div>
+                            <div class="user-text">
+                                <strong id="userName">Loading...</strong>
+                                <span id="userRole">...</span>
+                            </div>
+                            <i class="material-icons-round dropdown-arrow">arrow_drop_down</i>
+                        </div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <div class="logout-btn-dropdown" onclick="logout()">Logout</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-content">
+                <iframe id="contentFrame" title="Content"></iframe>
+            </div>
+        </div>
+    </div>
 
-/* UI refs */
-const nameInput = document.getElementById('nameInput');
-const emailInput = document.getElementById('emailInput');
-const phoneInput = document.getElementById('phoneInput');
-const creditsInput = document.getElementById('creditsInput');
-const creditsBlock = document.getElementById('creditsBlock');
-const saveBtn = document.getElementById('saveBtn');
-const deleteBtn = document.getElementById('deleteBtn');
-const setupAlert = document.getElementById('setupAlert');
+    <div id="restrictionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="material-icons-round">error_outline</i>
+                <h3>Account Inactive</h3>
+            </div>
+            <div class="modal-body">
+                <p>Dear Vendor,</p>
+                <p>Your access to advanced features is currently restricted. Please clear your outstanding dues to resume full service access.</p>
+                <div class="deu-amount">
+                    Outstanding Dues: <span id="modalDeuAmount">₹ 0.00</span>
+                </div>
+                <p style="font-size: 0.9rem; text-align: center; color: var(--text-dark); font-weight: 500;">
+                    Please contact the Admin/Author to process payment or renew your subscription.
+                </p>
+            </div>
+            <div class="modal-actions">
+                <button onclick="closeRestrictionModal()">Close</button>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getDatabase, ref as dbRef, get, child } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+        // NOTE: Please ensure this path is correct for your Firebase config
+        import { firebaseConfig } from 'https://penportindia.github.io/identmakers/Roots/Database/Database.js'; 
 
-const currentCreditsEl = document.getElementById('currentCredits');
-const baseCountEl = document.getElementById('baseCount');
-const totalWorkEl = document.getElementById('totalWork');
-const statusBadge = document.getElementById('statusBadge');
-const addCreditsInput = document.getElementById('addCreditsInput');
-const addCreditsBtn = document.getElementById('addCreditsBtn');
-const zeroCreditsBtn = document.getElementById('zeroCreditsBtn');
-const vendorToggleBtn = document.getElementById('vendorToggleBtn');
-const moduleAlert = document.getElementById('moduleAlert');
-const forceSyncBtn = document.getElementById('forceSyncBtn'); 
+        const USER_STORAGE_KEY = 'penport_id_user_data';
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
 
-const btnManageDev = document.getElementById('btnManageDev');
-const btnManageVendor = document.getElementById('btnManageVendor');
-const roleIndicator = document.getElementById('roleIndicator');
-
-/* Global State */
-let currentRole = 'developer';
-let vendorData = null;
-let developerData = null; 
-let totalWorkDone = 0;
-let workdoneListenerActive = false;
-let vendorListenerActive = false;
-
-// Helper: Show UI alerts
-function showAlert(el, txt, kind='success', timeout=3000){
-    el.textContent = txt;
-    el.classList.remove('success','error');
-    el.classList.add(kind);
-    el.style.display = 'block';
-    if(timeout) setTimeout(()=>{ el.style.display='none'; }, timeout);
-}
-function hideAlert(el){ el.style.display='none'; }
-
-// Helper: Calculate total work done
-function calculateWorkdoneCount(workdoneData){
-    if(!workdoneData) return 0;
-    let count = 0;
-    for(const school in workdoneData){
-        const sch = workdoneData[school];
-        if(sch.STAFF) count += Object.keys(sch.STAFF).length;
-        if(sch.STUDENT) count += Object.keys(sch.STUDENT).length;
-    }
-    return count;
-}
-
-/* References for listeners */
-const workdoneRef = dbRef(db, 'workdone');
-const vendorRef = dbRef(db, 'roles/vendor');
-
-/* Real-time listener for workdone node */
-function listenWorkdone(){
-    if(workdoneListenerActive) return;
-    onValue(workdoneRef, snap=>{
-        totalWorkDone = calculateWorkdoneCount(snap.val());
-        totalWorkEl.textContent = totalWorkDone;
-        updateCreditDisplayRealtime();
-    });
-    workdoneListenerActive = true;
-}
-
-/* Real-time listener for vendor data */
-function setupVendorRealtime(){
-    if(vendorListenerActive) return;
-    onValue(vendorRef, snap=>{
-        vendorData = snap.exists() ? snap.val() : null;
-        updateCreditDisplayRealtime();
-        if(currentRole === 'vendor' && vendorData){
-             nameInput.value = vendorData.name || '';
-             emailInput.value = vendorData.email || '';
-             phoneInput.value = vendorData.phone || '';
-             creditsInput.value = vendorData.credits || 0;
-        }
-    });
-    vendorListenerActive = true;
-}
-
-/* Update credit dashboard UI */
-function updateCreditDisplayRealtime(){
-    if(!vendorData){
-        currentCreditsEl.textContent = '--';
-        baseCountEl.textContent = '--';
-        statusBadge.textContent = 'NO VENDOR';
-        statusBadge.className = 'status status-deactive';
-        vendorToggleBtn.textContent = 'Toggle Active';
-        return;
-    }
-    
-    const base = Number(vendorData.baseCount || 0);
-    const credits = Number(vendorData.credits || 0);
-    const used = Math.max(0, totalWorkDone - base);
-    const remaining = credits - used;
-    const remDisplay = Math.max(0, remaining);
-    
-    currentCreditsEl.textContent = remDisplay;
-    baseCountEl.textContent = base;
-    
-    const isActiveFlag = !!vendorData.isActive;
-    vendorToggleBtn.textContent = isActiveFlag ? 'Deactivate' : 'Activate'; 
-
-    if(remaining > 0 && isActiveFlag){
-        statusBadge.textContent = 'ACTIVE';
-        statusBadge.className = 'status status-active';
-    } else {
-        statusBadge.textContent = 'DEACTIVATED';
-        statusBadge.className = 'status status-deactive';
-        
-        // Auto-deactivate if credits run out
-        if(remaining <= 0 && isActiveFlag){
-            update(vendorRef, { isActive: false, updatedAt: new Date().toISOString() })
-                .catch(err => console.error("Auto-deactivation failed:", err));
-        }
-    }
-}
-
-/* Load data into form */
-async function loadRoleData(role){
-    hideAlert(setupAlert);
-    const roleRef = dbRef(db, 'roles/' + role);
-    
-    try{
-        const snap = await get(roleRef);
-        const d = snap.exists() ? snap.val() : {};
-
-        nameInput.value = d.name || '';
-        emailInput.value = d.email || '';
-        phoneInput.value = d.phone || '';
-
-        if(role === 'developer'){
-             developerData = d;
-             creditsInput.value = 1000;
-        } 
-        if(snap.exists()){
-             showAlert(setupAlert, `Loaded existing ${role} data`, 'success', 2000);
-        } else {
-             showAlert(setupAlert, `Ready to create new ${role}`, 'success', 2000);
-        }
-    }catch(err){
-         console.error("Error loading role data:", err);
-         showAlert(setupAlert, `Error loading ${role} data`, 'error', 5000);
-    }
-}
-
-/* Switch between Developer and Vendor views */
-function setRoleView(role){
-    currentRole = role;
-    localStorage.setItem('admin_selected_role', role);
-
-    btnManageDev.classList.remove('active-role');
-    btnManageVendor.classList.remove('active-role');
-    
-    const isVendor = role === 'vendor';
-    
-    if(isVendor){
-        btnManageVendor.classList.add('active-role');
-    } else {
-        btnManageDev.classList.add('active-role');
-    }
-
-    creditsBlock.style.display = isVendor ? 'block' : 'none';
-    document.getElementById('managementSection').style.opacity = isVendor ? '1' : '0.5';
-    document.getElementById('vendorControls').style.pointerEvents = isVendor ? 'auto' : 'none';
-    
-    roleIndicator.innerHTML = isVendor 
-        ? '<i class="fas fa-store"></i> Managing <strong>Vendor</strong>'
-        : '<i class="fas fa-user-tie"></i> Managing <strong>Developer</strong>';
-    
-    document.getElementById('setupTitle').textContent = isVendor ? 'Vendor Details' : 'Developer Details'; 
-
-    loadRoleData(role);
-}
-
-/* Save role (create or update) */
-saveBtn.addEventListener('click', async (e)=>{
-    e.preventDefault();
-    hideAlert(setupAlert);
-    const role = currentRole;
-    const name = nameInput.value.trim();
-    const email = emailInput.value.trim();
-    const phone = phoneInput.value.trim() || 'N/A';
-
-    if(!name || !email){ showAlert(setupAlert, 'Name and Email are required', 'error'); return; }
-    
-    const roleRef = dbRef(db, 'roles/' + role);
-    saveBtn.disabled = true;
-
-    try{
-        const snap = await get(roleRef);
-        const now = new Date().toISOString();
-        let message = '';
-
-        if(!snap.exists()){
-            // Create Logic
-            const payload = { name, email, phone, createdAt: now, updatedAt: now };
-            if(role === 'vendor'){
-                const workSnap = await get(workdoneRef);
-                const base = calculateWorkdoneCount(workSnap.val());
-                const initialCredits = Math.max(0, Number(creditsInput.value) || 0); 
-                payload.credits = initialCredits;
-                payload.baseCount = base;
-                payload.isActive = true;
-            }
-            await set(roleRef, payload);
-            message = 'Created ' + role + ' successfully';
-        } else {
-            // Update Logic
-            const updates = { name, email, phone, updatedAt: now };
-            if(role === 'vendor' && snap.val().credits != Number(creditsInput.value) ){
-                updates.credits = Math.max(0, Number(creditsInput.value) || 0);
-            }
-
-            await update(roleRef, updates);
-            message = 'Updated ' + role + ' successfully';
-        }
-        
-        showAlert(setupAlert, message, 'success', 3000);
-        if(role === 'developer') loadRoleData(role); 
-        
-    }catch(err){
-        console.error(err);
-        showAlert(setupAlert, 'Error: ' + (err.message||'Unknown error occurred'), 'error', 5000);
-    } finally {
-        saveBtn.disabled = false;
-    }
-});
+        const loginForm = document.getElementById("loginForm");
+        const errorDiv = document.getElementById("errorMsg");
+        const loginScreen = document.getElementById("loginScreen");
+        const dashboardContainer = document.getElementById("dashboardContainer");
+        const passwordInput = document.getElementById("password");
+        const togglePasswordIcon = document.getElementById("togglePassword");
+        const userNameEl = document.getElementById("userName");
+        const userRoleEl = document.getElementById("userRole");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        const userCardEl = document.getElementById("userCard");
+        const iframe = document.getElementById("contentFrame");
+        const headerTitle = document.getElementById("dashboardHeaderTitle");
+        const sidebarMenu = document.getElementById("sidebarMenu");
+        // NEW: Modal Elements
+        const restrictionModal = document.getElementById("restrictionModal");
+        const modalDeuAmount = document.getElementById("modalDeuAmount");
 
 
-/* Delete role node */
-deleteBtn.addEventListener('click', async ()=>{
-    hideAlert(setupAlert);
-    const role = currentRole;
-    const roleRef = dbRef(db, 'roles/' + role);
+        // Global variable to hold the vendor's 'deu' and 'isActive' status
+        let currentVendorData = null;
 
-    const snap = await get(roleRef);
-    if(!snap.exists()){
-        showAlert(setupAlert, `The ${role} does not exist to delete.`, 'error', 3000);
-        return;
-    }
-
-    if(!confirm(`Are you sure you want to permanently delete the ${role.toUpperCase()}? This action cannot be undone.`)) return;
-    
-    deleteBtn.disabled = true;
-
-    try{
-        await remove(roleRef);
-        showAlert(setupAlert, role + ' removed successfully', 'success', 3000);
-        
-        nameInput.value=''; emailInput.value=''; phoneInput.value=''; creditsInput.value=1000;
-        
-        if(role === 'vendor'){ 
-             setRoleView('developer'); 
-        } else {
-             developerData = null;
-             loadRoleData(role); 
-        }
-    }catch(err){
-        console.error(err);
-        showAlert(setupAlert, 'Delete failed: ' + (err.message||err), 'error', 5000);
-    } finally {
-        deleteBtn.disabled = false;
-    }
-});
-
-/* Vendor action: Add Credits & Reset Base */
-addCreditsBtn.addEventListener('click', async ()=>{
-    hideAlert(moduleAlert);
-    if(!vendorData){ showAlert(moduleAlert,'No vendor exists','error'); return; }
-    
-    const amount = Number(addCreditsInput.value);
-    if(!amount || amount <= 0 || !Number.isInteger(amount)){ 
-        showAlert(moduleAlert,'Enter a valid positive integer amount to add','error'); 
-        return; 
-    }
-    
-    if(!confirm('Add ' + amount + ' credits and reset base to current workdone?')) return;
-    
-    addCreditsBtn.disabled = true;
-
-    try{
-        const currentCredits = Number(vendorData.credits || 0);
-        const updates = {
-            credits: currentCredits + amount,
-            baseCount: totalWorkDone,
-            isActive: true,
-            updatedAt: new Date().toISOString()
+        const menuConfig = {
+            dashboard: { icon: 'space_dashboard', tooltip: 'Dashboard', url: "https://penportindia.github.io/identmakers/Roots/Dashborad/Dashboard.html" },
+            schools: { icon: 'business', tooltip: 'Clients ', url: "https://penportindia.github.io/identmakers/Roots/Schools/User.html" },
+            create: { icon: 'add_box', tooltip: 'Create New ID', url: "https://penportindia.github.io/identmakers/Roots/Create/Create.html" },
+            manage: { icon: 'folder_open', tooltip: 'Manage', url: "https://penportindia.github.io/identmakers/Roots/Manage/Manage.html" },
+            template: { icon: 'badge', tooltip: 'Templates', url: "https://penportindia.github.io/identmakers/Roots/Template/Template.html" },
+            print: { icon: 'print', tooltip: 'Print Manager', url: "https://penportindia.github.io/identmakers/Roots/Print/Print.html" },
+            data: { icon: 'cloud_download', tooltip: 'Data Export', url: "https://penportindia.github.io/identmakers/Roots/Data Management/Data.html" },
+            accounts: { icon: 'account_balance_wallet', tooltip: 'Accounts', url: "https://penportindia.github.io/identmakers/Roots/Author/Author.html" }
         };
-        await update(vendorRef, updates);
-        addCreditsInput.value = '';
-        showAlert(moduleAlert, 'Credits added & base reset successfully', 'success', 3000);
-    }catch(err){
-        console.error(err);
-        showAlert(moduleAlert,'Failed: ' + (err.message||err), 'error', 5000);
-    } finally {
-        addCreditsBtn.disabled = false;
-    }
-});
 
-/* Vendor action: Set Credits to ZERO */
-zeroCreditsBtn.addEventListener('click', async ()=>{
-    hideAlert(moduleAlert);
-    if(!vendorData){ showAlert(moduleAlert,'No vendor exists','error'); return; }
-    
-    if(!confirm('Set vendor credits to ZERO? This will deactivate vendor immediately.')) return;
-    
-    zeroCreditsBtn.disabled = true;
-
-    try{
-        const updates = { credits: 0, updatedAt: new Date().toISOString(), isActive: false };
-        await update(vendorRef, updates);
-        showAlert(moduleAlert, 'Vendor credits set to ZERO and deactivated successfully', 'success', 3500);
-    }catch(err){
-        console.error(err);
-        showAlert(moduleAlert,'Failed: ' + (err.message||err), 'error', 5000);
-    } finally {
-        zeroCreditsBtn.disabled = false;
-    }
-});
-
-/* Vendor action: Toggle Active Status */
-vendorToggleBtn.addEventListener('click', async ()=>{
-    hideAlert(moduleAlert);
-    if(!vendorData){ showAlert(moduleAlert,'No vendor exists','error'); return; }
-    
-    vendorToggleBtn.disabled = true;
-
-    try{
-        const newFlag = !vendorData.isActive;
-        const updates = { isActive: newFlag, updatedAt: new Date().toISOString() };
-        await update(vendorRef, updates);
-        showAlert(moduleAlert, 'Vendor is now ' + (newFlag ? 'ACTIVE' : 'DEACTIVATED') + ' successfully', 'success', 2500);
-    }catch(err){
-        console.error(err);
-        showAlert(moduleAlert,'Toggle failed: ' + (err.message||err), 'error', 5000);
-    } finally {
-        vendorToggleBtn.disabled = false;
-    }
-});
-
-/* Force refresh data (Redundant check but useful for manual sync) */
-forceSyncBtn.addEventListener('click', async ()=>{
-    hideAlert(moduleAlert);
-    forceSyncBtn.disabled = true;
-
-    try{
-        const w = await get(workdoneRef);
-        totalWorkDone = calculateWorkdoneCount(w.val());
-        totalWorkEl.textContent = totalWorkDone;
-        
-        await loadRoleData(currentRole); 
-
-        updateCreditDisplayRealtime(); 
-        
-        showAlert(moduleAlert,'Full data refreshed successfully', 'success', 1500);
-    }catch(err){
-        console.error(err);
-        showAlert(moduleAlert,'Refresh failed: ' + (err.message||err),'error',2000);
-    } finally {
-        forceSyncBtn.disabled = false;
-    }
-});
+        const roleMenus = {
+            vendor: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data'],
+            developer: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'accounts'],
+            manager: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'accounts']
+        };
 
 
-/* Switch view buttons */
-btnManageDev.addEventListener('click', ()=>{ setRoleView('developer'); });
-btnManageVendor.addEventListener('click', ()=>{ setRoleView('vendor'); });
+        // --- Helper Functions ---
 
-/* Start Application */
-(function init(){
-    listenWorkdone();
-    setupVendorRealtime();
-    
-    const savedRole = localStorage.getItem('admin_selected_role') || 'developer';
-    setRoleView(savedRole);
-})();
-</script>
+        /** Saves user data to localStorage. */
+        function saveUser(data) {
+            try {
+                localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data));
+            } catch (e) {
+                console.error("Local storage save failed:", e);
+            }
+        }
+
+        /** Retrieves user data from localStorage. */
+        function loadUser() {
+            try {
+                const data = localStorage.getItem(USER_STORAGE_KEY);
+                return data ? JSON.parse(data) : null;
+            } catch (e) {
+                console.error("Local storage load failed:", e);
+                return null;
+            }
+        }
+
+        /** Clears user data from localStorage. */
+        function clearUser() {
+            localStorage.removeItem(USER_STORAGE_KEY);
+        }
+
+        /** Updates the header user card with provided data. */
+        function updateHeaderUI(userData) {
+            const { name, roleKey } = userData;
+            const roleDisplay = roleKey.charAt(0).toUpperCase() + roleKey.slice(1);
+
+            userNameEl.textContent = name;
+            userRoleEl.textContent = roleDisplay;
+        }
+
+        // --- NEW: Function to show the restriction modal/dialog ---
+        function showRestrictionModal(messageType = 'restriction') {
+            if (messageType === 'restriction' && (!currentVendorData || currentVendorData.isActive)) return;
+
+            // Update modal content based on the type of message
+            if (messageType === 'restriction') {
+                const deuAmount = currentVendorData.deu || 0;
+                modalDeuAmount.textContent = `₹ ${deuAmount.toFixed(2)}`;
+            } else if (messageType === 'inactive_login') {
+                const deuAmount = currentVendorData.deu || 0;
+                 // Temporarily update modal for login message
+                document.querySelector('.modal-header h3').textContent = "Account Status";
+                document.querySelector('.modal-header i').textContent = "warning";
+                document.querySelector('.modal-header i').style.color = "var(--credit-normal)";
+                document.querySelector('.modal-header').style.borderBottom = "2px solid var(--credit-normal)";
+
+                document.querySelector('.modal-body p:nth-child(2)').textContent = "Your account is currently inactive. Only Dashboard access is available.";
+                document.querySelector('.modal-body .deu-amount').style.display = 'block';
+                modalDeuAmount.textContent = `₹ ${deuAmount.toFixed(2)}`;
+                document.querySelector('.modal-body p:nth-child(4)').textContent = "Please contact the Admin/Author to process payment or renew your subscription.";
+            }
+
+            // Show modal
+            restrictionModal.classList.add('show');
+        }
+
+        // --- NEW: Function to close the restriction modal/dialog ---
+        window.closeRestrictionModal = () => {
+            restrictionModal.classList.remove('show');
+            
+            // Reset modal content to default for restriction message 
+            document.querySelector('.modal-header h3').textContent = "Account Inactive";
+            document.querySelector('.modal-header i').textContent = "error_outline";
+            document.querySelector('.modal-header i').style.color = "var(--credit-low)";
+            document.querySelector('.modal-header').style.borderBottom = "2px solid var(--credit-low)";
+
+            document.querySelector('.modal-body p:nth-child(2)').textContent = "Dear Vendor,";
+            document.querySelector('.modal-body .deu-amount').style.display = 'block';
+            document.querySelector('.modal-body p:nth-child(4)').textContent = "Please contact the Admin/Author to process payment or renew your subscription.";
+        };
+
+
+        /**
+         * Builds the sidebar menu and initializes the first page.
+         */
+        function initializeDashboard(role, isInitialLoad = false, forcePage = null) {
+            buildSidebarMenu(role);
+
+            const userIsInactiveVendor = role.toLowerCase() === 'vendor' && currentVendorData && !currentVendorData.isActive;
+            const firstPageKey = forcePage || roleMenus[role.toLowerCase()][0];
+
+            if (isInitialLoad && iframe.src && !userIsInactiveVendor) {
+                const currentUrlKey = Object.keys(menuConfig).find(key => iframe.src.includes(menuConfig[key].url));
+                if (currentUrlKey) {
+                    document.querySelector(`.menu-item[data-page="${currentUrlKey}"]`)?.classList.add('active');
+                    headerTitle.textContent = menuConfig[currentUrlKey].tooltip;
+                    return;
+                }
+            }
+
+            loadPage(firstPageKey);
+            document.querySelector(`.menu-item[data-page="${firstPageKey}"]`)?.classList.add('active');
+        }
+
+
+        // --- Function to build the menu dynamically ---
+        function buildSidebarMenu(role) {
+            sidebarMenu.innerHTML = '';
+            const menuItems = roleMenus[role.toLowerCase()] || [];
+
+            const userIsInactiveVendor = role.toLowerCase() === 'vendor' && currentVendorData && !currentVendorData.isActive;
+
+            menuItems.forEach((pageName) => {
+                const item = menuConfig[pageName];
+                if (!item) return;
+
+                const menuItemDiv = document.createElement('div');
+                menuItemDiv.className = 'menu-item';
+                menuItemDiv.dataset.page = pageName;
+                menuItemDiv.dataset.tooltip = item.tooltip;
+
+                menuItemDiv.innerHTML = `<i class="material-icons-round">${item.icon}</i>`;
+
+                if (userIsInactiveVendor && pageName !== 'dashboard') {
+                    menuItemDiv.classList.add('vendor-restricted');
+                }
+
+                menuItemDiv.addEventListener("click", handleMenuClick);
+
+                sidebarMenu.appendChild(menuItemDiv);
+            });
+        }
+
+        // --- Menu Click Handler (Uses new modal) ---
+        function handleMenuClick(e) {
+            const item = e.currentTarget;
+            const page = item.dataset.page;
+
+            if (currentVendorData && !currentVendorData.isActive && page !== 'dashboard') {
+                showRestrictionModal('restriction'); // Show restriction modal
+                return; // Prevent page load
+            }
+
+            document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
+            item.classList.add("active");
+
+            loadPage(page);
+            toggleDropdown(false);
+        }
+
+
+        // --- Load Page ---
+        function loadPage(page) {
+            const item = menuConfig[page];
+            if (!item) return;
+
+            iframe.src = item.url;
+            headerTitle.textContent = item.tooltip;
+        }
+
+        // --- Password toggle ---
+        togglePasswordIcon.addEventListener('click', () => {
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+            togglePasswordIcon.classList.toggle('fa-eye-slash');
+        });
+
+        // --- Toggle Dropdown (Made more robust) ---
+        window.toggleDropdown = (show) => {
+            const isVisible = userCardEl.classList.contains('open');
+            const shouldShow = typeof show === 'boolean' ? show : !isVisible;
+
+            userCardEl.classList.toggle('open', shouldShow);
+        };
+
+        // --- Global Click Handler to close dropdown when clicking outside ---
+        document.addEventListener('click', (e) => {
+            // Close dropdown if clicked outside
+            if (userCardEl.classList.contains('open') && !userCardEl.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                toggleDropdown(false);
+            }
+            // Close modal if clicked outside modal content (but not modal container)
+            if (restrictionModal.classList.contains('show') && !document.querySelector('.modal-content').contains(e.target) && e.target === restrictionModal) {
+                closeRestrictionModal();
+            }
+        });
+
+
+        // --- Logout (Full-proof) ---
+        window.logout = async () => {
+            try {
+                await signOut(auth);
+                clearUser();
+                currentVendorData = null; 
+                loginScreen.classList.remove("hidden");
+                dashboardContainer.classList.remove("visible");
+                loginForm.reset();
+                errorDiv.style.display = "none";
+                iframe.src = '';
+                toggleDropdown(false);
+                sidebarMenu.innerHTML = '';
+                userNameEl.textContent = 'User';
+                userRoleEl.textContent = 'Role';
+                closeRestrictionModal(); // Ensure modal is closed on logout
+            } catch (error) {
+                console.error("Logout Error:", error);
+                // Use alert fallback for critical errors
+                alert("Logout failed. Please try again."); 
+            }
+        }
+
+        // --- Core Login Logic (Modified for Vendor Status Check & Modal) ---
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            errorDiv.style.display = "none";
+
+            const email = document.getElementById("email").value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!email || !password) {
+                errorDiv.textContent = "❌ Please enter both email and password.";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            try {
+                // 1. Firebase Authentication
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. Fetch Role Data
+                const rolesSnapshot = await get(child(dbRef(database), 'roles'));
+                const rolesData = rolesSnapshot.val();
+
+                let userRoleKey = null;
+                let userData = null;
+
+                for (const [role, data] of Object.entries(rolesData)) {
+                    if (data.email && data.email.toLowerCase() === email.toLowerCase()) {
+                        userRoleKey = role.toLowerCase();
+                        userData = data;
+                        break;
+                    }
+                }
+
+                // 3. Role Validation
+                if (!userRoleKey || !roleMenus[userRoleKey]) {
+                    errorDiv.textContent = "❌ Your account role is not defined or supported (Developer/Manager/Vendor).";
+                    errorDiv.style.display = "block";
+                    await signOut(auth);
+                    return;
+                }
+
+                // 4. Vendor Status Handling
+                if (userRoleKey === "vendor") {
+                    currentVendorData = {
+                        isActive: userData.isActive || false, 
+                        deu: userData.deu || 0
+                    };
+
+                    // NEW: Show modal on login if inactive
+                    if (!currentVendorData.isActive) {
+                        // Show a temporary login-specific modal message
+                        showRestrictionModal('inactive_login');
+                    }
+                } else {
+                    currentVendorData = null;
+                }
+
+
+                // 5. Successful Login & UI Update
+                saveUser({
+                    name: userData.name || user.email.split('@')[0], 
+                    roleKey: userRoleKey,
+                    isActive: currentVendorData ? currentVendorData.isActive : true, 
+                    deu: currentVendorData ? currentVendorData.deu : 0,
+                    uid: user.uid
+                });
+
+                updateHeaderUI({ name: userData.name, roleKey: userRoleKey });
+
+                loginScreen.classList.add("hidden");
+                dashboardContainer.classList.add("visible");
+
+                // 6. Initialize dashboard based on active status
+                if (userRoleKey === 'vendor' && !currentVendorData.isActive) {
+                    initializeDashboard('vendor', false, 'dashboard');
+                } else {
+                    initializeDashboard(userRoleKey);
+                }
+
+            } catch (error) {
+                let msg = "Login failed. Please check your credentials.";
+                if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                    msg = "❌ Invalid email or password.";
+                } else if (error.code === 'auth/too-many-requests') {
+                    msg = "❌ Account temporarily locked due to too many failed attempts.";
+                } else {
+                    console.error("Login Error:", error.code, error.message);
+                }
+                errorDiv.textContent = msg;
+                errorDiv.style.display = "block";
+                passwordInput.value = "";
+            }
+        });
+
+        // --- State Persistence (Modified for Vendor Status Check) ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userData = loadUser();
+                if (userData && roleMenus[userData.roleKey] && userData.uid === user.uid) {
+
+                    if (userData.roleKey === 'vendor') {
+                        currentVendorData = {
+                            isActive: userData.isActive || true,
+                            deu: userData.deu || 0
+                        };
+                    } else {
+                        currentVendorData = null;
+                    }
+
+                    loginScreen.classList.add("hidden");
+                    dashboardContainer.classList.add("visible");
+                    updateHeaderUI(userData);
+
+                    if (userData.roleKey === 'vendor' && !userData.isActive) {
+                        initializeDashboard('vendor', true, 'dashboard');
+                    } else {
+                        initializeDashboard(userData.roleKey, true);
+                    }
+                } else {
+                    if (user) await signOut(auth);
+                    loginScreen.classList.remove("hidden");
+                    dashboardContainer.classList.remove("visible");
+                }
+            } else {
+                loginScreen.classList.remove("hidden");
+                dashboardContainer.classList.remove("visible");
+                currentVendorData = null;
+            }
+        });
+    </script>
 </body>
+
 </html>
