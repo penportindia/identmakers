@@ -1,93 +1,636 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Record Management Console</title>
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Bootstrap & FontAwesome -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to right, #e3f2fd, #f1f8e9);
-      min-height: 100vh;
-      padding: 30px;
-    }
-    .card {
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-    .form-label {
-      font-weight: 600;
-    }
-    .btn-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-size: 14px;
-      padding: 6px 12px;
-    }
-    .input-group-text {
-      background-color: #e3f2fd;
-      cursor: pointer;
-    }
-    #enrollNo:focus {
-      text-transform: uppercase;
-    }
-  </style>
+    <style>
+        /* Modern & Stylish UI Variables */
+        :root {
+            --primary-color: #3f51b5; 
+            --primary-light: #5c6bc0;
+            --accent-color: #00bcd4; 
+            --bg-color: #f4f6f9; 
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --shadow-lift: 0 10px 30px rgba(0, 0, 0, 0.08); 
+            --border-radius: 12px;
+        }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-color); 
+            min-height: 100vh; 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column;
+            color: var(--text-color);
+        }
+        .main-wrapper {
+            flex-grow: 1;
+            padding: 40px 20px; 
+            max-width: 1200px; 
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* Card Style */
+        .ui-card { 
+            border-radius: var(--border-radius); 
+            box-shadow: var(--shadow-lift); 
+            background-color: var(--card-bg);
+            margin-bottom: 30px; 
+            border: none; 
+            padding: 35px; 
+        }
+
+        /* Form Controls */
+        .form-label { 
+            font-weight: 500;
+            color: #6c757d; 
+            font-size: 0.8rem;
+            margin-bottom: 6px; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-control { 
+            border-radius: 8px; 
+            border: 1px solid #e0e0e0;
+            padding: 16px 20px; 
+            font-size: 0.95rem; 
+            transition: all 0.3s;
+        }
+        
+        /* Input Group Styling for Search */
+        .input-group > .form-control { 
+            border-radius: 8px 0 0 8px; 
+            padding: 16px 20px; 
+        }
+        .input-group .btn-search-icon {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            border-radius: 0 8px 8px 0; 
+            margin-left: -1px;
+            padding: 12px 25px; 
+            font-weight: 600;
+        }
+        
+        /* Barcode Button Styling */
+        .btn-barcode-icon {
+            background-color: #607d8b; 
+            border-color: #607d8b;
+            color: white;
+            padding: 12px 18px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            margin-left: 10px;
+        }
+
+        /* Dynamic Content */
+        #photoPreview { 
+            width: 140px; 
+            height: 140px; 
+            object-fit: cover; 
+            border-radius: 50%; 
+            border: 4px solid var(--accent-color); 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Message Bar */
+        .message-bar { 
+            padding: 1.25rem 2rem; 
+            border-radius: var(--border-radius); 
+            font-weight: 600; 
+            margin-top: 20px;
+            font-size: 1rem;
+            border: 1px solid;
+        }
+        .message-bar-info { 
+            background-color: #e3f2fd; 
+            color: var(--primary-color); 
+            border-color: #bbdefb;
+        }
+        .message-bar-warning {
+            background-color: #fffde7; 
+            color: #ff9800;
+            border-color: #ffe082;
+        }
+        .message-bar-danger {
+            background-color: #ffebee; 
+            color: #f44336;
+            border-color: #ef9a9a;
+        }
+        
+        /* Section Separator */
+        .card-header-separator {
+            font-weight: 700; 
+            color: var(--primary-color); 
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+    </style>
 </head>
 <body>
-  <div class="container">
-
-    <!-- 🔍 Search Section -->
-    <div class="card p-4">
-      <div class="row g-3 align-items-end">
-        <div class="col-md-9">
-          <label for="enrollNo" class="form-label">Enrollment Number</label>
-          <div class="input-group">
-            <input type="text" id="enrollNo" class="form-control text-uppercase" placeholder="Enter Enrollment Number" oninput="this.value = this.value.toUpperCase()" />
-            <span class="input-group-text" onclick="startScanner()">
-              <i class="fas fa-barcode"></i>
-            </span>
-          </div>
+    <div class="main-wrapper">
+        
+        <div class="ui-card">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-10 col-md-9">
+                    <label for="enrollNo" class="form-label">Enrollment Number / Staff ID</label>
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="enrollNo" 
+                            class="form-control" 
+                            placeholder="ENTER FULL UNIQUE ID TO SEARCH" 
+                            oninput="this.value = this.value.toUpperCase()" 
+                            onkeypress="if(event.key === 'Enter') window.searchRecord()"
+                        />
+                        <button onclick="window.searchRecord()" class="btn btn-search-icon" type="button" title="Search Record">
+                             <i class="fas fa-search"></i> 
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    <button onclick="window.startScanner()" class="btn btn-icon w-100 btn-barcode-icon" type="button" title="Activate Barcode Scanner">
+                        <i class="fas fa-barcode me-0"></i> Scan
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="col-md-3">
-          <button onclick="searchRecord()" class="btn btn-primary w-100 btn-icon">
-            <i class="fas fa-search"></i> Search
-          </button>
+
+        <div id="loadingSpinner" class="text-center py-5" style="display:none;">
+            <div class="spinner-border text-primary" role="status" style="width: 3.5rem; height: 3.5rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="text-primary mt-3 fs-5"><span id="spinnerMessage">Processing request...</span></p>
         </div>
-      </div>
+
+        <div class="ui-card" id="updateForm" style="display:none;">
+            </div>
+
+        <div id="infoMessage" class="message-bar message-bar-info text-center" style="display:block;">
+            <i class="fas fa-info-circle me-2"></i> **Welcome to ERP.** Please enter the **full unique ID** above to proceed with record management.
+        </div>
+
     </div>
 
-    <!-- ⏳ Spinner -->
-    <div id="loadingSpinner" class="text-center my-3" style="display:none;">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- 📝 Update Form Section -->
-    <div class="card p-4" id="updateForm">
-      <!-- Form will be injected here dynamically -->
-    </div>
+    <script type="module">
+        /* ------------ Dependencies (keep your Database.js import as-is) ------------ */
+        import { firebaseConfig, cloudinaryConfig } from '../Database/Database.js'; 
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getDatabase, ref as dbRef, get, update, remove, set } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-  </div>
+        /* ---------------- Firebase init ---------------- */
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
 
-  <script type="module" src="Manage.js"></script>
-  <script>
-    // Focus on input when barcode button is clicked
-    function startScanner() {
-      const enrollInput = document.getElementById("enrollNo");
-      enrollInput.focus();
-      // You can integrate a real barcode scanner library here
-    }
-  </script>
+        /* ---------------- Cloudinary config ---------------- */
+        const CLOUDINARY_UPLOAD_URL = cloudinaryConfig.uploadUrl;        // e.g. https://api.cloudinary.com/v1_1/<cloudName>/image/upload
+        const CLOUDINARY_UPLOAD_PRESET = cloudinaryConfig.uploadPreset; // unsigned preset (optional)
+        const CLOUDINARY_SIGNED = !!cloudinaryConfig.signed || false;   // optional flag if you use signed uploads (server-side)
+
+        /* ---------------- Global state ---------------- */
+        let currentSchoolName = "";
+        let currentSchoolId = "";
+        let currentType = ""; 
+        let currentEnroll = "";
+
+        /* ---------------- UI helpers ---------------- */
+        function setInfoMessage(message, type = 'info') {
+            const infoMsg = document.getElementById("infoMessage");
+            if (!infoMsg) return console.warn("infoMessage element not found");
+            infoMsg.innerHTML = message;
+            infoMsg.className = `message-bar text-center mt-3 message-bar-${type}`;
+            infoMsg.style.display = "block";
+            const form = document.getElementById("updateForm");
+            if (form) form.style.display = (type === 'info' || type === 'warning') ? "block" : form.style.display;
+        }
+
+        function showSpinner(message = "Processing request...") {
+            const spinner = document.getElementById("loadingSpinner");
+            const spinnerMsg = document.getElementById("spinnerMessage");
+            if (spinner) spinner.style.display = "block";
+            if (spinnerMsg) spinnerMsg.textContent = message;
+            const form = document.getElementById("updateForm");
+            if (form) form.style.display = "none";
+            const info = document.getElementById("infoMessage");
+            if (info) info.style.display = "none";
+        }
+
+        function hideSpinner() {
+            const spinner = document.getElementById("loadingSpinner");
+            if (spinner) spinner.style.display = "none";
+        }
+
+        /* Robust error logger (writes to DB errors/ timestamped node) */
+        async function logError(message, sourceFn) {
+            try {
+                const now = new Date().toISOString().replace(/:/g, "-");
+                const ref = dbRef(database, `errors/${now}`);
+                const log = {
+                    message: String(message || "Unknown error"),
+                    function: sourceFn || "unknown",
+                    time: new Date().toISOString(),
+                    user: currentEnroll || "UNKNOWN"
+                };
+                // use set to create a node
+                await set(ref, log);
+            } catch (e) {
+                console.error("Logging failed:", e);
+            }
+        }
+
+        /* ---------------- Cloudinary upload (robust) ---------------- */
+        async function uploadToCloudinary(file) {
+            if (!CLOUDINARY_UPLOAD_URL) {
+                throw new Error("Cloudinary upload URL is missing (cloudinaryConfig.uploadUrl).");
+            }
+            if (!file) throw new Error("No file provided for upload.");
+
+            // Build base form data (unsigned uploads require upload_preset)
+            async function doUpload(usePublicId = false) {
+                const formData = new FormData();
+                formData.append("file", file);
+                if (CLOUDINARY_UPLOAD_PRESET) formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+                // optional: folder structure using school/type
+                const folder = currentSchoolId ? `${currentSchoolId}/${currentType.toLowerCase()}` : `${currentType.toLowerCase()}`;
+                formData.append("folder", folder);
+                if (usePublicId && currentEnroll) {
+                    // NOTE: overwriting an existing public_id requires signed uploads on Cloudinary.
+                    // unsigned presets often ignore "public_id" or reject overwrite. We'll try and fallback.
+                    formData.append("public_id", String(currentEnroll));
+                    // allow overwrite param (only effective for signed uploads)
+                    formData.append("overwrite", "true");
+                }
+
+                const resp = await fetch(CLOUDINARY_UPLOAD_URL, {
+                    method: "POST",
+                    body: formData,
+                });
+
+                const text = await resp.text(); // sometimes Cloudinary returns non-json errors
+                let json;
+                try { json = JSON.parse(text); } catch (e) { json = null; }
+
+                return { ok: resp.ok, status: resp.status, json, rawText: text };
+            }
+
+            try {
+                // First try: prefer sending public_id only if you configured signed uploads on server side,
+                // otherwise unsigned presets may reject public_id. We'll attempt with public_id only if CLOUDINARY_SIGNED is true.
+                let attempt = await doUpload(CLOUDINARY_SIGNED);
+
+                // If first attempt failed and we tried to send public_id (signed) but it's not allowed, try again without public_id
+                if (!attempt.ok) {
+                    console.warn("Cloudinary first attempt failed", attempt.status, attempt.json || attempt.rawText);
+                    // If cloud returned JSON with error code, we can inspect, but we'll fallback to retry without public_id
+                    const retry = await doUpload(false);
+                    if (!retry.ok) {
+                        console.error("Cloudinary retry failed:", retry.status, retry.json || retry.rawText);
+                        const errMsg = (retry.json && retry.json.error && retry.json.error.message) ? retry.json.error.message : `Cloudinary failed with status ${retry.status}`;
+                        throw new Error(errMsg);
+                    } else {
+                        attempt = retry;
+                    }
+                }
+
+                // Success: parse returned JSON
+                const data = attempt.json;
+                if (!data) throw new Error("Cloudinary returned unexpected response: " + attempt.rawText);
+
+                if (data.secure_url) {
+                    return data.secure_url;
+                } else if (data.url) {
+                    return data.url;
+                } else {
+                    throw new Error("Cloudinary upload succeeded but no URL returned.");
+                }
+            } catch (err) {
+                console.error("uploadToCloudinary error:", err);
+                throw err;
+            }
+        }
+
+        /* ---------------- Utility: cache-busted URL ---------------- */
+        function cacheBusted(url) {
+            if (!url) return url;
+            const t = Date.now();
+            return url.includes("?") ? `${url}&t=${t}` : `${url}?t=${t}`;
+        }
+
+        /* ---------------- Window helpers ---------------- */
+        window.clearForm = function (full = true) {
+            const form = document.getElementById("updateForm");
+            if (form) form.innerHTML = "";
+            if (full) {
+                const enrollEl = document.getElementById("enrollNo");
+                if (enrollEl) enrollEl.value = "";
+                currentType = "";
+                currentEnroll = "";
+                currentSchoolName = "";
+                currentSchoolId = "";
+                setInfoMessage('<i class="fas fa-info-circle me-2"></i> <strong>Welcome to ERP.</strong> Please enter the full unique ID to proceed.', 'info');
+                if (enrollEl) enrollEl.focus();
+            }
+        };
+
+        window.startScanner = function() {
+            const enrollEl = document.getElementById("enrollNo");
+            if (enrollEl) enrollEl.focus();
+            alert("Barcode scanner activated. Please scan the Enrollment ID.");
+        }
+
+        /* ---------------- Search Record ---------------- */
+        window.searchRecord = async function () {
+            const enrollEl = document.getElementById("enrollNo");
+            const enroll = enrollEl ? enrollEl.value.trim().toUpperCase() : "";
+            if (!enroll) return setInfoMessage("⚠️ Please enter an Enrollment Number / Staff ID to search.", 'warning');
+            if (!navigator.onLine) return setInfoMessage("🚫 You're offline. Please check your connection.", 'danger');
+
+            showSpinner(`Searching for ${enroll}...`);
+            window.clearForm(false);
+
+            try {
+                const masterRef = dbRef(database, "DATA-MASTER");
+                const masterSnap = await get(masterRef);
+
+                if (!masterSnap.exists()) {
+                    hideSpinner();
+                    return setInfoMessage('<i class="fas fa-exclamation-triangle me-2"></i> Master data node is empty.', 'danger');
+                }
+
+                const masterData = masterSnap.val();
+                let found = false, recordData = null;
+                outerLoop:
+                for (const schoolName in masterData) {
+                    for (const schoolId in masterData[schoolName]) {
+                        const schoolNode = masterData[schoolName][schoolId];
+                        if (!schoolNode) continue;
+
+                        if (schoolNode.STAFF && schoolNode.STAFF[enroll]) {
+                            found = true;
+                            currentSchoolName = schoolName;
+                            currentSchoolId = schoolId;
+                            currentType = "STAFF";
+                            currentEnroll = enroll;
+                            recordData = schoolNode.STAFF[enroll];
+                            break outerLoop;
+                        }
+                        if (schoolNode.STUDENT && schoolNode.STUDENT[enroll]) {
+                            found = true;
+                            currentSchoolName = schoolName;
+                            currentSchoolId = schoolId;
+                            currentType = "STUDENT";
+                            currentEnroll = enroll;
+                            recordData = schoolNode.STUDENT[enroll];
+                            break outerLoop;
+                        }
+                    }
+                }
+
+                hideSpinner();
+                if (!found) {
+                    setInfoMessage(`<i class="fas fa-search-minus me-2"></i> Record Not Found: ID ${enroll} was not located.`, 'warning');
+                } else {
+                    renderForm(currentType, recordData || {});
+                    setInfoMessage(`<i class="fas fa-check-circle me-2"></i> Record Found: ${currentEnroll} at ${currentSchoolName}.`, 'info');
+                    const form = document.getElementById("updateForm");
+                    if (form) form.style.display = "block";
+                }
+            } catch (err) {
+                hideSpinner();
+                console.error("searchRecord error:", err);
+                await logError(err.message || err, "searchRecord");
+                setInfoMessage('<i class="fas fa-bug me-2"></i> System error occurred. See console.', 'danger');
+            }
+        };
+
+        /* ---------------- Render form (with cache-busted photo) ---------------- */
+        function renderForm(type, data = {}) {
+            const form = document.getElementById("updateForm");
+            if (!form) return console.warn("updateForm not found");
+
+            const disabledFields = ["schoolName", "schoolId", "staff_enroll", "student_enroll", "timestamp"];
+            const recordName = (data.staff_name || data.student_name || currentEnroll || "").toUpperCase();
+
+            let photoUrl = data.photo || 'https://via.placeholder.com/150/cccccc/000000?text=No+Photo';
+            if (photoUrl && photoUrl !== 'https://via.placeholder.com/150/cccccc/000000?text=No+Photo') {
+                photoUrl = cacheBusted(photoUrl);
+            }
+
+            let html = `
+                <div class="row align-items-center mb-5 pb-4" style="border-bottom: 1px dashed #e0e0e0;">
+                    <div class="col-lg-2 col-md-3 text-center mb-3 mb-md-0">
+                        <img id="photoPreview" src="${photoUrl}" alt="Record Photo" style="max-width:140px; border-radius:6px;" />
+                    </div>
+                    <div class="col-lg-10 col-md-9">
+                        <h4 style="font-weight:800; color:#333; margin-bottom:5px;">${recordName}</h4>
+                        <p class="text-muted mb-1"><i class="fas fa-id-badge me-2 text-primary"></i> ${type} ID: <strong>${currentEnroll}</strong></p>
+                        <p class="text-muted mb-0"><i class="fas fa-school me-2 text-primary"></i> School: <strong>${currentSchoolName} (${currentSchoolId})</strong></p>
+                    </div>
+                </div>
+                <h5 class="card-header-separator">Record Details</h5>
+                <div class="row g-4">`;
+
+            const keys = Object.keys(data).sort();
+            keys.forEach((key) => {
+                if (["photo", "timestamp", "schoolName", "schoolId", "staff_enroll", "student_enroll"].includes(key)) return;
+                const label = key.replace(/_/g, " ").toUpperCase();
+                const val = String(data[key] || "").toUpperCase();
+                const disabled = disabledFields.includes(key) ? "disabled" : "";
+                html += `
+                    <div class="col-xl-4 col-lg-6 col-md-6">
+                        <label class="form-label" for="${key}">${label}</label>
+                        <input type="text" class="form-control text-uppercase" id="${key}" value="${val}" ${disabled} oninput="this.value=this.value.toUpperCase()" />
+                    </div>`;
+            });
+
+            html += `</div>
+                <div class="row mt-5 pt-4 align-items-end" style="border-top:1px solid #f0f0f0;">
+                    <div class="col-lg-5 col-md-6 mb-3">
+                        <label class="form-label">Upload New Photo</label>
+                        <input type="file" id="newPhoto" class="form-control" accept="image/*" />
+                        ${data.photo ? `<button onclick="window.downloadPhoto('${data.photo}', '${currentEnroll}.jpg')" class="btn btn-primary btn-sm mt-3 btn-icon"><i class="fas fa-download"></i> Download Current Photo</button>` : `<p class="text-muted mt-2 small">No existing photo on record.</p>`}
+                    </div>
+                    <div class="col-lg-7 col-md-6 d-flex justify-content-md-end gap-3 pt-md-0 pt-3">
+                        <button class="btn btn-warning btn-icon" onclick="window.updateRecord()"><i class="fas fa-edit"></i> UPDATE</button>
+                        <button class="btn btn-danger btn-icon" onclick="window.deleteRecord()"><i class="fas fa-trash-alt"></i> DELETE</button>
+                        <button class="btn btn-secondary btn-icon" onclick="window.clearForm(true)"><i class="fas fa-eraser"></i> CLEAR</button>
+                    </div>
+                </div>`;
+
+            form.innerHTML = html;
+
+            // Live preview
+            const newPhotoEl = document.getElementById("newPhoto");
+            const preview = document.getElementById("photoPreview");
+            newPhotoEl?.addEventListener("change", (e) => {
+                const file = e.target.files?.[0];
+                if (file && preview) {
+                    preview.src = URL.createObjectURL(file);
+                    // revokeObjectURL later after update to avoid memory leaks (we'll revoke after upload success)
+                }
+            });
+        }
+
+        /* ---------------- Update Record (robust) ---------------- */
+        window.updateRecord = async function () {
+            if (!currentSchoolName || !currentSchoolId || !currentType || !currentEnroll) {
+                return setInfoMessage("⚠️ कृपया अपडेट करने से पहले रिकॉर्ड सर्च करें।", 'warning');
+            }
+
+            const path = `DATA-MASTER/${currentSchoolName}/${currentSchoolId}/${currentType}/${currentEnroll}`;
+            const ref = dbRef(database, path);
+
+            try {
+                // Fetch existing to compare
+                const snapshot = await get(ref);
+                const existing = snapshot.exists() ? snapshot.val() : {};
+
+                // Gather inputs
+                const inputs = Array.from(document.querySelectorAll("#updateForm input[type='text']"));
+                const updated = {};
+                let hasChanges = false;
+
+                inputs.forEach((el) => {
+                    const id = el.id;
+                    const val = String(el.value || "").trim().toUpperCase();
+                    const old = (existing[id] !== undefined && existing[id] !== null) ? String(existing[id]).toUpperCase() : "";
+                    // Keep value in updated even if same, to ensure DB fields remain consistent - but we will skip update call if no changes
+                    updated[id] = val;
+                    if (!el.disabled && val !== old) hasChanges = true;
+                });
+
+                // Retain mandatory fields
+                const disabledFieldsToRetain = ["schoolName", "schoolId", "staff_enroll", "student_enroll", "timestamp"];
+                disabledFieldsToRetain.forEach(k => {
+                    if (existing[k] !== undefined && updated[k] === undefined) updated[k] = existing[k];
+                });
+
+                // Handle photo file
+                const fileInput = document.getElementById("newPhoto");
+                const file = fileInput?.files?.[0];
+
+                showSpinner("Uploading image (if any) and saving...");
+
+                let photoUpdated = false;
+                let newPhotoURL = existing.photo || "";
+
+                if (file) {
+                    try {
+                        newPhotoURL = await uploadToCloudinary(file);
+                        photoUpdated = true;
+                    } catch (err) {
+                        // If upload fails, do NOT proceed with DB update. Log & inform.
+                        console.error("Image upload failed:", err);
+                        await logError(err.message || err, "uploadToCloudinary");
+                        hideSpinner();
+                        return setInfoMessage(`<i class="fas fa-times-circle me-2"></i> फोटो अपलोड असफल: ${err.message}`, 'danger');
+                    }
+                }
+
+                updated.photo = newPhotoURL;
+                if (photoUpdated) hasChanges = true;
+
+                if (!hasChanges) {
+                    hideSpinner();
+                    return setInfoMessage("ℹ️ कोई बदलाव नहीं मिला जिसे अपडेट किया जा सके।", 'info');
+                }
+
+                // Perform update (use update at the record node)
+                await update(ref, updated);
+
+                // Re-fetch to ensure UI shows exact saved state (and include DB-set timestamp etc)
+                const newSnap = await get(ref);
+                const newData = newSnap.exists() ? newSnap.val() : { ...existing, ...updated };
+
+                // Re-render with cache-busted photo
+                renderForm(currentType, newData);
+
+                // Revoke preview object URL if used
+                if (file && window.URL && document.getElementById("photoPreview")) {
+                    try { URL.revokeObjectURL(document.getElementById("photoPreview").src); } catch(e){/*ignore*/ }
+                }
+
+                // Clear file input to avoid accidental re-uploads
+                if (fileInput) { fileInput.value = ""; }
+
+                setInfoMessage(`<i class="fas fa-check-circle me-2"></i> सफलता: रिकॉर्ड ${currentEnroll} सफलतापूर्वक अपडेट किया गया।`, 'info');
+                hideSpinner();
+            } catch (err) {
+                console.error("updateRecord error:", err);
+                await logError(err.message || err, "updateRecord");
+                hideSpinner();
+                alert("❌ अपडेट विफल रहा: " + (err.message || err));
+            }
+        };
+
+        /* ---------------- Delete ---------------- */
+        window.deleteRecord = async function () {
+            if (!currentSchoolName || !currentSchoolId || !currentType || !currentEnroll)
+                return setInfoMessage("⚠️ Please search first before attempting to delete.", 'warning');
+
+            const confirmDelete = confirm(`⚠️ Are you sure you want to permanently delete the record for ${currentEnroll}? THIS CANNOT BE UNDONE.`);
+            if (!confirmDelete) return;
+
+            try {
+                showSpinner("Deleting record...");
+                const recordRef = dbRef(database, `DATA-MASTER/${currentSchoolName}/${currentSchoolId}/${currentType}/${currentEnroll}`);
+                const snapshot = await get(recordRef);
+
+                if (!snapshot.exists()) {
+                    hideSpinner();
+                    setInfoMessage("❌ Record not found. Already deleted or moved.", 'danger');
+                    window.clearForm(true);
+                    return;
+                }
+
+                await remove(recordRef);
+                window.clearForm(true);
+                setInfoMessage(`<i class="fas fa-trash-alt me-2"></i> Deleted: Record ${currentEnroll} removed.`, 'warning');
+            } catch (err) {
+                console.error("deleteRecord error:", err);
+                await logError(err.message || err, "deleteRecord");
+                hideSpinner();
+                alert("❌ Delete failed: " + (err.message || err));
+            } finally {
+                hideSpinner();
+            }
+        };
+
+        /* ---------------- Download photo ---------------- */
+        window.downloadPhoto = async function (url, filename) {
+            if (!url) return setInfoMessage("Photo URL is missing.", 'warning');
+            try {
+                const response = await fetch(url, { mode: 'cors' });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const blob = await response.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = blobUrl;
+                a.download = filename || 'photo.jpg';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(blobUrl);
+                setInfoMessage(`<i class="fas fa-download me-2"></i> Photo downloaded successfully.`, 'info');
+            } catch (err) {
+                console.error("Download error:", err);
+                alert("❌ Unable to download image.");
+            }
+        };
+        </script>
+
 </body>
 </html>
