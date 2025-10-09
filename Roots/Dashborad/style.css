@@ -1,134 +1,153 @@
-/* General Font */
-.font-inter {
-  font-family: 'Inter', sans-serif;
+/*
+ * School Dashboard Styles - Optimized for Poppins Font & Premium UX (SIZE ADJUSTED)
+ */
+
+/* Global Typography */
+.font-inter { 
+    /* Assuming you are now using Poppins (as per last request) */
+    font-family: 'Poppins', sans-serif; 
 }
 
-/* Card hover effect */
-.card-hover {
-  transition: all 0.2s ease;
+/* --- Base Component Styles --- */
+
+/* Card Hover Effect */
+.card-hover { 
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
 }
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+.card-hover:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
 }
 
-/* Stat Cards */
+/* Stat Cards (Top 4) */
 .stat-card {
-  background: white;
-  border-radius: 1rem;
-  padding: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+    background: white;
+    border-radius: 0.75rem; /* Reduced Border Radius */
+    padding: 1rem; /* Reduced Padding from 1.25rem */
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* Reduced Gap */
+    box-shadow: 0 3px 6px rgba(0,0,0,0.04); /* Reduced Shadow */
+    border: 1px solid #e5e7eb; 
 }
-.stat-card h4 {
-  font-size: 0.875rem;
-  color: #6b7280;
+.stat-card h4 { 
+    font-size: 0.8rem; /* Reduced Font Size from 0.875rem */
+    color: #6b7280; 
+    text-transform: uppercase; 
+    letter-spacing: 0.05em;
 }
-.stat-card span {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #374151;
+.stat-card span { 
+    font-size: 1.5rem; /* Reduced Main Number Font Size from 1.8rem */
+    font-weight: 700; 
+    color: #1f2937; 
 }
-
-/* Stat Icons */
-.stat-icon {
-  font-size: 1.875rem;
-}
-
-/* Online school tiny cards - slightly smaller */
-.online-school-card {
-  background: #f0fdf4;
-  color: #166534;
-  font-size: 0.7rem;          /* slightly smaller */
-  font-weight: 600;
-  padding: 0.2rem 0.4rem;     /* slightly smaller */
-  border-radius: 0.4rem;      /* slightly smaller */
-  display: flex;
-  align-items: center;
-  gap: 0.2rem;                /* slightly smaller */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
-}
-.online-school-card:hover {
-  background: #dcfce7;
-  transform: translateY(-1px);
-}
-.online-school-card i {
-  font-size: 0.8rem;           /* slightly smaller */
-  color: #22c55e;
+.stat-icon { 
+    font-size: 2rem; /* Reduced Icon Size from 2.25rem */
+    opacity: 0.8;
 }
 
-/* Blink animation */
-.blink {
-  animation: blink 1.2s infinite;
+/* ---------------------------------------------------------------- */
+/* --- Vendor/Subscription Card: ULTRA PREMIUM ENHANCEMENTS (SIZE ADJUSTED) --- */
+/* ---------------------------------------------------------------- */
+
+.vendor-card {
+    /* ✨ ENHANCED PREMIUM GOLD GRADIENT (Deep Gold to Bright Yellow) */
+    background: linear-gradient(135deg, #a16207 0%, #fcd34d 100%); 
+    color: white; 
+    padding: 1.25rem; /* Reduced Padding from 1.5rem */
+    border-radius: 0.75rem; /* Reduced Border Radius */
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* ✨ STRONGER, DEEPER SHADOW */
+    box-shadow: 0 10px 25px rgba(161, 98, 7, 0.4); /* Reduced Shadow */
+    overflow: hidden; 
+    border: none; 
 }
-@keyframes blink {
-  50% { opacity: 0; }
+.vendor-card:hover { 
+    transform: translateY(-5px); /* Reduced Lift on Hover */
+    box-shadow: 0 15px 30px rgba(161, 98, 7, 0.6); /* Reduced Hover Shadow */
 }
 
-/* ------------------------- */
-/* School List Cards Styling */
-/* ------------------------- */
-.school-list-card {
-  background: white;
-  border-radius: 1rem;
-  padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  transition: all 0.2s ease;
-}
-.school-list-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+/* Header Text (Subscription Status) */
+.vendor-card h4 {
+    color: #fef3c7; 
+    font-weight: 500;
 }
 
-/* Responsive card sizing for School List */
-#schoolList {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr); /* default 1 column */
-  gap: 1rem;
-}
-@media (min-width: 640px) {
-  #schoolList {
-    grid-template-columns: repeat(2, 1fr); /* sm */
-  }
-}
-@media (min-width: 768px) {
-  #schoolList {
-    grid-template-columns: repeat(3, 1fr); /* md */
-  }
-}
-@media (min-width: 1024px) {
-  #schoolList {
-    grid-template-columns: repeat(4, 1fr); /* lg */
-  }
-}
-@media (min-width: 1280px) {
-  #schoolList {
-    grid-template-columns: repeat(5, 1fr); /* xl */
-  }
+/* Icon (Used pure white for high contrast) */
+.vendor-card .stat-icon { 
+    font-size: 2.2rem; /* Reduced Icon Size from 2.8rem */
+    color: white; 
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Reduced Icon Shadow */
 }
 
-/* Optional: make card content responsive */
-.school-list-card h3 {
-  font-size: 1rem;
-  font-weight: 600;
-}
-.school-list-card p {
-  font-size: 0.875rem;
-  color: #4b5563;
+/* Balance Text (Amount is big and bold) */
+.vendor-card #vendorBalance { 
+    font-size: 2rem; /* Reduced Main Balance Font Size from 2.5rem */
+    font-weight: 800; 
+    letter-spacing: -0.05em;
+    color: white; 
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); 
+    margin-top: 0.25rem; /* Reduced Margin Top */
+    display: block;
 }
 
-.date-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+/* Status Tags - FIXED for Gold background contrast */
+.vendor-card #vendorStatusText {
+    color: #78350f !important; 
+    font-weight: 700; 
 }
-.date-card h4 {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #374151;
+/* Dot colors will be set by JS via utility classes */
+
+
+/* Blink animation (Remains same) */
+.blink { 
+    animation: blink 1s infinite alternate; 
 }
-.date-card p {
-  font-size: 0.75rem;
-  color: #6b7280;
+@keyframes blink { 
+    from { opacity: 1; } 
+    to { opacity: 0.4; } 
+}
+
+
+/* --- School List Cards: Height and 5 Cards per Row --- */
+
+/* School Card Base Style */
+.school-card {
+    min-height: 180px; /* Reduced Min-Height from 200px */
+    background: white; 
+    border-radius: 12px; /* Reduced Border Radius */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06); /* Reduced Shadow */
+}
+
+#schoolList { 
+    display: grid; 
+    gap: 0.75rem; /* Reduced Gap */
+    grid-template-columns: repeat(1, 1fr); 
+}
+@media (min-width: 640px){ 
+    #schoolList { grid-template-columns: repeat(2, 1fr); } 
+} 
+@media (min-width: 1024px){ 
+    #schoolList { grid-template-columns: repeat(3, 1fr); } 
+} 
+@media (min-width: 1280px){ 
+    /* PC screen: 5 cards per row */
+    #schoolList { grid-template-columns: repeat(5, 1fr); } 
+}
+
+/* Done Button (Remains same, slightly smaller padding) */
+.done-btn {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.5rem 1rem; /* Reduced Padding */
+    background: linear-gradient(to right, #22c55e, #16a34a); 
+    color:white; font-weight:700; font-size:0.875rem; /* Slightly smaller font */
+    border-radius:0.6rem; /* Reduced Border Radius */
+    box-shadow:0 3px 10px rgba(34,197,94,0.3); 
+    transition: all 0.3s ease;
+}
+.done-btn:hover { 
+    background: linear-gradient(to right, #10b981, #065f46); 
+    transform: scale(1.01); 
+    box-shadow:0 4px 15px rgba(16,185,129,0.5); 
 }
