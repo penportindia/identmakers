@@ -4,22 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Management</title>
+    <title>Data Management | School ERP</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
     <script type="module" src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js"></script>
 
     <style>
         /* --- Minimal Design Variables --- */
         :root {
-            --primary-color: #03A9F4; /* Light Blue - Cleaner */
-            --delete-color: #FF5252; /* Red - Modern */
-            --success-color: #4CAF50; /* Green */
+            --primary-color: #03A9F4;
+            --delete-color: #FF5252;
+            --success-color: #4CAF50;
             --background-color: #fcfcfc;
             --card-background: #ffffff;
             --text-color: #263238;
@@ -38,26 +40,39 @@
             color: var(--text-color);
             line-height: 1.6;
         }
-        
-        /* Removed unnecessary padding/borders from header */
-        .header-section {
+
+        .top-bar-section {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
             margin-bottom: 30px;
         }
 
-        #searchInput {
-            width: 300px;
-            padding: 10px 15px;
-            border-radius: 5px;
+        .search-container {
+            display: flex;
+            align-items: center;
             border: 1px solid #CFD8DC;
+            border-radius: var(--border-radius);
             box-shadow: var(--shadow-subtle);
+            padding: 5px 10px;
+            background: var(--card-background);
+        }
+
+        .search-container .material-icons {
+            color: var(--sub-text-color);
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        #searchInput {
+            width: 250px;
+            padding: 5px 0;
+            border: none;
             font-size: 0.95rem;
             outline: none;
         }
 
-        /* --- Notification/Toast - Minimal and Clean --- */
+        /* --- Notification/Toast Styles --- */
         .notification {
             position: fixed;
             top: 20px;
@@ -94,57 +109,63 @@
             color: white;
         }
 
-
-        /* --- Summary Card Grid --- */
+        /* --- School Card Grid --- */
         .card-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Even Smaller Cards */
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
         }
 
-        /* --- Tiny School Summary Card - Minimal --- */
+        /* --- School Card Styles --- */
         .school-summary-card {
             background: var(--card-background);
             border-radius: var(--border-radius);
-            padding: 20px 15px;
+            padding: 25px 20px;
             box-shadow: var(--shadow-subtle);
             border: 1px solid #ECEFF1;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
             text-align: center;
+            min-height: 120px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .school-summary-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-4px);
             box-shadow: var(--shadow-lift);
             border-color: var(--primary-color);
         }
 
         .school-summary-card .material-icons {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             color: var(--primary-color);
             margin-bottom: 5px;
         }
-        
+
         .school-summary-card h4 {
             margin: 0;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: var(--text-color);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            margin-top: 5px;
         }
-        
+
         .school-summary-card .school-id-display {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             color: var(--sub-text-color);
-            margin-top: 2px;
+            margin-top: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         /* --- Modal Styling --- */
         .modal-backdrop {
-            /* ... (Backdrop styles remain the same) ... */
             position: fixed;
             top: 0;
             left: 0;
@@ -158,26 +179,46 @@
             animation: fadeIn 0.3s;
         }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
         .modal-content {
             background: var(--card-background);
             border-radius: var(--border-radius);
             width: 95%;
-            max-width: 650px; /* Slimmer Modal */
-            padding: 25px;
+            max-width: 600px;
+            padding: 30px;
             box-shadow: var(--shadow-lift);
             transform: scale(0.95);
             animation: slideIn 0.3s forwards;
         }
-        
+
+        @keyframes slideIn {
+            0% {
+                transform: scale(0.95) translateY(20px);
+            }
+
+            100% {
+                transform: scale(1) translateY(0);
+            }
+        }
+
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding-bottom: 15px;
             margin-bottom: 20px;
-            border-bottom: 1px solid #CFD8DC; /* Lighter border */
+            border-bottom: 1px solid #CFD8DC;
         }
-        
+
         .modal-header h2 {
             margin: 0;
             color: var(--text-color);
@@ -191,100 +232,125 @@
             color: var(--sub-text-color);
             cursor: pointer;
             transition: color 0.2s;
+            padding: 5px;
         }
 
         .modal-close-btn:hover {
-            color: var(--text-color);
+            color: var(--delete-color);
         }
 
         /* --- Data Control Cards inside Modal --- */
         .data-cards-grid {
-            display: flex; /* Changed to flex for better layout in a smaller modal */
+            display: flex;
             gap: 20px;
             justify-content: space-around;
         }
-        
+
         .data-control-card {
             flex: 1;
-            background: #F5F7FA; /* Light background for card */
+            background: #F5F7FA;
             border: 1px solid #E0E0E0;
             border-radius: var(--border-radius);
             padding: 20px;
             box-shadow: var(--shadow-subtle);
             text-align: center;
         }
-        
+
         .data-control-card h4 {
             font-size: 1.1rem;
             color: var(--text-color);
+            margin-top: 0;
         }
 
-        .data-control-card .count-display { 
-            font-size: 2.5rem; 
-            font-weight: 700; 
-            color: var(--primary-color); 
-            margin: 5px 0 10px 0;
+        .data-control-card .count-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 5px 0 15px 0;
+            display: block;
         }
 
-        /* --- Clean Button Styling --- */
-        .btn-group { 
-            display: flex; 
-            flex-direction: column; /* Buttons stack nicely */
-            gap: 8px; 
+        /* --- Clean Button Styling (From previous request) --- */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             margin-top: 20px;
         }
-        
+
         .data-control-card button {
-            padding: 10px 15px;
+            padding: 12px 20px; 
             border: 1px solid transparent;
-            border-radius: 4px;
+            border-radius: 8px; 
             cursor: pointer;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.2s;
+            font-weight: 600; 
+            font-size: 0.95rem;
+            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
             display: flex;
             align-items: center;
             justify-content: center;
+            text-decoration: none;
         }
-        
-        .data-control-card button .material-icons { 
-            font-size: 18px; 
-            margin-right: 5px; 
+
+        .data-control-card button .material-icons {
+            font-size: 20px;
+            margin-right: 8px;
         }
 
         .export-btn {
             background: var(--primary-color);
             color: white;
-            box-shadow: 0 2px 5px rgba(3, 169, 244, 0.3);
+            box-shadow: 0 5px 15px rgba(3, 169, 244, 0.4);
         }
+
         .export-btn:hover {
-            background: #0288D1; /* Darker blue on hover */
+            background: #0288D1;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(3, 169, 244, 0.5);
+        }
+
+        .export-btn:active {
             transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(3, 169, 244, 0.4);
         }
 
         .delete-btn {
             background: none;
             color: var(--delete-color);
-            border: 1px solid var(--delete-color);
+            border: 2px solid var(--delete-color);
+            box-shadow: inset 0 0 0 0 rgba(255, 82, 82, 0.1);
         }
+
         .delete-btn:hover {
             background: var(--delete-color);
             color: white;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(255, 82, 82, 0.3);
         }
-        
-        /* Empty State */
+
+        .delete-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(255, 82, 82, 0.3);
+        }
+
+        /* Empty State - Improved */
         .empty-state {
             text-align: center;
-            padding: 30px;
-            font-size: 1rem;
+            padding: 50px 30px;
+            font-size: 1.1rem;
             color: var(--sub-text-color);
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            border: 2px dashed #CFD8DC;
+            margin-top: 20px;
         }
+
         .empty-state .material-icons {
-            font-size: 3rem;
-            margin-bottom: 10px;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: #B0BEC5;
+            display: block;
         }
-        
     </style>
 </head>
 
@@ -292,23 +358,23 @@
 
     <div id="notification" class="notification"></div>
 
-    <div class="header-section">
-        <h1><span class="material-icons"
-                style="font-size: 2rem; vertical-align: middle; margin-right: 10px; color: var(--primary-color);">cloud_sync</span>
-            Data Management</h1>
-        <input type="text" id="searchInput" placeholder="Search School..." />
+    <div class="top-bar-section">
+        <div class="search-container">
+            <span class="material-icons">search</span>
+            <input type="text" id="searchInput" placeholder="Search School..." />
+        </div>
     </div>
 
     <div id="cardContainer" class="card-container">
-        </div>
+    </div>
 
     <div id="modalBackdrop" class="modal-backdrop">
         <div id="modalContent" class="modal-content">
-            </div>
+        </div>
     </div>
 
     <script type="module">
-        // Import your Firebase config from a relative path
+        // Firebase Imports
         import { firebaseConfig } from "../Database/Database.js";
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
         import { getDatabase, ref, get, remove, set } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
@@ -316,7 +382,7 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        
+
         // DOM Elements
         const cardContainer = document.getElementById("cardContainer");
         const modalBackdrop = document.getElementById("modalBackdrop");
@@ -324,11 +390,12 @@
         const notification = document.getElementById("notification");
         const searchInput = document.getElementById("searchInput");
 
-        let schoolsDataCache = {}; 
-        let activeSchoolData = null; 
+        let schoolsDataCache = {};
+        let activeSchoolData = null;
 
         // --- Utility Functions ---
 
+        /** Escapes HTML special characters for security/XSS protection. */
         function escapeHtml(unsafe) {
             if (unsafe === null || unsafe === undefined) return '';
             return String(unsafe)
@@ -339,14 +406,16 @@
                 .replace(/'/g, '&#039;');
         }
 
+        /** Sanitizes string for use as a file name. */
         function sanitizeFilename(name) {
             return String(name).replace(/[\\\/:*?"<>|]+/g, '_');
         }
 
-        // --- Clean Toast Function ---
+        /** Displays a clean, temporary notification toast. */
         function showToast(msg, type = 'success') {
             if (!notification) { console.warn('Notification element not found:', msg); return; }
-            notification.innerHTML = `<span class="material-icons">${type === 'success' ? 'check_circle' : 'error'}</span>${msg}`;
+            const icon = type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info';
+            notification.innerHTML = `<span class="material-icons">${icon}</span>${msg}`;
             notification.className = 'notification';
             notification.classList.add('show');
             notification.classList.add(type === 'error' ? 'notification-error' : 'notification-success');
@@ -361,52 +430,65 @@
             modalContent.innerHTML = '';
             activeSchoolData = null;
         }
+        window.closeModal = closeModal; 
 
-        // --- Stage 1: Light Fetch (Only Names/IDs) ---
+        // --- Stage 1: Light Fetch (Names, IDs, and first School ID) ---
 
         async function fetchSchoolSummary() {
             try {
-                // Show initial loading message only
-                showToast("Loading school list...", 'success'); 
-                
-                const snapshot = await get(ref(db, 'DATA-MASTER')); 
+                showToast("Loading school list...", 'success');
+
+                const snapshot = await get(ref(db, 'DATA-MASTER'));
                 schoolsDataCache = {};
-                
+
                 if (snapshot.exists()) {
                     const masterData = snapshot.val();
                     for (const schoolName in masterData) {
-                        let ids = Object.keys(masterData[schoolName] || {});
-                        schoolsDataCache[schoolName] = { ids }; 
+                        const schoolNode = masterData[schoolName];
+                        const ids = Object.keys(schoolNode || {});
+                        
+                        if (ids.length > 0) {
+                            const firstSchoolID = ids[0]; 
+                            schoolsDataCache[schoolName] = { 
+                                ids,
+                                firstSchoolID: firstSchoolID
+                            };
+                        }
                     }
                     renderSchoolCards();
-                    // No success toast here to keep UI clean, the rendered cards confirm the load.
+                    if(Object.keys(schoolsDataCache).length > 0) showToast("School list loaded.", 'success');
                 } else {
-                    cardContainer.innerHTML = '<p class="empty-state"><span class="material-icons">folder_open</span>No schools found.</p>';
+                    cardContainer.innerHTML = '<div class="empty-state"><span class="material-icons">school</span>No schools found in the database.</div>';
                     showToast("No schools found in database", 'error');
                 }
             } catch (err) {
-                console.error(err);
+                console.error("Firebase fetch error:", err);
                 showToast('Failed to load schools list', 'error');
             }
         }
 
+        /** Renders the list of school cards based on the cache and search filter. */
         function renderSchoolCards() {
             if (!cardContainer) return;
             const filter = (searchInput?.value || '').toLowerCase();
             cardContainer.innerHTML = '';
             let count = 0;
-            
+
             for (const schoolName in schoolsDataCache) {
-                if (filter && !schoolName.toLowerCase().includes(filter)) continue;
-                
                 const data = schoolsDataCache[schoolName];
+                if (filter && !schoolName.toLowerCase().includes(filter) && !data.firstSchoolID.toLowerCase().includes(filter)) continue;
+
                 const card = document.createElement('div');
                 card.className = 'school-summary-card';
 
+                const schoolIDText = data.firstSchoolID 
+                    ? `ID: ${escapeHtml(data.firstSchoolID)}` 
+                    : `${data.ids.length} ID(s)`;
+
                 card.innerHTML = `
-                <span class="material-icons">account_balance</span>
+                <span class="material-icons">school</span>
                 <h4>${escapeHtml(schoolName)}</h4>
-                <p class="school-id-display" title="${escapeHtml(data.ids.join(', '))}">IDs: ${escapeHtml(data.ids[0])}...</p>
+                <p class="school-id-display" title="First School ID: ${escapeHtml(data.firstSchoolID)}">${schoolIDText}</p> 
                 `;
 
                 card.addEventListener('click', () => loadSchoolDetails(schoolName));
@@ -414,11 +496,15 @@
                 cardContainer.appendChild(card);
                 count++;
             }
-            if (count === 0) cardContainer.innerHTML = '<p class="empty-state"><span class="material-icons">search_off</span>No matching schools found.</p>';
+
+            if (count === 0) {
+                cardContainer.innerHTML = `<div class="empty-state"><span class="material-icons">search_off</span>No schools match "${escapeHtml(filter)}".</div>`;
+            }
         }
 
         // --- Stage 2: Modal Detail Fetch and Render (On-Demand) ---
 
+        /** Fetches full data for the selected school and renders the modal. */
         async function loadSchoolDetails(schoolName) {
             // Setup Modal with Loading State
             modalContent.innerHTML = `
@@ -426,19 +512,18 @@
                     <h2>${escapeHtml(schoolName)}</h2>
                     <button class="modal-close-btn" onclick="closeModal()"><span class="material-icons">close</span></button>
                 </div>
-                <div style="text-align: center;">
-                    <div class="loader"></div>
+                <div style="text-align: center; padding: 20px;">
+                    <span class="material-icons" style="font-size: 3rem; color: var(--primary-color);">sync</span>
                     <p style="color: var(--sub-text-color);">Loading records...</p>
                 </div>
             `;
             modalBackdrop.style.display = 'flex';
-            
-            // Fetch ONLY the selected school's full data
+
             try {
                 const snapshot = await get(ref(db, `DATA-MASTER/${schoolName}`));
-                
+
                 if (!snapshot.exists()) {
-                    renderDetailCards(schoolName, 0, 0); // Render with zero counts
+                    renderDetailCards(schoolName, 0, 0);
                     activeSchoolData = {};
                     showToast('No detailed records found.', 'error');
                     return;
@@ -454,29 +539,35 @@
                     studentCount += Object.keys(students).length;
                     staffCount += Object.keys(staffs).length;
                 }
-                
+
                 renderDetailCards(schoolName, studentCount, staffCount);
 
             } catch (err) {
-                console.error(err);
-                modalContent.innerHTML = `<p class="empty-state"><span class="material-icons">cloud_off</span>Failed to load data details.</p>`;
+                console.error("Detail load error:", err);
+                modalContent.innerHTML = `
+                    <div class="modal-header">
+                        <h2>${escapeHtml(schoolName)}</h2>
+                        <button class="modal-close-btn" onclick="closeModal()"><span class="material-icons">close</span></button>
+                    </div>
+                    <p class="empty-state"><span class="material-icons">cloud_off</span>Failed to load data details.</p>
+                `;
                 showToast('Failed to load detailed data', 'error');
             }
         }
 
-        // --- Render Modal Cards ---
+        /** Renders the detail cards inside the modal with counts and action buttons. */
         function renderDetailCards(schoolName, studentCount, staffCount) {
-             modalContent.innerHTML = `
+            modalContent.innerHTML = `
                 <div class="modal-header">
                     <h2>${escapeHtml(schoolName)}</h2>
                     <button class="modal-close-btn" onclick="closeModal()"><span class="material-icons">close</span></button>
                 </div>
                 
-                <p style="font-size: 0.9rem; margin-bottom: 25px; color: var(--sub-text-color);">Select an action for the entire school data records.</p>
+                <p style="font-size: 0.9rem; margin-bottom: 25px; color: var(--sub-text-color); text-align: center;">Perform bulk actions on Student or Staff records for this school.</p>
 
                 <div class="data-cards-grid">
-                    ${createDataCard(schoolName, 'STUDENT', studentCount, 'face')}
-                    ${createDataCard(schoolName, 'STAFF', staffCount, 'people')}
+                    ${createDataCard(schoolName, 'Student', studentCount, 'person')}
+                    ${createDataCard(schoolName, 'Staff', staffCount, 'group')}
                 </div>
             `;
 
@@ -488,58 +579,104 @@
             });
         }
 
+        /** Generates HTML for a single data control card (Export/Delete). */
         function createDataCard(schoolName, type, count, icon) {
             return `
                 <div class="data-control-card">
+                    <span class="material-icons" style="font-size: 2.5rem; color: var(--sub-text-color);">${icon}</span>
                     <h4>${type} Records</h4>
                     <span class="count-display">${count}</span>
                     <div class="btn-group">
-                        <button class="export-btn" data-school="${escapeHtml(schoolName)}" data-type="${type}">
+                        <button class="export-btn" data-school="${escapeHtml(schoolName)}" data-type="${type}" ${count === 0 ? 'disabled title="No data to export"' : ''}>
                             <span class="material-icons">download</span>Export ${type}
                         </button>
-                        <button class="delete-btn" data-school="${escapeHtml(schoolName)}" data-type="${type}">
-                            <span class="material-icons">delete</span>Delete ${type}
+                        <button class="delete-btn" data-school="${escapeHtml(schoolName)}" data-type="${type}" ${count === 0 ? 'disabled title="No data to delete"' : ''}>
+                            <span class="material-icons">delete_forever</span>Delete ${type}
                         </button>
                     </div>
                 </div>
             `;
         }
-        
+
         // --- Core Action Logic (Export and Delete) ---
 
+        /** * Maps MIME type to a common file extension.
+         * @param {string} mimeType 
+         * @returns {string} The extension (e.g., 'jpg', 'png'), or 'bin' as fallback.
+         */
+        function getExtensionFromMime(mimeType) {
+            if (!mimeType) return 'bin';
+            const parts = mimeType.toLowerCase().split('/');
+            if (parts[0] !== 'image') return 'bin'; 
+
+            const subtype = parts[1];
+            if (subtype.includes('jpeg')) return 'jpg';
+            if (subtype.includes('png')) return 'png';
+            if (subtype.includes('gif')) return 'gif';
+            if (subtype.includes('webp')) return 'webp';
+            return 'jpg'; // Default to jpg for any other image type
+        }
+
+        /** Handles the bulk export of records into a ZIP file (XLSX + Photos). */
         async function handleExport(schoolName, type) {
-             if (!activeSchoolData) return;
-             // Show only "Working..." message
-             showToast(`Exporting ${type} data...`, 'success'); 
-             
-             // The rest of your export logic remains the same...
-             try {
+            if (!activeSchoolData) return;
+            showToast(`Exporting ${type} data...`, 'success');
+
+            try {
                 const zip = new JSZip();
                 const photoFolder = zip.folder("Photos");
-                let dataToExport = [];
+                const dataToExport = [];
                 let totalExported = 0;
-                const typeKey = type.toUpperCase(); 
+                const typeKey = type.toUpperCase();
 
+                // Loop through all School IDs under the schoolName
                 for (const schoolID in activeSchoolData) {
                     const records = activeSchoolData[schoolID]?.[typeKey] || {};
                     for (const key in records) {
                         const record = records[key];
                         if (!record) continue;
+
+                        const enrollKey = record.student_enroll || record.staff_enroll || key;
+                        const recordPhotoURL = record.photo;
                         
-                        dataToExport.push({ ...record });
-                        totalExported++;
+                        // 1. Prepare data for Excel Sheet
+                        const recordForExcel = {
+                            'School ID': schoolID, 
+                            ...record
+                        };
                         
-                        if (record.photo) {
+                        delete recordForExcel.photo; // Remove the photo URL from Excel data
+
+                        let finalPhotoFilename = 'N/A';
+                        
+                        // 2. Handle Photo Download and determine correct extension dynamically
+                        if (recordPhotoURL) {
                             try {
-                                const resp = await fetch(record.photo);
-                                if (resp.ok) { 
-                                    const blob = await resp.blob(); 
-                                    const enrollKey = record.student_enroll || record.staff_enroll || key;
-                                    const filename = `${sanitizeFilename(enrollKey)}.jpg`;
-                                    photoFolder.file(filename, blob); 
+                                const resp = await fetch(recordPhotoURL);
+                                if (resp.ok) {
+                                    const blob = await resp.blob();
+                                    // *** DYNAMIC EXTENSION LOGIC HERE ***
+                                    const extension = getExtensionFromMime(blob.type); 
+                                    
+                                    finalPhotoFilename = `${sanitizeFilename(enrollKey)}.${extension}`;
+                                    
+                                    photoFolder.file(finalPhotoFilename, blob); // Saves photo with correct extension
                                 }
-                            } catch (err) { /* silent photo fetch failure */ }
+                            } catch (err) { 
+                                // On photo fetch failure, the filename remains N/A or is based on default
+                                console.warn(`Failed to fetch photo for ${key}:`, err);
+                            }
                         }
+                        
+                        // 3. Add the determined Photo Filename to the Excel data
+                        if (finalPhotoFilename !== 'N/A') {
+                            recordForExcel['Photo Filename'] = finalPhotoFilename;
+                        } else {
+                            recordForExcel['Photo Filename'] = 'N/A (Download Failed)';
+                        }
+                        
+                        dataToExport.push(recordForExcel);
+                        totalExported++;
                     }
                 }
 
@@ -547,43 +684,43 @@
                     const ws = XLSX.utils.json_to_sheet(dataToExport);
                     const wb = XLSX.utils.book_new();
                     XLSX.utils.book_append_sheet(wb, ws, type);
-                    
+
                     zip.file(`${sanitizeFilename(schoolName)}-${type}.xlsx`, XLSX.write(wb, { bookType: 'xlsx', type: 'array' }));
-                    
+
                     const blob = await zip.generateAsync({ type: 'blob' });
                     saveAs(blob, `${sanitizeFilename(schoolName)}-${type}-Export.zip`);
-                    
-                    // Clean Success Message
-                    showToast(`${type} Export successful.`, 'success'); 
+
+                    showToast(`${type} Export successful (${totalExported} records).`, 'success');
                 } else {
-                    showToast(`No ${type} data found.`, 'error');
+                    showToast(`No ${type} data found to export.`, 'error');
                 }
 
-             } catch (err) {
-                 console.error('Export failed:', err);
-                 showToast('Export failed: Check console for details.', 'error');
-             }
+            } catch (err) {
+                console.error('Export failed:', err);
+                showToast('Export failed: Check console for details.', 'error');
+            }
         }
-        
-        async function handleDelete(schoolName, type) {
-             if (!activeSchoolData) return;
-             
-             if (!confirm(`CONFIRM: Are you sure you want to DELETE ALL ${type} data for ${schoolName}? This is permanent.`)) return;
-             
-             showToast(`Deleting ${type} data...`, 'error'); // Use error type for delete operation starting
 
-             try {
+        /** Handles the bulk permanent deletion of records. */
+        async function handleDelete(schoolName, type) {
+            if (!activeSchoolData) return;
+
+            if (!confirm(`WARNING: Are you sure you want to DELETE ALL ${type} data for ${schoolName}? This action is PERMANENT and moves data to 'Delete-Desire'.`)) return;
+
+            showToast(`Deleting ${type} data...`, 'error');
+
+            try {
                 const promises = [];
+                const typeKey = type.toUpperCase();
                 let totalDeletedCount = 0;
-                const typeKey = type.toUpperCase(); 
 
                 for (const schoolID in activeSchoolData) {
                     const records = activeSchoolData[schoolID]?.[typeKey] || {};
-                    
+
                     for (const key of Object.keys(records)) {
                         const record = { ...records[key] };
-                        delete record.photo; 
-                        
+                        delete record.photo;
+
                         const deletePath = ref(db, `Delete-Desire/${schoolName}/${schoolID}/${typeKey}/${key}`);
                         const workRef = ref(db, `workdone/${schoolName}/${typeKey}/${key}`);
                         const dataRef = ref(db, `DATA-MASTER/${schoolName}/${schoolID}/${typeKey}/${key}`);
@@ -591,34 +728,30 @@
 
                         promises.push(
                             set(deletePath, record)
-                                .then(() => set(workRef, { deletedAt: ts, type: typeKey, key }))
+                                .then(() => set(workRef, { deletedAt: ts, type: typeKey, key, schoolID }))
                                 .then(() => remove(dataRef))
-                                .catch(err => console.warn(err))
+                                .catch(err => console.warn(`Error deleting record ${key}:`, err))
                         );
 
                         totalDeletedCount++;
                     }
-                    
+
                     if (activeSchoolData[schoolID]) activeSchoolData[schoolID][typeKey] = {};
                 }
 
                 await Promise.all(promises);
-                
-                // Clean Success Message
-                showToast(`${type} Data Deleted successfully.`, 'success');
-                
-                // Reload the details in the modal to update the counts to 0
-                setTimeout(() => loadSchoolDetails(schoolName), 800); 
 
-             } catch (err) {
-                 console.error('Delete flow failed:', err);
-                 showToast('Delete failed: Check console for details.', 'error');
-             }
+                showToast(`${type} Data Deleted successfully (${totalDeletedCount} records).`, 'success');
+
+                setTimeout(() => loadSchoolDetails(schoolName), 800);
+
+            } catch (err) {
+                console.error('Delete flow failed:', err);
+                showToast('Delete failed: Check console for details.', 'error');
+            }
         }
-        
-        // --- Initialization ---
-        window.closeModal = closeModal; 
 
+        // --- Initialization ---
         if (searchInput) searchInput.addEventListener('input', renderSchoolCards);
         fetchSchoolSummary();
     </script>
