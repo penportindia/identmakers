@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="pageTitle">Penport India - ID Card Solution</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 
     <style>
+        /* ======================================================================== */
+        /* 1. Variables & Global Reset */
+        /* ======================================================================== */
         :root {
             --primary-color: #0077b6;
             --secondary-color: #023e8a;
@@ -26,7 +27,6 @@
             --credit-normal: #f97316;
             --sidebar-width: 70px;
             --border-radius-xl: 12px;
-
             --COMPANY_LOGO_URL: url('https://i.ibb.co/zTBBSD15/Penport-Background.jpg');
             --LOGIN_BG_IMAGE_URL: url('https://i.ibb.co/vCFMjrn8/vecteezy-abstract-white-and-orange-corporate-background-11171106-1.jpg');
         }
@@ -39,81 +39,76 @@
         }
 
         body {
+            background: var(--bg-light);
+            color: var(--text-dark);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background: var(--bg-light);
-            color: var(--text-dark);
         }
 
+        /* ======================================================================== */
+        /* 2. Login Screen */
+        /* ======================================================================== */
         #loginScreen {
+            align-items: center;
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), var(--LOGIN_BG_IMAGE_URL);
+            background-position: center;
+            background-size: cover;
+            display: flex;
+            height: 100%;
+            justify-content: center;
+            left: 0;
+            padding: 20px;
             position: absolute;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), var(--LOGIN_BG_IMAGE_URL);
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
             transition: opacity 0.5s ease, visibility 0.5s;
+            width: 100%;
             z-index: 10000;
         }
 
         #loginScreen.hidden {
             opacity: 0;
-            visibility: hidden;
             pointer-events: none;
+            visibility: hidden;
         }
 
-        /* WRAPPER for Login Form and Ad Banner */
         .login-ad-wrapper {
-            display: flex;
+            animation: fadeIn 0.8s ease-out;
             align-items: stretch;
             background: rgba(255, 255, 255, 0.98);
             border-radius: var(--border-radius-xl);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-            animation: fadeIn 0.8s ease-out;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            display: flex;
             max-width: 900px;
-            width: 95%;
             overflow: hidden;
+            width: 95%;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .login-container {
-            width: 100%;
-            max-width: 440px;
-            padding: 40px;
+            background: rgba(255,255,255,0.98);
             color: var(--text-dark);
             flex-shrink: 0;
-            background: rgba(255, 255, 255, 0.98);
+            max-width: 440px;
+            padding: 40px;
+            width: 100%;
         }
 
-        /* Ad Section Styling */
+        /* Ad Container */
         .ad-container {
-            display: none;
-            width: 460px;
-            flex-shrink: 0;
             background: var(--bg-dark);
-            position: relative;
-            overflow: hidden;
-            border-top-right-radius: var(--border-radius-xl);
             border-bottom-right-radius: var(--border-radius-xl);
+            border-top-right-radius: var(--border-radius-xl);
+            display: none;
+            flex-shrink: 0;
+            overflow: hidden;
             padding: 20px;
+            position: relative;
+            width: 460px;
         }
 
         @media (min-width: 768px) {
@@ -123,28 +118,28 @@
         }
 
         .ad-content {
-            height: 100%;
-            width: 100%;
             background-color: #0d1a2b;
-            color: white;
             border-radius: var(--border-radius-xl);
-            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            color: white;
             display: flex;
             flex-direction: column;
+            height: 100%;
+            overflow: hidden;
             position: relative;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            width: 100%;
         }
 
         .ad-image-header {
-            height: 80%; /* Increased height since plans are removed */
-            background-size: cover;
-            background-position: center;
-            background-color: var(--secondary-color);
-            display: flex;
             align-items: center;
-            justify-content: center;
+            background-color: var(--secondary-color);
+            background-position: center;
+            background-size: cover;
+            display: flex;
             font-size: 1.5rem;
             font-weight: 600;
+            height: 80%;
+            justify-content: center;
             opacity: 0.9;
             transition: all 0.3s;
         }
@@ -153,70 +148,69 @@
             opacity: 1;
         }
 
-
         .ad-body {
-            padding: 25px; /* Increased padding */
-            flex-grow: 1;
             background: var(--bg-dark);
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Center content vertically */
+            flex-grow: 1;
+            justify-content: center;
+            padding: 25px;
         }
 
         .ad-body h3 {
+            color: var(--accent-color);
             font-size: 1.75rem;
             font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--accent-color);
             line-height: 1.2;
+            margin-bottom: 8px;
         }
 
         .ad-body p {
+            color: rgba(255,255,255,0.85);
             font-size: 1rem;
-            color: rgba(255, 255, 255, 0.85);
             margin-bottom: 0;
         }
-        
+
         .ad-loading {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            align-items: center;
+            background: rgba(0,0,0,0.8);
+            border-radius: var(--border-radius-xl);
             bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
             color: white;
             display: flex;
-            justify-content: center;
-            align-items: center;
             font-size: 1.2rem;
-            border-radius: var(--border-radius-xl);
+            justify-content: center;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
         }
 
-        /* Dashboard and General Styles (retained) */
+        /* Login Form */
         .login-logo {
-            text-align: center;
             margin-bottom: 30px;
+            text-align: center;
         }
 
         .logo-image {
-            width: 110px;
-            height: 110px;
-            background-image: var(--COMPANY_LOGO_URL);
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
             background-color: var(--bg-content);
-            margin: 0 auto 15px;
-            border-radius: 50%;
+            background-image: var(--COMPANY_LOGO_URL);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
             border: 4px solid var(--primary-color);
+            border-radius: 50%;
+            height: 110px;
+            margin: 0 auto 15px;
+            width: 110px;
         }
 
         .login-logo h1 {
-            margin-top: 0;
             color: var(--text-dark);
-            font-weight: 800;
             font-size: 2rem;
+            font-weight: 800;
             letter-spacing: -1px;
+            margin-top: 0;
         }
 
         .login-logo h2 {
@@ -232,93 +226,93 @@
         }
 
         .input-group input {
-            width: 100%;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            color: var(--text-dark);
+            font-size: 1.05rem;
+            font-weight: 500;
             padding: 15px 20px;
             padding-left: 50px;
-            border-radius: var(--border-radius-xl);
-            border: 1px solid #e2e8f0;
-            background: #ffffff;
-            font-size: 1.05rem;
-            color: var(--text-dark);
             transition: all 0.3s;
-            font-weight: 500;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            width: 100%;
         }
 
         .input-group input:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(0, 119, 182, 0.25);
+            box-shadow: 0 0 0 4px rgba(0,119,182,0.25);
             outline: none;
         }
 
         .input-group .fas,
         .input-group .material-icons-round {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
             color: var(--text-muted);
             font-size: 1.2rem;
+            left: 18px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .input-group .fas.fa-eye,
         .input-group .fas.fa-eye-slash {
-            right: 18px;
-            cursor: pointer;
             color: var(--primary-color);
+            cursor: pointer;
             left: auto;
+            right: 18px;
         }
 
         .login-btn {
-            width: 100%;
-            padding: 16px;
             background: var(--primary-color);
-            color: #fff;
             border: none;
             border-radius: var(--border-radius-xl);
-            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(0,119,182,0.4);
+            color: #fff;
             cursor: pointer;
-            letter-spacing: 1px;
             font-size: 1.1rem;
-            box-shadow: 0 8px 20px rgba(0, 119, 182, 0.4);
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding: 16px;
             transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            width: 100%;
         }
 
         .login-btn:hover {
             background: var(--secondary-color);
+            box-shadow: 0 12px 25px rgba(0,119,182,0.5);
             transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(0, 119, 182, 0.5);
         }
 
         .login-btn:active {
+            box-shadow: 4px 10px rgba(0,119,182,0.3);
             transform: translateY(0);
-            box-shadow: 4px 10px rgba(0, 119, 182, 0.3);
         }
 
         .error-message {
-            margin-top: 20px;
-            text-align: center;
-            color: var(--credit-low);
-            font-weight: 600;
-            display: none;
             background: #fee2e2;
             border: 1px solid var(--credit-low);
-            padding: 12px;
             border-radius: 8px;
+            color: var(--credit-low);
+            display: none;
             font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 20px;
+            padding: 12px;
+            text-align: center;
         }
 
         .footer {
+            color: var(--text-muted);
+            font-size: 12px;
             margin-top: 30px;
             text-align: center;
-            font-size: 12px;
-            color: var(--text-muted);
         }
 
         .footer a {
             color: var(--primary-color);
-            text-decoration: none;
             font-weight: 600;
+            text-decoration: none;
             transition: color 0.2s;
         }
 
@@ -327,75 +321,80 @@
             text-decoration: underline;
         }
 
+        /* ======================================================================== */
+        /* 3. Dashboard Container */
+        /* ======================================================================== */
         .container {
             display: none;
             flex: 1;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .container.visible {
             display: flex;
-            height: 100vh;
+            flex-direction: row; /* Changed to row for sidebar + main-area layout */
+            flex: 1; /* Ensures it takes up remaining space for min-height 100vh */
         }
 
+        /* Sidebar */
         .sidebar {
-            width: var(--sidebar-width);
             background: var(--bg-dark);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
             color: #fff;
             display: flex;
             flex-direction: column;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
-            z-index: 100;
             flex-shrink: 0;
+            width: var(--sidebar-width);
+            z-index: 100;
         }
 
         .sidebar-header {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             padding: 16px 0;
             text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-header i {
-            font-size: 30px;
-            color: var(--accent-color);
-            background: rgba(255, 255, 255, 0.1);
-            padding: 6px;
-            border-radius: 8px;
-            display: inline-flex;
             align-items: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            color: var(--accent-color);
+            display: inline-flex;
+            font-size: 30px;
             justify-content: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            padding: 6px;
         }
 
         .menu {
-            flex: 1;
             display: flex;
+            flex: 1;
             flex-direction: column;
             margin-top: 20px;
         }
 
         .menu-item {
-            display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 18px 0;
-            margin: 4px 10px;
-            cursor: pointer;
             border-radius: 8px;
             color: #94a3b8;
-            transition: background 0.2s, color 0.2s, transform 0.1s;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            margin: 4px 10px;
+            padding: 18px 0;
             position: relative;
+            transition: background 0.2s, color 0.2s, transform 0.1s;
         }
 
         .menu-item.disabled {
+            cursor: not-allowed;
             opacity: 0.5;
             pointer-events: none;
-            cursor: not-allowed;
         }
 
         .menu-item.vendor-restricted {
-            opacity: 0.5;
             cursor: pointer;
+            opacity: 0.5;
             pointer-events: auto;
         }
 
@@ -409,19 +408,19 @@
         }
 
         .menu-item.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            height: 80%;
-            width: 4px;
             background: var(--accent-color);
             border-radius: 0 4px 4px 0;
+            content: '';
+            height: 80%;
+            left: 0;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
         }
 
         .menu-item:hover {
-            background: rgba(0, 119, 182, 0.2);
+            background: rgba(0,119,182,0.2);
             color: var(--accent-color);
             transform: translateY(-1px);
         }
@@ -433,27 +432,26 @@
         }
 
         .menu-item.vendor-restricted:hover {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239,68,68,0.2);
             color: var(--credit-low);
             transform: translateY(-1px);
         }
 
-
         .menu-item::after {
+            background: var(--text-dark);
+            border-radius: 6px;
+            color: #fff;
             content: attr(data-tooltip);
-            position: absolute;
+            font-size: 14px;
             left: calc(var(--sidebar-width) + 15px);
+            opacity: 0;
+            padding: 6px 10px;
+            position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: var(--text-dark);
-            color: #fff;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
             transition: opacity 0.3s, visibility 0.3s;
+            visibility: hidden;
+            white-space: nowrap;
             z-index: 100;
         }
 
@@ -462,189 +460,184 @@
             visibility: visible;
         }
 
+        /* Main Area */
         .main-area {
-            flex: 1;
             display: flex;
+            flex: 1;
             flex-direction: column;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .header {
-            height: 64px;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 0 24px;
-            background: var(--bg-content);
             border-bottom: 1px solid #e5e7eb;
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            background: var(--bg-content);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+            display: flex;
             flex-shrink: 0;
+            height: 64px;
+            justify-content: space-between;
+            padding: 0 24px;
         }
 
         .header-title {
+            color: var(--text-dark);
             font-size: 20px;
             font-weight: 700;
-            color: var(--text-dark);
         }
 
+        /* User Dropdown */
         .user-dropdown-container {
             position: relative;
         }
 
         .user-card {
-            display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 8px 15px;
             background: var(--bg-light);
-            border-radius: var(--border-radius-xl);
+            border-radius: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid #d1d5db;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            padding: 5px 15px 5px 5px;
+            transition: all 0.2s;
         }
 
         .user-card:hover {
             background: #e2e8f0;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transform: translateY(-1px);
+        }
+
+        .user-icon {
+            align-items: center;
+            background: var(--primary-color);
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            height: 36px;
+            justify-content: center;
+            margin-right: 10px;
+            width: 36px;
         }
 
         .user-text {
             display: flex;
             flex-direction: column;
             line-height: 1.2;
+            text-align: right;
         }
 
         .user-text strong {
+            font-size: 14px;
             font-weight: 600;
-            font-size: 1rem;
             color: var(--text-dark);
         }
 
         .user-text span {
-            font-size: 0.8rem;
+            font-size: 12px;
             color: var(--text-muted);
         }
 
         .dropdown-arrow {
-            transition: transform 0.3s;
+            color: var(--text-muted);
+            margin-left: 8px;
+            transition: transform 0.2s;
         }
 
-        .user-card.open .dropdown-arrow {
+        .user-card[aria-expanded="true"] .dropdown-arrow {
             transform: rotate(180deg);
         }
 
-        .user-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 8px;
-            background: var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 19px;
-            flex-shrink: 0;
-        }
-
         .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            width: 150px;
             background: var(--bg-content);
-            border-radius: var(--border-radius-xl);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             border: 1px solid #e2e8f0;
-            z-index: 50;
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             display: none;
-            overflow: hidden;
+            min-width: 150px;
             padding: 10px;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+            position: absolute;
+            right: 0;
+            top: 55px;
+            z-index: 1000;
         }
 
-        .user-card.open+.dropdown-menu {
+        .dropdown-menu.visible {
             display: block;
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .logout-btn-dropdown {
-            padding: 10px;
-            text-align: center;
-            color: #fff;
-            background: var(--credit-low);
-            border-radius: 8px;
+            color: var(--credit-low);
             cursor: pointer;
             font-weight: 600;
-            transition: background 0.2s, transform 0.1s;
+            padding: 10px 15px;
+            text-align: center;
+            transition: background 0.2s, color 0.2s;
         }
 
         .logout-btn-dropdown:hover {
-            background: #c53030;
-            transform: translateY(-1px);
+            background: #fee2e2;
+            border-radius: 8px;
+            color: #991b1b;
         }
 
+        /* Main Content / Views */
         .main-content {
-            flex: 1;
-            position: relative;
-            overflow-y: auto;
-            background: var(--bg-light);
-            padding: 0;
             display: flex;
+            flex: 1;
             flex-direction: column;
+            overflow: visible;
+            padding: 0;
+            position: relative;
         }
 
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 0;
-            background: var(--bg-content);
-            box-shadow: none;
-            flex-grow: 1;
-        }
-
-        /* Views management */
         .content-view {
-            width: 100%;
-            height: 100%;
-            flex-grow: 1;
             display: none;
+            flex-grow: 1;
+            width: 100%;
         }
 
         #iframeView.active,
         #adManagementView.active {
             display: block;
+            flex: 1;
+            display: flex;
         }
 
+        /* IFRAME */
+        iframe {
+            background: var(--bg-content);
+            border: none;
+            display: block;
+            flex: 1; /* important: ensures iframe takes full height */
+            height: 100%;
+            overflow: hidden;
+            width: 100%;
+        }
 
-        /* --- AD MANAGEMENT UI STYLES --- */
+        /* AD MANAGEMENT UI STYLES */
         #adManagementView {
-            padding: 24px;
             background: var(--bg-light);
             overflow-y: auto;
+            padding: 24px;
         }
 
         .ad-manager-container {
-            max-width: 800px;
-            margin: 0 auto;
             background: var(--bg-content);
-            padding: 30px;
             border-radius: var(--border-radius-xl);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 30px;
         }
 
         .ad-manager-container h2 {
-            font-size: 1.8rem;
-            color: var(--primary-color);
+            align-items: center;
             border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            color: var(--primary-color);
+            display: flex;
+            font-size: 1.8rem;
             font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
         }
 
         .ad-manager-form .input-group {
@@ -652,20 +645,20 @@
         }
 
         .ad-manager-form label {
+            color: var(--text-dark);
             display: block;
             font-weight: 600;
             margin-bottom: 5px;
-            color: var(--text-dark);
         }
 
         .ad-manager-form input[type="text"],
         .ad-manager-form textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
             border: 1px solid #cbd5e1;
+            border-radius: 8px;
             font-size: 1rem;
+            padding: 12px;
             transition: border-color 0.3s, box-shadow 0.3s;
+            width: 100%;
         }
 
         .ad-manager-form input[type="text"]:focus,
@@ -676,25 +669,25 @@
         }
 
         .ad-manager-form textarea {
-            resize: vertical;
             min-height: 150px;
+            resize: vertical;
         }
 
         .ad-form-actions {
             display: flex;
             gap: 15px;
-            margin-top: 25px;
             justify-content: flex-end;
+            margin-top: 25px;
         }
 
         .ad-form-actions button {
-            padding: 12px 25px;
             border: none;
             border-radius: 8px;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
             font-size: 1rem;
+            font-weight: 600;
+            padding: 12px 25px;
+            transition: all 0.2s;
         }
 
         #saveAdBtn {
@@ -718,45 +711,46 @@
         }
 
         .ad-preview-area {
-            margin-top: 30px;
-            padding: 20px;
             border: 1px dashed var(--text-muted);
             border-radius: var(--border-radius-xl);
+            margin-top: 30px;
+            padding: 20px;
         }
 
         .ad-manager-alert {
-            padding: 15px;
             border-radius: 8px;
-            margin-bottom: 20px;
-            font-weight: 600;
             display: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding: 15px;
         }
 
         .ad-manager-alert.success {
             background: #d1fae5;
             color: #065f46;
         }
+
         .ad-manager-alert.error {
             background: #fee2e2;
             color: #991b1b;
         }
 
-        /* --- END AD MANAGEMENT UI STYLES --- */
-
-        /* --- MODAL/DIALOG STYLES (Existing) --- */
+        /* ======================================================================== */
+        /* 4. Modal Styles */
+        /* ======================================================================== */
         #restrictionModal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            align-items: center;
             background: rgba(0, 0, 0, 0.6);
             display: none;
+            height: 100%;
             justify-content: center;
-            align-items: center;
-            z-index: 11000;
+            left: 0;
             opacity: 0;
+            position: fixed;
+            top: 0;
             transition: opacity 0.3s ease;
+            width: 100%;
+            z-index: 11000;
         }
 
         #restrictionModal.show {
@@ -766,13 +760,13 @@
 
         .modal-content {
             background: var(--bg-content);
-            padding: 30px;
             border-radius: var(--border-radius-xl);
-            max-width: 400px;
-            width: 90%;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            max-width: 400px;
+            padding: 30px;
             transform: scale(0.9);
             transition: transform 0.3s ease;
+            width: 90%;
         }
 
         #restrictionModal.show .modal-content {
@@ -780,29 +774,29 @@
         }
 
         .modal-header {
-            display: flex;
             align-items: center;
+            border-bottom: 2px solid var(--credit-low);
+            display: flex;
             gap: 15px;
             margin-bottom: 15px;
-            border-bottom: 2px solid var(--credit-low);
             padding-bottom: 10px;
         }
 
         .modal-header i {
-            font-size: 36px;
             color: var(--credit-low);
+            font-size: 36px;
         }
 
         .modal-header h3 {
-            margin: 0;
-            font-weight: 700;
             color: var(--text-dark);
             font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0;
         }
 
         .modal-body p {
-            font-size: 1rem;
             color: var(--text-muted);
+            font-size: 1rem;
             line-height: 1.5;
             margin-bottom: 15px;
         }
@@ -812,20 +806,20 @@
         }
 
         .modal-body strong {
-            font-weight: 600;
             color: var(--text-dark);
+            font-weight: 600;
         }
 
         .deu-amount {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: var(--credit-low);
-            margin: 15px 0;
-            text-align: center;
-            padding: 10px;
             background: #ffe0e0;
             border: 1px solid var(--credit-low);
             border-radius: 8px;
+            color: var(--credit-low);
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin: 15px 0;
+            padding: 10px;
+            text-align: center;
         }
 
         .modal-actions {
@@ -835,13 +829,13 @@
         }
 
         .modal-actions button {
-            padding: 10px 20px;
             background: var(--primary-color);
-            color: #fff;
             border: none;
             border-radius: 8px;
-            font-weight: 600;
+            color: #fff;
             cursor: pointer;
+            font-weight: 600;
+            padding: 10px 20px;
             transition: background 0.2s, transform 0.1s;
         }
 
@@ -849,16 +843,12 @@
             background: var(--secondary-color);
             transform: translateY(-1px);
         }
-        /* --- END MODAL STYLES --- */
     </style>
 </head>
-
 <body>
 
     <div id="loginScreen">
-        <!-- WRAPPER for Login Form and Ad Banner -->
         <div class="login-ad-wrapper">
-            <!-- Login Form Container -->
             <div class="login-container">
                 <div class="login-logo">
                     <div class="logo-image"></div>
@@ -872,8 +862,7 @@
                     </div>
                     <div class="input-group">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="password" placeholder="Password" required
-                            autocomplete="current-password">
+                        <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
                         <i class="fas fa-eye" id="togglePassword"></i>
                     </div>
                     <button type="submit" class="login-btn">
@@ -889,7 +878,6 @@
                 </div>
             </div>
 
-            <!-- DYNAMIC Advertisement Container (Simplified) -->
             <div class="ad-container">
                 <div class="ad-content">
                     <div id="adImageHeader" class="ad-image-header"
@@ -905,17 +893,16 @@
                     </div>
                 </div>
             </div>
-            <!-- END Dynamic Ad Container -->
+            </div>
         </div>
-        <!-- END WRAPPER -->
-    </div>
 
     <div class="container" id="dashboardContainer">
         <div class="sidebar">
             <div class="sidebar-header">
                 <i class="material-icons-round">credit_card</i>
             </div>
-            <div class="menu" id="sidebarMenu"></div>
+            <div class="menu" id="sidebarMenu">
+                </div>
         </div>
 
         <div class="main-area">
@@ -924,8 +911,7 @@
                 <div class="header-actions">
                     <div class="user-dropdown-container">
                         <div class="user-card" id="userCard" onclick="toggleDropdown()">
-                            <div class="user-icon"><i class="material-icons-round">person</i>
-                            </div>
+                            <div class="user-icon"><i class="material-icons-round">person</i></div>
                             <div class="user-text">
                                 <strong id="userName">Loading...</strong>
                                 <span id="userRole">...</span>
@@ -939,17 +925,17 @@
                 </div>
             </div>
 
-            <!-- MAIN CONTENT AREA - Holds Iframe or Ad Management View -->
             <div class="main-content">
-                <!-- 1. Iframe View (Default for most pages) -->
                 <div id="iframeView" class="content-view active">
                     <iframe id="contentFrame" title="Content"></iframe>
                 </div>
 
-                <!-- 2. Ad Management View (Internal Page for Developer/Manager) -->
                 <div id="adManagementView" class="content-view">
                     <div class="ad-manager-container">
-                        <h2><i class="material-icons-round" style="font-size: 1.8rem; margin-right: 10px;">campaign</i>Advertisement Management</h2>
+                        <h2>
+                            <i class="material-icons-round" style="font-size: 1.8rem; margin-right: 10px;">campaign</i>
+                            Advertisement Management
+                        </h2>
                         <div id="adManagerAlert" class="ad-manager-alert"></div>
 
                         <form id="adManagerForm" class="ad-manager-form">
@@ -966,27 +952,25 @@
                             </div>
                             <div class="input-group">
                                 <label for="adImageUrlInput">Image URL</label>
-                                <input type="text" id="adImageUrlInput" placeholder="https://images.unsplash.com/photo-..."
-                                    required>
+                                <input type="text" id="adImageUrlInput" placeholder="https://images.unsplash.com/photo-..." required>
                             </div>
 
                             <div class="ad-form-actions">
                                 <button type="button" id="previewAdBtn" onclick="previewAd()">
-                                    <i class="material-icons-round"
-                                        style="font-size: 1.2rem; margin-right: 5px;">visibility</i>
+                                    <i class="material-icons-round" style="font-size: 1.2rem; margin-right: 5px;">visibility</i>
                                     Preview
                                 </button>
                                 <button type="submit" id="saveAdBtn">
-                                    <i class="material-icons-round"
-                                        style="font-size: 1.2rem; margin-right: 5px;">save</i>
+                                    <i class="material-icons-round" style="font-size: 1.2rem; margin-right: 5px;">save</i>
                                     Save Ad
                                 </button>
                             </div>
                         </form>
 
                         <div class="ad-preview-area">
-                            <h3 style="color: var(--text-dark); margin-bottom: 15px; font-weight: 600;">Login Screen Ad
-                                Preview (Simplified)</h3>
+                            <h3 style="color: var(--text-dark); margin-bottom: 15px; font-weight: 600;">
+                                Login Screen Ad Preview (Simplified)
+                            </h3>
                             <div class="ad-content" style="max-width: 400px; height: 350px;">
                                 <div id="previewImageHeader" class="ad-image-header">Image Preview</div>
                                 <div class="ad-body" style="background: var(--secondary-color);">
@@ -997,13 +981,9 @@
                         </div>
                     </div>
                 </div>
-                <!-- END Ad Management View -->
+                </div>
             </div>
-            <!-- END MAIN CONTENT AREA -->
-        </div>
     </div>
-
-    <!-- MODAL STRUCTURE FOR RESTRICTION MESSAGE (Existing) -->
     <div id="restrictionModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1011,9 +991,7 @@
                 <h3 id="modalTitle">Feature Access Restricted</h3>
             </div>
             <div class="modal-body">
-                <!-- Name placeholder -->
                 <p>Dear <strong id="modalUserName">Vendor</strong>,</p>
-                <!-- Dynamic Message placeholder -->
                 <p id="modalMainMessage">
                     Your current subscription period has ended, which has temporarily suspended access to advanced
                     functional modules. Your data and modules are otherwise active.
@@ -1021,7 +999,6 @@
                 <div class="deu-amount">
                     Outstanding Dues: <span id="modalDeuAmount">₹ 0.00</span>
                 </div>
-                <!-- Action message -->
                 <p style="font-size: 0.95rem; text-align: center; color: var(--text-dark); font-weight: 500;">
                     To regain full module access and enjoy all features, please renew your subscription and clear your
                     outstanding dues.
@@ -1032,201 +1009,316 @@
             </div>
         </div>
     </div>
-    <!-- END MODAL STRUCTURE -->
 
     <script type="module">
-        // --- Firebase Modular SDK Imports ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-        // Realtime Database imports
-        import { getDatabase, ref as dbRef, get, child, set, onValue } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-        // Auth imports
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-        // NOTE: Please ensure this path is correct for your Firebase config
-        import { firebaseConfig } from 'https://penportindia.github.io/identmakers/Roots/Database/Database.js';
+    /* ------------------------------
+    Penport: Enhanced Session + Reload-Logout Script
+    - Keeps original app logic and behavior
+    - Adds: forced logout on reload, 30-min session expiry, robust cleanup & redirect
+    ------------------------------ */
 
-        // --- Configuration and Initialization ---
-        const USER_STORAGE_KEY = 'penport_id_user_data';
-        const FIREBASE_AD_PATH = 'ads/loginBanner';
-        const DEFAULT_AD_IMG = 'https://placehold.co/460x200/0d1a2b/48cae4?text=Advertisement+Here';
+    /* --- Firebase Modular SDK Imports --- */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getDatabase, ref as dbRef, get, child, set, onValue } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+    import { firebaseConfig } from 'https://penportindia.github.io/identmakers/Roots/Database/Database.js';
 
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const auth = getAuth(app);
+    /* --- Configuration --- */
+    const USER_STORAGE_KEY = 'penport_id_user_data';   // older/local user storage (kept for compatibility)
+    const SESSION_EXPIRY_KEY = 'penport_session_expiry'; // timestamp (ms) when session should expire
+    const FIREBASE_AD_PATH = 'ads/loginBanner';
+    const DEFAULT_AD_IMG = 'https://placehold.co/460x200/0d1a2b/48cae4?text=Advertisement+Here';
+    const SESSION_DURATION_MS = 30 * 60 * 1000; // 30 minutes in ms
 
-        // This variable will hold the function returned by onValue (the correct way to stop the listener).
-        let stopAdListener = null;
+    /* --- Firebase Init --- */
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth(app);
 
-        // --- HTML Element References ---
-        const loginForm = document.getElementById("loginForm");
-        const errorDiv = document.getElementById("errorMsg");
-        const loginScreen = document.getElementById("loginScreen");
-        const dashboardContainer = document.getElementById("dashboardContainer");
-        const passwordInput = document.getElementById("password");
-        const togglePasswordIcon = document.getElementById("togglePassword");
-        const userNameEl = document.getElementById("userName");
-        const userRoleEl = document.getElementById("userRole");
-        const userCardEl = document.getElementById("userCard");
-        const sidebarMenu = document.getElementById("sidebarMenu");
-        const iframe = document.getElementById("contentFrame");
-        const headerTitle = document.getElementById("dashboardHeaderTitle");
+    /* --- Ad listener unsubscribe holder --- */
+    let stopAdListener = null;
 
-        // Dynamic Ad Elements (Login Screen)
-        const adLoading = document.getElementById('adLoading');
-        const adImageHeader = document.getElementById('adImageHeader');
-        const adTitleEl = document.getElementById('adTitle');
-        const adMessageEl = document.getElementById('adMessage');
+    /* --- Session watcher timer handle --- */
+    let sessionWatcher = null;
 
-        // Ad Management Elements (Dashboard View)
-        const iframeView = document.getElementById('iframeView');
-        const adManagementView = document.getElementById('adManagementView');
-        const adManagerForm = document.getElementById('adManagerForm');
-        const adTitleInput = document.getElementById('adTitleInput');
-        const adMessageInput = document.getElementById('adMessageInput');
-        const adImageUrlInput = document.getElementById('adImageUrlInput');
-        const adManagerAlert = document.getElementById('adManagerAlert');
-        const previewImageHeader = document.getElementById('previewImageHeader');
-        const previewTitle = document.getElementById('previewTitle');
-        const previewMessage = document.getElementById('previewMessage');
+    /* --- Cached vendor data --- */
+    let currentVendorData = null;
 
-        // Modal Elements
-        const restrictionModal = document.getElementById("restrictionModal");
-        const modalTitle = document.getElementById("modalTitle");
-        const modalIcon = document.getElementById("modalIcon");
-        const modalUserName = document.getElementById("modalUserName");
-        const modalMainMessage = document.getElementById("modalMainMessage");
-        const modalDeuAmount = document.getElementById("modalDeuAmount");
+    /* --- HTML refs (same as original) --- */
+    const loginForm = document.getElementById("loginForm");
+    const errorDiv = document.getElementById("errorMsg");
+    const loginScreen = document.getElementById("loginScreen");
+    const dashboardContainer = document.getElementById("dashboardContainer");
+    const passwordInput = document.getElementById("password");
+    const togglePasswordIcon = document.getElementById("togglePassword");
+    const userNameEl = document.getElementById("userName");
+    const userRoleEl = document.getElementById("userRole");
+    const userCardEl = document.getElementById("userCard");
+    const sidebarMenu = document.getElementById("sidebarMenu");
+    const iframe = document.getElementById("contentFrame");
+    const headerTitle = document.getElementById("dashboardHeaderTitle");
 
+    /* Dynamic Ad Elements (Login Screen) */
+    const adLoading = document.getElementById('adLoading');
+    const adImageHeader = document.getElementById('adImageHeader');
+    const adTitleEl = document.getElementById('adTitle');
+    const adMessageEl = document.getElementById('adMessage');
 
-        // Global variable to hold the vendor's 'deu', 'isActive', and 'name' status
-        let currentVendorData = null;
+    /* Ad Management Elements (Dashboard View) */
+    const iframeView = document.getElementById('iframeView');
+    const adManagementView = document.getElementById('adManagementView');
+    const adManagerForm = document.getElementById('adManagerForm');
+    const adTitleInput = document.getElementById('adTitleInput');
+    const adMessageInput = document.getElementById('adMessageInput');
+    const adImageUrlInput = document.getElementById('adImageUrlInput');
+    const adManagerAlert = document.getElementById('adManagerAlert');
+    const previewImageHeader = document.getElementById('previewImageHeader');
+    const previewTitle = document.getElementById('previewTitle');
+    const previewMessage = document.getElementById('previewMessage');
 
-        // --- MENU CONFIGURATION ---
-        const menuConfig = {
-            // Original Icons Restored (Except 'account')
-            dashboard: { icon: 'space_dashboard', tooltip: 'Dashboard', url: 'https://penportindia.github.io/identmakers/Roots/Dashborad/Dashboard.html', internal: false },
-            schools: { icon: 'business', tooltip: 'Clients', url: 'https://penportindia.github.io/identmakers/Roots/Schools/User.html', internal: false },
-            create: { icon: 'add_box', tooltip: 'Create New ID', url: 'https://penportindia.github.io/identmakers/Roots/Create/Create.html', internal: false },
-            manage: { icon: 'folder_open', tooltip: 'Manage', url: 'https://penportindia.github.io/identmakers/Roots/Manage/Manage.html', internal: false },
-            template: { icon: 'badge', tooltip: 'Templates', url: 'https://penportindia.github.io/identmakers/Roots/Template/Template.html', internal: false },
-            print: { icon: 'print', tooltip: 'Print Manager', url: 'https://penportindia.github.io/identmakers/Roots/Print/Print.html', internal: false },
-            data: { icon: 'cloud_download', tooltip: 'Data Export', url: 'https://penportindia.github.io/identmakers/Roots/Data%20Management/Data.html', internal: false },
-            
-            // Attractive & Relevant Account Icon Set
-            account: { icon: 'manage_accounts', tooltip: 'Account', url: 'https://penportindia.github.io/identmakers/Roots/Author/Author.html', internal: false },
-            
-            adManage: { icon: 'campaign', tooltip: 'Ad Management', internal: true }
-        };
+    /* Modal Elements */
+    const restrictionModal = document.getElementById("restrictionModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalIcon = document.getElementById("modalIcon");
+    const modalUserName = document.getElementById("modalUserName");
+    const modalMainMessage = document.getElementById("modalMainMessage");
+    const modalDeuAmount = document.getElementById("modalDeuAmount");
 
-        // --- ROLE BASED MENU ACCESS ---
-        const roleMenus = {
-            vendor:    ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data'],
-            developer: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'account', 'adManage'],
-            
-            // 'adManage' is still removed from 'manager' role as per your last request
-            manager:   ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'account'] 
-        };
+    /* --- Menu configuration (unchanged) --- */
+    const menuConfig = {
+        dashboard: { icon: 'space_dashboard', tooltip: 'Dashboard', url: 'https://penportindia.github.io/identmakers/Roots/Dashborad/Dashboard.html', internal: false },
+        schools: { icon: 'business', tooltip: 'Clients', url: 'https://penportindia.github.io/identmakers/Roots/Schools/User.html', internal: false },
+        create: { icon: 'add_box', tooltip: 'Create New ID', url: 'https://penportindia.github.io/identmakers/Roots/Create/Create.html', internal: false },
+        manage: { icon: 'folder_open', tooltip: 'Manage', url: 'https://penportindia.github.io/identmakers/Roots/Manage/Manage.html', internal: false },
+        template: { icon: 'badge', tooltip: 'Templates', url: 'https://penportindia.github.io/identmakers/Roots/Template/Template.html', internal: false },
+        print: { icon: 'print', tooltip: 'Print Manager', url: 'https://penportindia.github.io/identmakers/Roots/Print/Print.html', internal: false },
+        data: { icon: 'cloud_download', tooltip: 'Data Export', url: 'https://penportindia.github.io/identmakers/Roots/Data%20Management/Data.html', internal: false },
+        account: { icon: 'manage_accounts', tooltip: 'Account', url: 'https://penportindia.github.io/identmakers/Roots/Author/Author.html', internal: false },
+        adManage: { icon: 'campaign', tooltip: 'Ad Management', internal: true }
+    };
 
-        // --- FIREBASE AD FETCHING (Login Screen) ---
+    const roleMenus = {
+        vendor:    ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data'],
+        developer: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'account', 'adManage'],
+        manager:   ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'account']
+    };
 
-        /** Fetches and displays the simplified ad banner data from Firebase Realtime DB. */
-        function fetchAndDisplayAd() {
-            adLoading.style.display = 'flex';
-            
-            // Stop any existing listener before starting a new one
+    /* ---------------------------
+    Helper / Session Functions
+    --------------------------- */
+
+    /** Centralized logout + cleanup (call whenever you want to force sign-out) */
+    async function performLogout({ skipRedirect = false } = {}) {
+        try {
+            // 1) Unsubscribe ad listener
             if (stopAdListener) {
-                stopAdListener();
+                try { stopAdListener(); } catch (e) { console.warn("Error unsubscribing ad listener:", e); }
+                stopAdListener = null;
             }
 
-            // Listen for real-time changes to the ad banner
-            const adRef = dbRef(database, FIREBASE_AD_PATH);
+            // 2) Clear session watcher
+            if (sessionWatcher) {
+                clearInterval(sessionWatcher);
+                sessionWatcher = null;
+            }
 
-            // Store the function returned by onValue to allow unsubscribing later (the fix for 'off is not defined')
-            stopAdListener = onValue(adRef, (snapshot) => {
-                const adData = snapshot.val();
-                adLoading.style.display = 'none';
+            // 3) Remove session expiry & user storage
+            try { localStorage.removeItem(SESSION_EXPIRY_KEY); } catch (e) { /* ignore */ }
+            try { localStorage.removeItem(USER_STORAGE_KEY); } catch (e) { /* ignore */ }
 
-                if (adData) {
-                    const { title, message, imageUrl } = adData;
+            // 4) Reset UI elements
+            loginScreen.classList.remove("hidden");
+            dashboardContainer.classList.remove("visible");
+            loginForm.reset();
+            errorDiv.style.display = "none";
+            iframe.src = '';
+            sidebarMenu.innerHTML = '';
+            userNameEl.textContent = 'User';
+            userRoleEl.textContent = 'Role';
+            currentVendorData = null;
+            closeRestrictionModal();
 
-                    adTitleEl.textContent = title || "ID Card Solution Software";
-                    adMessageEl.textContent = message || "Start your digital ID card journey.";
+            // 5) Sign out from Firebase Auth
+            try {
+                // signOut returns a promise; we try to await but in some unload scenarios it may get interrupted.
+                await signOut(auth);
+            } catch (e) {
+                // swallow - best-effort signOut (may be aborted by unload)
+                console.warn("performLogout: signOut error (best-effort):", e);
+            }
 
-                    // Set image, using default if URL is missing
+            // 6) Optionally redirect to login anchor or external login page
+            // If your login is a separate page, replace logic below with: window.location.replace('/login.html');
+            if (!skipRedirect) {
+                // Ensure login UI is visible and optional anchor for easier detection
+                try { window.location.hash = '#login'; } catch (e) { /* ignore */ }
+                // If you want full reload to a login-only page uncomment next line and set correct URL:
+                // window.location.replace('/login.html');
+            }
+
+            // Restart login-screen ad listener for public login screen after logout
+            fetchAndDisplayAd();
+
+        } catch (err) {
+            console.error("Error during performLogout:", err);
+        }
+    }
+
+    /** Save user to local storage (kept for compatibility) */
+    function saveUser(data) {
+        try {
+            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data));
+        } catch (e) {
+            console.error("Local storage save failed:", e);
+        }
+    }
+
+    /** Load user from local storage */
+    function loadUser() {
+        try {
+            const data = localStorage.getItem(USER_STORAGE_KEY);
+            return data ? JSON.parse(data) : null;
+        } catch (e) {
+            console.error("Local storage load failed:", e);
+            return null;
+        }
+    }
+
+    /** Set session expiry (ms timestamp) and start watcher */
+    function startSessionTimer() {
+        try {
+            const expiry = Date.now() + SESSION_DURATION_MS;
+            localStorage.setItem(SESSION_EXPIRY_KEY, String(expiry));
+        } catch (e) {
+            console.warn("Could not set session expiry in localStorage:", e);
+        }
+
+        // Clear any existing watcher
+        if (sessionWatcher) {
+            clearInterval(sessionWatcher);
+            sessionWatcher = null;
+        }
+
+        // Check every 5 seconds (responsive) — if you want less frequent check increase interval
+        sessionWatcher = setInterval(() => {
+            const expiryStr = localStorage.getItem(SESSION_EXPIRY_KEY);
+            const expiry = expiryStr ? Number(expiryStr) : 0;
+            if (!expiry || Date.now() >= expiry) {
+                // Session expired -> force logout
+                clearInterval(sessionWatcher);
+                sessionWatcher = null;
+                performLogout();
+            }
+        }, 5000);
+    }
+
+    /** Validate current session on-demand (used on auth state changes etc.) */
+    function isSessionValid() {
+        try {
+            const expiryStr = localStorage.getItem(SESSION_EXPIRY_KEY);
+            const expiry = expiryStr ? Number(expiryStr) : 0;
+            return expiry && Date.now() < expiry;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /* ---------------------------
+    Ad Fetch / Preview / Management
+    (kept strongly same as original)
+    --------------------------- */
+
+    /** Fetches and displays the simplified ad banner data from Firebase Realtime DB. */
+    function fetchAndDisplayAd() {
+        if (adLoading) adLoading.style.display = 'flex';
+
+        // Stop existing listener if any
+        if (stopAdListener) {
+            try { stopAdListener(); } catch (e) { /* ignore */ }
+            stopAdListener = null;
+        }
+
+        const adRef = dbRef(database, FIREBASE_AD_PATH);
+        // store the unsubscribe function
+        stopAdListener = onValue(adRef, (snapshot) => {
+            const adData = snapshot.val();
+            if (adLoading) adLoading.style.display = 'none';
+
+            if (adData) {
+                const { title, message, imageUrl } = adData;
+                if (adTitleEl) adTitleEl.textContent = title || "ID Card Solution Software";
+                if (adMessageEl) adMessageEl.textContent = message || "Start your digital ID card journey.";
+                if (adImageHeader) {
                     adImageHeader.style.backgroundImage = `url('${imageUrl || DEFAULT_AD_IMG}')`;
-                    adImageHeader.textContent = ''; // Clear text if image is loaded
-                } else {
-                    // Display default/fallback message
-                    adTitleEl.textContent = "Penport ID Card Solution";
-                    adMessageEl.textContent = "Welcome! Create professional ID cards effortlessly. Start your trial today!";
+                    adImageHeader.textContent = '';
+                }
+            } else {
+                if (adTitleEl) adTitleEl.textContent = "Penport ID Card Solution";
+                if (adMessageEl) adMessageEl.textContent = "Welcome! Create professional ID cards effortlessly. Start your trial today!";
+                if (adImageHeader) {
                     adImageHeader.style.backgroundImage = `url('${DEFAULT_AD_IMG}')`;
                     adImageHeader.textContent = '';
-                    console.warn("No Ad data found in Firebase. Using default content.");
                 }
-            }, (error) => {
-                adLoading.style.display = 'none';
-                console.error("Error fetching ad data:", error);
-                // Fallback on error
-                adTitleEl.textContent = "Ad Load Error";
-                adMessageEl.textContent = "Could not load latest advertisement details. Please check network.";
-                adImageHeader.style.backgroundImage = `url('${DEFAULT_AD_IMG}')`;
-            });
-        }
-
-        // Run ad fetch on script load for the login screen
-        fetchAndDisplayAd();
-
-
-        // --- AD MANAGEMENT UI LOGIC ---
-
-        /** Loads the current simplified ad data into the management form. */
-        async function loadAdDataToForm() {
-            try {
-                const snapshot = await get(child(dbRef(database), FIREBASE_AD_PATH));
-                const adData = snapshot.val();
-
-                if (adData) {
-                    adTitleInput.value = adData.title || '';
-                    adMessageInput.value = adData.message || '';
-                    adImageUrlInput.value = adData.imageUrl || '';
-                } else {
-                    adTitleInput.value = '';
-                    adMessageInput.value = '';
-                    adImageUrlInput.value = '';
-                }
-                previewAd();
-            } catch (error) {
-                console.error("Error loading ad data for form:", error);
-                showAlert('error', 'Error loading ad data for form.');
+                console.warn("No Ad data found in Firebase. Using default content.");
             }
-        }
+        }, (error) => {
+            if (adLoading) adLoading.style.display = 'none';
+            console.error("Error fetching ad data:", error);
+            if (adTitleEl) adTitleEl.textContent = "Ad Load Error";
+            if (adMessageEl) adMessageEl.textContent = "Could not load latest advertisement details. Please check network.";
+            if (adImageHeader) adImageHeader.style.backgroundImage = `url('${DEFAULT_AD_IMG}')`;
+        });
+    }
 
-        /** Shows a temporary success or error alert in the management view. */
-        function showAlert(type, message) {
-            adManagerAlert.className = `ad-manager-alert ${type}`;
-            adManagerAlert.textContent = message;
-            adManagerAlert.style.display = 'block';
-            setTimeout(() => {
-                adManagerAlert.style.display = 'none';
-            }, 4000);
-        }
+    /** Loads the current simplified ad data into the management form. */
+    async function loadAdDataToForm() {
+        try {
+            const snapshot = await get(child(dbRef(database), FIREBASE_AD_PATH));
+            const adData = snapshot.val();
 
-        /** Saves the simplified ad data from the form to Firebase. */
+            adTitleInput.value = adData?.title || '';
+            adMessageInput.value = adData?.message || '';
+            adImageUrlInput.value = adData?.imageUrl || '';
+            previewAd();
+        } catch (error) {
+            console.error("Error loading ad data for form:", error);
+            showAlert('error', 'Error loading ad data for form.');
+        }
+    }
+
+    /** Shows a temporary success or error alert in the management view. */
+    function showAlert(type, message) {
+        adManagerAlert.className = `ad-manager-alert ${type}`;
+        adManagerAlert.textContent = message;
+        adManagerAlert.style.display = 'block';
+        setTimeout(() => {
+            adManagerAlert.style.display = 'none';
+        }, 4000);
+    }
+
+    /** Previews the current form data in the preview box. */
+    window.previewAd = () => {
+        const title = adTitleInput.value || 'Ad Title...';
+        const message = adMessageInput.value || 'Ad Message...';
+        const imageUrl = adImageUrlInput.value || DEFAULT_AD_IMG;
+
+        previewTitle.textContent = title;
+        previewMessage.textContent = message;
+        previewImageHeader.style.backgroundImage = `url('${imageUrl}')`;
+        previewImageHeader.textContent = 'Ad Preview';
+    }
+
+    /* Save ad handler (unchanged) */
+    if (adManagerForm) {
         adManagerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const title = adTitleInput.value.trim();
             const message = adMessageInput.value.trim();
             const imageUrl = adImageUrlInput.value.trim();
 
-            const newAdData = {
-                title,
-                message,
-                imageUrl,
-                // Removed planDetails as requested for simplification
-            };
+            const newAdData = { title, message, imageUrl };
 
             try {
-                // Use Firebase set() to save or overwrite the data
                 await set(dbRef(database, FIREBASE_AD_PATH), newAdData);
                 showAlert('success', '✅ Advertisement saved successfully.');
             } catch (error) {
@@ -1234,267 +1326,144 @@
                 showAlert('error', `❌ Error saving ad: ${error.message}`);
             }
         });
+    }
 
-        /** Previews the current form data in the preview box. */
-        window.previewAd = () => {
-            const title = adTitleInput.value || 'Ad Title...';
-            const message = adMessageInput.value || 'Ad Message...';
-            const imageUrl = adImageUrlInput.value || DEFAULT_AD_IMG;
+    /* ---------------------------
+    UI / Menu / Modal Functions
+    (preserved from original)
+    --------------------------- */
 
-            previewTitle.textContent = title;
-            previewMessage.textContent = message;
-            previewImageHeader.style.backgroundImage = `url('${imageUrl}')`;
-            previewImageHeader.textContent = 'Ad Preview';
-        }
+    function updateHeaderUI(userData) {
+        const { name, roleKey } = userData;
+        const roleDisplay = roleKey ? (roleKey.charAt(0).toUpperCase() + roleKey.slice(1)) : '';
+        userNameEl.textContent = name || 'User';
+        userRoleEl.textContent = roleDisplay || 'Role';
+    }
 
+    function setMainContentView(viewId) {
+        const views = [iframeView, adManagementView];
+        views.forEach(view => view.classList.remove('active'));
+        const targetView = document.getElementById(viewId);
+        if (targetView) targetView.classList.add('active');
+    }
 
-        // --- Helper Functions (Existing) ---
+    function showRestrictionModal(messageType = 'restriction') {
+        if (!currentVendorData) return;
+        const name = currentVendorData.name || "Vendor";
+        const deuAmount = currentVendorData.deu || 0;
+        modalUserName.textContent = name;
+        modalDeuAmount.textContent = `₹ ${Number(deuAmount).toFixed(2)}`;
 
-        /** Saves user data to localStorage. */
-        function saveUser(data) {
-            try {
-                localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data));
-            } catch (e) {
-                console.error("Local storage save failed:", e);
-            }
-        }
-
-        /** Retrieves user data from localStorage. */
-        function loadUser() {
-            try {
-                const data = localStorage.getItem(USER_STORAGE_KEY);
-                return data ? JSON.parse(data) : null;
-            } catch (e) {
-                console.error("Local storage load failed:", e);
-                return null;
-            }
-        }
-
-        /** Clears user data from localStorage. */
-        function clearUser() {
-            localStorage.removeItem(USER_STORAGE_KEY);
-        }
-
-        /** Updates the header user card with provided data. */
-        function updateHeaderUI(userData) {
-            const { name, roleKey } = userData;
-            const roleDisplay = roleKey.charAt(0).toUpperCase() + roleKey.slice(1);
-
-            userNameEl.textContent = name;
-            userRoleEl.textContent = roleDisplay;
-        }
-
-        /** Toggles the main content view between iframe and Ad Management. */
-        function setMainContentView(viewId) {
-            const views = [iframeView, adManagementView];
-            views.forEach(view => {
-                view.classList.remove('active');
-            });
-
-            const targetView = document.getElementById(viewId);
-            if (targetView) {
-                targetView.classList.add('active');
-            }
-        }
-
-        // --- MODAL & DASHBOARD INITIALIZATION ---
-
-        /** Shows the custom restriction modal. */
-        function showRestrictionModal(messageType = 'restriction') {
-            if (!currentVendorData) return;
-
-            const name = currentVendorData.name || "Vendor";
-            const deuAmount = currentVendorData.deu || 0;
-
-            modalUserName.textContent = name;
-            modalDeuAmount.textContent = `₹ ${deuAmount.toFixed(2)}`;
-
-            if (messageType === 'restriction') {
-                modalTitle.textContent = "Feature Access Restricted";
-                modalIcon.textContent = "error_outline";
-                modalIcon.style.color = "var(--credit-low)";
-                document.querySelector('.modal-header').style.borderBottom = "2px solid var(--credit-low)";
-                modalMainMessage.textContent =
-                    "Your current subscription period has ended, which has temporarily suspended access to advanced functional modules. Your data and modules are otherwise active.";
-
-            } else if (messageType === 'inactive_login') {
-                modalTitle.textContent = "Subscription Inactive";
-                modalIcon.textContent = "warning";
-                modalIcon.style.color = "var(--credit-normal)";
-                document.querySelector('.modal-header').style.borderBottom = "2px solid var(--credit-normal)";
-                modalMainMessage.textContent =
-                    "Welcome! Your account subscription is currently inactive. For your convenience, basic Dashboard access is available, but all other modules are inaccessible until renewal.";
-            }
-
-            restrictionModal.classList.add('show');
-        }
-
-        /** Function to close the restriction modal/dialog. */
-        window.closeRestrictionModal = () => {
-            restrictionModal.classList.remove('show');
-            // Reset modal content to default state
+        if (messageType === 'restriction') {
             modalTitle.textContent = "Feature Access Restricted";
             modalIcon.textContent = "error_outline";
             modalIcon.style.color = "var(--credit-low)";
             document.querySelector('.modal-header').style.borderBottom = "2px solid var(--credit-low)";
-            modalMainMessage.textContent =
-                "Your current subscription period has ended, which has temporarily suspended access to advanced functional modules. Your data and modules are otherwise active.";
-        };
-
-
-        /** Builds the sidebar menu and initializes the first page. */
-        function initializeDashboard(role, isInitialLoad = false, forcePage = null) {
-            buildSidebarMenu(role);
-
-            const userIsInactiveVendor = role.toLowerCase() === 'vendor' && currentVendorData && !currentVendorData.isActive;
-            const roleMenu = roleMenus[role.toLowerCase()];
-            const firstPageKey = forcePage || roleMenu[0];
-            const firstPageItem = menuConfig[firstPageKey];
-
-            if (isInitialLoad) {
-                const currentUrlKey = Object.keys(menuConfig).find(key => menuConfig[key].url && iframe.src.includes(menuConfig[key].url));
-                if (currentUrlKey && !userIsInactiveVendor) {
-                    // If iframe is already loaded with a valid non-restricted page, keep it
-                    document.querySelector(`.menu-item[data-page="${currentUrlKey}"]`)?.classList.add('active');
-                    headerTitle.textContent = menuConfig[currentUrlKey].tooltip;
-                    setMainContentView('iframeView');
-                    return;
-                }
-            }
-
-            // Load the determined first page
-            loadPage(firstPageKey);
-            document.querySelector(`.menu-item[data-page="${firstPageKey}"]`)?.classList.add('active');
+            modalMainMessage.textContent = "Your current subscription period has ended, which has temporarily suspended access to advanced functional modules. Your data and modules are otherwise active.";
+        } else if (messageType === 'inactive_login') {
+            modalTitle.textContent = "Subscription Inactive";
+            modalIcon.textContent = "warning";
+            modalIcon.style.color = "var(--credit-normal)";
+            document.querySelector('.modal-header').style.borderBottom = "2px solid var(--credit-normal)";
+            modalMainMessage.textContent = "Welcome! Your account subscription is currently inactive. For your convenience, basic Dashboard access is available, but all other modules are inaccessible until renewal.";
         }
+        restrictionModal.classList.add('show');
+    }
 
+    window.closeRestrictionModal = () => {
+        restrictionModal.classList.remove('show');
+        modalTitle.textContent = "Feature Access Restricted";
+        modalIcon.textContent = "error_outline";
+        modalIcon.style.color = "var(--credit-low)";
+        document.querySelector('.modal-header').style.borderBottom = "2px solid var(--credit-low)";
+        modalMainMessage.textContent = "Your current subscription period has ended, which has temporarily suspended access to advanced functional modules. Your data and modules are otherwise active.";
+    }
 
-        // --- Function to build the menu dynamically ---
-        function buildSidebarMenu(role) {
-            sidebarMenu.innerHTML = '';
-            const menuItems = roleMenus[role.toLowerCase()] || [];
+    function buildSidebarMenu(role) {
+        sidebarMenu.innerHTML = '';
+        const menuItems = roleMenus[role.toLowerCase()] || [];
+        const userIsInactiveVendor = role.toLowerCase() === 'vendor' && currentVendorData && !currentVendorData.isActive;
 
-            const userIsInactiveVendor = role.toLowerCase() === 'vendor' && currentVendorData && !currentVendorData.isActive;
-
-            menuItems.forEach((pageName) => {
-                const item = menuConfig[pageName];
-                if (!item) return;
-
-                const menuItemDiv = document.createElement('div');
-                menuItemDiv.className = 'menu-item';
-                menuItemDiv.dataset.page = pageName;
-                menuItemDiv.dataset.tooltip = item.tooltip;
-
-                menuItemDiv.innerHTML = `<i class="material-icons-round">${item.icon}</i>`;
-
-                // Restrict access to all non-dashboard pages for inactive vendors
-                if (userIsInactiveVendor && pageName !== 'dashboard') {
-                    menuItemDiv.classList.add('vendor-restricted');
-                }
-
-                menuItemDiv.addEventListener("click", handleMenuClick);
-
-                sidebarMenu.appendChild(menuItemDiv);
-            });
-        }
-
-        // --- Menu Click Handler (Handles Internal vs. Iframe Views) ---
-        function handleMenuClick(e) {
-            const item = e.currentTarget;
-            const page = item.dataset.page;
-            const itemConfig = menuConfig[page];
-
-            // Show restriction modal for inactive vendors trying to access restricted pages
-            if (currentVendorData && !currentVendorData.isActive && page !== 'dashboard') {
-                showRestrictionModal('restriction');
-                return;
-            }
-
-            document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
-            item.classList.add("active");
-
-            loadPage(page);
-            toggleDropdown(false);
-        }
-
-
-        // --- Load Page (Handles Internal vs. Iframe Views) ---
-        function loadPage(page) {
-            const item = menuConfig[page];
+        menuItems.forEach((pageName) => {
+            const item = menuConfig[pageName];
             if (!item) return;
-
-            headerTitle.textContent = item.tooltip;
-
-            if (item.internal) {
-                // Load internal view (Ad Management)
-                setMainContentView('adManagementView');
-                if (page === 'adManage') {
-                    loadAdDataToForm(); // Load data when Ad Management is opened
-                }
-            } else {
-                // Load iframe view
-                iframe.src = item.url;
-                setMainContentView('iframeView');
+            const menuItemDiv = document.createElement('div');
+            menuItemDiv.className = 'menu-item';
+            menuItemDiv.dataset.page = pageName;
+            menuItemDiv.dataset.tooltip = item.tooltip;
+            menuItemDiv.innerHTML = `<i class="material-icons-round">${item.icon}</i>`;
+            if (userIsInactiveVendor && pageName !== 'dashboard') {
+                menuItemDiv.classList.add('vendor-restricted');
             }
-        }
+            menuItemDiv.addEventListener("click", handleMenuClick);
+            sidebarMenu.appendChild(menuItemDiv);
+        });
+    }
 
-        // --- Password toggle ---
+    function handleMenuClick(e) {
+        const item = e.currentTarget;
+        const page = item.dataset.page;
+        if (currentVendorData && !currentVendorData.isActive && page !== 'dashboard') {
+            showRestrictionModal('restriction');
+            return;
+        }
+        document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
+        item.classList.add("active");
+        loadPage(page);
+        toggleDropdown(false);
+    }
+
+    function loadPage(page) {
+        const item = menuConfig[page];
+        if (!item) return;
+        headerTitle.textContent = item.tooltip;
+        if (item.internal) {
+            setMainContentView('adManagementView');
+            if (page === 'adManage') loadAdDataToForm();
+        } else {
+            iframe.src = item.url;
+            setMainContentView('iframeView');
+        }
+    }
+
+    /* Password toggle (unchanged) */
+    if (togglePasswordIcon) {
         togglePasswordIcon.addEventListener('click', () => {
             passwordInput.type = passwordInput.type === "password" ? "text" : "password";
             togglePasswordIcon.classList.toggle('fa-eye-slash');
         });
+    }
 
-        // --- Toggle Dropdown ---
-        window.toggleDropdown = (show) => {
-            const dropdownMenu = document.getElementById("dropdownMenu");
-            const isVisible = userCardEl.classList.contains('open');
-            const shouldShow = typeof show === 'boolean' ? show : !isVisible;
+    window.toggleDropdown = (show) => {
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        const isVisible = userCardEl.classList.contains('open');
+        const shouldShow = typeof show === 'boolean' ? show : !isVisible;
+        userCardEl.classList.toggle('open', shouldShow);
+    };
 
-            userCardEl.classList.toggle('open', shouldShow);
-        };
-
-        // --- Global Click Handler to close dropdown when clicking outside ---
-        document.addEventListener('click', (e) => {
-            const dropdownMenu = document.getElementById("dropdownMenu");
-            if (userCardEl.classList.contains('open') && !userCardEl.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                toggleDropdown(false);
-            }
-            if (restrictionModal.classList.contains('show') && !document.querySelector('.modal-content').contains(e.target) && e.target === restrictionModal) {
-                closeRestrictionModal();
-            }
-        });
-
-
-        // --- Logout (Fix applied here) ---
-        window.logout = async () => {
-            try {
-                // FIX: Correctly unsubscribe the Realtime Database listener by calling the function stored in stopAdListener.
-                if (stopAdListener) {
-                    stopAdListener();
-                    stopAdListener = null; // Clear the variable after unsubscribing
-                    console.log("Realtime Ad listener successfully unsubscribed.");
-                }
-
-                await signOut(auth);
-                clearUser();
-                currentVendorData = null;
-                loginScreen.classList.remove("hidden");
-                dashboardContainer.classList.remove("visible");
-                loginForm.reset();
-                errorDiv.style.display = "none";
-                iframe.src = '';
-                setMainContentView('iframeView'); // Reset view to default iframe
-                toggleDropdown(false);
-                sidebarMenu.innerHTML = '';
-                userNameEl.textContent = 'User';
-                userRoleEl.textContent = 'Role';
-                closeRestrictionModal();
-                fetchAndDisplayAd(); // Restart ad listener for login screen
-            } catch (error) {
-                console.error("Logout Error:", error);
-            }
+    /* Global click handler to close dropdown/modal (same) */
+    document.addEventListener('click', (e) => {
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        if (userCardEl.classList.contains('open') && !userCardEl.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            toggleDropdown(false);
         }
+        if (restrictionModal.classList.contains('show') && !document.querySelector('.modal-content').contains(e.target) && e.target === restrictionModal) {
+            closeRestrictionModal();
+        }
+    });
 
-        // --- Core Login Logic ---
+    /* ---------------------------
+    Logout (centralized via performLogout)
+    --------------------------- */
+
+    window.logout = async () => {
+        await performLogout();
+    };
+
+    /* ---------------------------
+    Login Logic (modified to set session expiry & start timer)
+    --------------------------- */
+    if (loginForm) {
         loginForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             errorDiv.style.display = "none";
@@ -1518,7 +1487,7 @@
                 let userRoleKey = null;
                 let userData = null;
 
-                for (const [role, data] of Object.entries(rolesData)) {
+                for (const [role, data] of Object.entries(rolesData || {})) {
                     if (data.email && data.email.toLowerCase() === email.toLowerCase()) {
                         userRoleKey = role.toLowerCase();
                         userData = data;
@@ -1549,7 +1518,7 @@
                     currentVendorData = null;
                 }
 
-
+                // Save user and start session timer (30 minutes)
                 saveUser({
                     name: name,
                     roleKey: userRoleKey,
@@ -1558,18 +1527,18 @@
                     uid: user.uid
                 });
 
-                updateHeaderUI({ name: name, roleKey: userRoleKey });
+                // Start session expiry (30 minutes from now)
+                startSessionTimer();
 
+                updateHeaderUI({ name: name, roleKey: userRoleKey });
                 loginScreen.classList.add("hidden");
                 dashboardContainer.classList.add("visible");
 
-                // If vendor is inactive, only allow Dashboard access
                 if (userRoleKey === 'vendor' && !currentVendorData.isActive) {
                     initializeDashboard('vendor', false, 'dashboard');
                 } else {
                     initializeDashboard(userRoleKey);
                 }
-
             } catch (error) {
                 let msg = "Login failed. Please check your credentials.";
                 if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
@@ -1584,44 +1553,136 @@
                 passwordInput.value = "";
             }
         });
+    }
 
-        // --- State Persistence ---
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const userData = loadUser();
-                if (userData && roleMenus[userData.roleKey] && userData.uid === user.uid) {
+    /* ---------------------------
+    State persistence & onAuthStateChanged
+    - Important: if session expired -> force logout
+    --------------------------- */
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            // If session is invalid/expired, force logout
+            if (!isSessionValid()) {
+                await performLogout();
+                return;
+            }
 
-                    if (userData.roleKey === 'vendor') {
-                        currentVendorData = {
-                            isActive: userData.isActive || true,
-                            deu: userData.deu || 0,
-                            name: userData.name
-                        };
-                    } else {
-                        currentVendorData = null;
-                    }
-
-                    loginScreen.classList.add("hidden");
-                    dashboardContainer.classList.add("visible");
-                    updateHeaderUI(userData);
-
-                    if (userData.roleKey === 'vendor' && !userData.isActive) {
-                        initializeDashboard('vendor', true, 'dashboard');
-                    } else {
-                        initializeDashboard(userData.roleKey, true);
-                    }
+            const userData = loadUser();
+            if (userData && roleMenus[userData.roleKey] && userData.uid === user.uid) {
+                if (userData.roleKey === 'vendor') {
+                    currentVendorData = {
+                        isActive: userData.isActive || true,
+                        deu: userData.deu || 0,
+                        name: userData.name
+                    };
                 } else {
-                    if (user) await signOut(auth);
-                    loginScreen.classList.remove("hidden");
-                    dashboardContainer.classList.remove("visible");
+                    currentVendorData = null;
+                }
+
+                loginScreen.classList.add("hidden");
+                dashboardContainer.classList.add("visible");
+                updateHeaderUI(userData);
+
+                // Ensure session watcher running
+                startSessionTimer();
+
+                if (userData.roleKey === 'vendor' && !userData.isActive) {
+                    initializeDashboard('vendor', true, 'dashboard');
+                } else {
+                    initializeDashboard(userData.roleKey, true);
                 }
             } else {
+                // No matching stored user -> force logout to be safe
+                if (user) await performLogout();
                 loginScreen.classList.remove("hidden");
                 dashboardContainer.classList.remove("visible");
-                currentVendorData = null;
             }
-        });
+        } else {
+            // Not logged in
+            loginScreen.classList.remove("hidden");
+            dashboardContainer.classList.remove("visible");
+            currentVendorData = null;
+        }
+    });
+
+    /* ---------------------------
+    Initialize Dashboard Logic (unchanged)
+    --------------------------- */
+    function initializeDashboard(role, isInitialLoad = false, forcePage = null) {
+        buildSidebarMenu(role);
+
+        const userIsInactiveVendor = role.toLowerCase() === 'vendor' && currentVendorData && !currentVendorData.isActive;
+        const roleMenu = roleMenus[role.toLowerCase()];
+        const firstPageKey = forcePage || roleMenu[0];
+        const firstPageItem = menuConfig[firstPageKey];
+
+        if (isInitialLoad) {
+            const currentUrlKey = Object.keys(menuConfig).find(key => menuConfig[key].url && iframe.src.includes(menuConfig[key].url));
+            if (currentUrlKey && !userIsInactiveVendor) {
+                document.querySelector(`.menu-item[data-page="${currentUrlKey}"]`)?.classList.add('active');
+                headerTitle.textContent = menuConfig[currentUrlKey].tooltip;
+                setMainContentView('iframeView');
+                return;
+            }
+        }
+
+        loadPage(firstPageKey);
+        document.querySelector(`.menu-item[data-page="${firstPageKey}"]`)?.classList.add('active');
+    }
+
+    /* ---------------------------
+    Force logout on page reload / close (best-effort)
+    - We both try to signOut during unload, and ALSO signOut immediately on script load
+    --------------------------- */
+
+    /* Attempt to signOut immediately on script load so a reload will present logged-out state.
+    This is key to ensure "reload -> logged out" behavior. */
+    (async function immediateSignOutOnLoad() {
+        try {
+            // If user is currently signed in, sign them out immediately (best-effort)
+            // We await but any interruption by navigation may abort — however since we do this
+            // at script-start, it effectively logs out when reloading.
+            await signOut(auth);
+        } catch (e) {
+            // ignore
+        } finally {
+            // Start fetch of ads for login screen immediately
+            try { fetchAndDisplayAd(); } catch (err) { console.warn("fetchAndDisplayAd error:", err); }
+        }
+    })();
+
+    /* Try to perform cleanup on page unload (best-effort, may be aborted by browser) */
+    window.addEventListener('beforeunload', (e) => {
+        // Attempt synchronous cleanup where possible
+        try {
+            // Clear local session expiry so on next load session is not valid
+            localStorage.removeItem(SESSION_EXPIRY_KEY);
+            localStorage.removeItem(USER_STORAGE_KEY);
+        } catch (err) { /* ignore */ }
+
+        // Try to call performLogout but don't await (unload may interrupt)
+        try { performLogout({ skipRedirect: true }); } catch (err) { /* ignore */ }
+
+        // Standard practice: no custom message
+    });
+
+    /* Also try unload event */
+    window.addEventListener('unload', (e) => {
+        try {
+            localStorage.removeItem(SESSION_EXPIRY_KEY);
+            localStorage.removeItem(USER_STORAGE_KEY);
+        } catch (err) { /* ignore */ }
+
+        try { performLogout({ skipRedirect: true }); } catch (err) { /* ignore */ }
+    });
+
+    /* ---------------------------
+    Final: Provide safe defaults and start ad listener if not already started
+    --------------------------- */
+    try { fetchAndDisplayAd(); } catch (e) { console.warn("Ad fetch init failed:", e); }
+
     </script>
+
 </body>
 
 </html>
