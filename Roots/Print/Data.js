@@ -624,16 +624,34 @@ function openColumnSettingsModule() {
     }
 
     const allKeysSet = new Set();
-    fullDataArray.forEach(row => Object.keys(row).forEach(k => { if (!k.startsWith("__")) allKeysSet.add(k); }));
+    fullDataArray.forEach(row => Object.keys(row).forEach(k => {
+        if (!k.startsWith("__")) allKeysSet.add(k);
+    }));
     const allKeys = Array.from(allKeysSet);
 
     const currentSettings = loadColumnSettings(type);
     let columnOrder = Array.isArray(currentSettings.order) ? currentSettings.order.slice() : allKeys.slice();
-    let hiddenColumns = new Set(currentSettings.hidden || []);
+    const hiddenColumns = new Set(currentSettings.hidden || []);
 
     // Normalize columnOrder: keep only valid keys and append missing ones
     columnOrder = columnOrder.filter(k => allKeys.includes(k));
-    allKeys.forEach(k => { if (!columnOrder.includes(k)) columnOrder.push(k); });
+    allKeys.forEach(k => {
+        if (!columnOrder.includes(k)) columnOrder.push(k);
+    });
+    
+    // --- Split columns into two groups based on visibility settings ---
+    const shownKeys = [];
+    const hiddenKeys = [];
+    columnOrder.forEach(key => {
+        const isShown = !hiddenColumns.has(key);
+        if (isShown) {
+            shownKeys.push(key);
+        } else {
+            hiddenKeys.push(key);
+        }
+    });
+    // --- End Split ---
+
 
     document.getElementById("columnSettingsModule")?.remove();
     const module = document.createElement("div");
@@ -649,7 +667,13 @@ function openColumnSettingsModule() {
         <h3 style="margin-top:0; color:#333; border-bottom: 2px solid #4CAF50; padding-bottom: 10px;">
             ⚙️ Column Settings: ${type.toUpperCase()}
         </h3>
-        <div id="columnList" style="list-style: none; padding: 0;"></div>
+        <div id="columnList" style="list-style: none; padding: 0;">
+            <div id="shownColumnList"></div>
+            <p style="margin: 15px 0; font-size: 0.9em; color: #999; text-align: center; border-top: 1px dashed #ccc; padding-top: 15px;">
+                --- Hidden Columns (Drag & Drop not applicable between sections) ---
+            </p>
+            <div id="hiddenColumnList" style="opacity: 0.7;"></div>
+        </div>
         <div style="margin-top: 25px; display: flex; justify-content: space-between; gap:12px;">
             <button id="saveColsBtn" class="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600 font-semibold">Save & Apply</button>
             <button id="resetColsBtn" class="px-3 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 font-semibold">Reset to Default</button>
@@ -659,23 +683,23 @@ function openColumnSettingsModule() {
     `;
 
     const columnListContainer = module.querySelector("#columnList");
+    const shownListDiv = module.querySelector("#shownColumnList");
+    const hiddenListDiv = module.querySelector("#hiddenColumnList");
     document.body.appendChild(module);
-
-    // Populate List and Implement Drag-and-Drop
-    columnOrder.forEach(key => {
+    
+    
+    // --- Function to create a column item with change listener ---
+    const createColumnItem = (key, isShown) => {
         const item = document.createElement("div");
         item.dataset.key = key;
         item.draggable = true;
         item.className = "column-drag-item";
         item.style.cssText = `
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 15px; margin-bottom: 8px; border: 1px solid #ddd;
+            padding: 10px 15px; margin-bottom: 8px; border: 1px solid ${isShown ? '#4CAF50' : '#ddd'};
             border-radius: 8px; cursor: move; background: #f9f9f9;
-            transition: background 0.1s;
+            transition: background 0.1s; ${isShown ? '' : 'opacity: 0.7;'}
         `;
-
-        // INVERTED LOGIC: Checkbox is checked if column is NOT hidden (i.e., is currently shown)
-        const isShown = !hiddenColumns.has(key);
 
         item.innerHTML = `
             <span style="font-weight: 600;">${key.toUpperCase()}</span>
@@ -684,57 +708,108 @@ function openColumnSettingsModule() {
                 <input type="checkbox" data-col-key="${key}" ${isShown ? 'checked' : ''}>
             </label>
         `;
-        columnListContainer.appendChild(item);
+
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        checkbox.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            item.style.border = `1px solid ${isChecked ? '#4CAF50' : '#ddd'}`;
+
+            if (isChecked) {
+                // Move to the shown list
+                shownListDiv.appendChild(item);
+                item.style.opacity = '1';
+            } else {
+                // Move to the hidden list
+                hiddenListDiv.appendChild(item);
+                item.style.opacity = '0.7';
+            }
+        });
+
+        return item;
+    };
+    // --- End createColumnItem ---
+
+
+    // Populate Lists
+    shownKeys.forEach(key => {
+        shownListDiv.appendChild(createColumnItem(key, true));
     });
 
-    // Drag-and-Drop Implementation
+    hiddenKeys.forEach(key => {
+        hiddenListDiv.appendChild(createColumnItem(key, false));
+    });
+
+
+    // --- Drag-and-Drop Implementation ---
     let dragItem = null;
 
-    columnListContainer.addEventListener('dragstart', (e) => {
-        const target = e.target.closest('[data-key]');
-        if (!target) return;
-        dragItem = target;
-        target.classList.add('dragging');
-        setTimeout(() => { if (dragItem) dragItem.style.opacity = '0.4'; }, 0);
-    });
+    [shownListDiv, hiddenListDiv].forEach(container => {
+        container.addEventListener('dragstart', (e) => {
+            const target = e.target.closest('[data-key]');
+            if (!target) return;
+            dragItem = target;
+            target.classList.add('dragging');
+            setTimeout(() => {
+                if (dragItem) dragItem.style.opacity = '0.4';
+            }, 0);
+        });
 
-    columnListContainer.addEventListener('dragend', () => {
-        if (dragItem) {
-            dragItem.style.opacity = '1';
-            dragItem.classList.remove('dragging');
-            dragItem = null;
-        }
-    });
+        container.addEventListener('dragend', () => {
+            if (dragItem) {
+                // Restore opacity based on current parent container
+                dragItem.style.opacity = dragItem.parentElement === shownListDiv ? '1' : '0.7';
+                dragItem.classList.remove('dragging');
+                dragItem = null;
+            }
+        });
 
-    columnListContainer.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        const afterElement = getDragAfterElement(columnListContainer, e.clientY);
-        const draggable = dragItem;
-        if (!draggable) return;
-        if (afterElement == null) {
-            columnListContainer.appendChild(draggable);
-        } else {
-            columnListContainer.insertBefore(draggable, afterElement);
-        }
+        container.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const currentContainer = e.currentTarget;
+
+            // Only allow dragging within the current container
+            if (dragItem && dragItem.parentElement === currentContainer) {
+                const afterElement = getDragAfterElement(currentContainer, e.clientY);
+                const draggable = dragItem;
+                if (!draggable) return;
+
+                if (afterElement == null) {
+                    currentContainer.appendChild(draggable);
+                } else {
+                    currentContainer.insertBefore(draggable, afterElement);
+                }
+            }
+        });
     });
 
     function getDragAfterElement(container, y) {
         const draggableElements = [...container.querySelectorAll('.column-drag-item:not(.dragging)')];
-        let closest = { offset: Number.NEGATIVE_INFINITY, element: null };
+        let closest = {
+            offset: Number.NEGATIVE_INFINITY,
+            element: null
+        };
         draggableElements.forEach(child => {
             const box = child.getBoundingClientRect();
             const offset = y - box.top - box.height / 2;
             if (offset < 0 && offset > closest.offset) {
-                closest = { offset: offset, element: child };
+                closest = {
+                    offset: offset,
+                    element: child
+                };
             }
         });
-        return closest.element; // may be null
+        return closest.element;
     }
+    // --- End Drag-and-Drop Implementation ---
+
 
     // Reset to default (clear settings for this type)
     module.querySelector('#resetColsBtn').addEventListener('click', () => {
         if (!confirm('Are you sure you want to reset this type to default column order and visibility?')) return;
-        saveColumnSettings(type, { order: null, hidden: [] });
+        saveColumnSettings(type, {
+            order: null,
+            hidden: []
+        });
         module.remove();
         renderTable(fullDataArray);
         alert('✅ Settings reset successfully.');
@@ -745,23 +820,26 @@ function openColumnSettingsModule() {
 
     module.querySelector('#saveColsBtn').addEventListener('click', () => {
         const newOrder = [];
-        columnListContainer.querySelectorAll('[data-key]').forEach(item => {
+        const newHidden = [];
+
+        // 1. Get order from SHOWN list
+        shownListDiv.querySelectorAll('[data-key]').forEach(item => {
             newOrder.push(item.dataset.key);
         });
 
-        const newHidden = [];
-        // INVERTED LOGIC: Find checkboxes that are UNCHECKED (meaning they should be hidden)
-        columnListContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-            if (!cb.checked) {
-                newHidden.push(cb.dataset.colKey);
-            }
+        // 2. Get order and hidden keys from HIDDEN list
+        hiddenListDiv.querySelectorAll('[data-key]').forEach(item => {
+            const key = item.dataset.key;
+            newOrder.push(key);
+            newHidden.push(key); // Items in hiddenListDiv are the new hidden columns
         });
 
         // Ensure saved order contains exactly the set of keys (avoid losing columns)
-        const finalOrder = [];
-        // Start with newOrder then append missing ones
-        newOrder.forEach(k => { if (!finalOrder.includes(k)) finalOrder.push(k); });
-        allKeys.forEach(k => { if (!finalOrder.includes(k)) finalOrder.push(k); });
+        const finalOrder = newOrder.slice();
+        // Append any potentially missing keys (safety check, though shouldn't happen here)
+        allKeys.forEach(k => {
+            if (!finalOrder.includes(k)) finalOrder.push(k);
+        });
 
         saveColumnSettings(type, {
             order: finalOrder,
