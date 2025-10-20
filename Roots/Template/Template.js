@@ -1183,9 +1183,16 @@ function setAllSelection(checked) {
 /* -----------------------------
     11) Download template (JSON)
     ----------------------------- */
-function downloadTemplate() {
-    if (!currentTemplate || !idTypeSelect || !templateTypeSelect) return alert('No template or necessary selectors loaded.');
 
+// Global variable to hold the filtered data temporarily
+let tplToExport = null;
+
+function downloadTemplate() {
+    if (!currentTemplate || !idTypeSelect || !templateTypeSelect) {
+        return alert('Error: Template or selectors missing.');
+    }
+
+    // --- 1. Filtering Logic (Same as before) ---
     const tplCopy = JSON.parse(JSON.stringify(currentTemplate));
     const pageType = templateTypeSelect.value;
     const sidesToInclude = pageType === '2' ? ['front', 'back'] : ['front'];
@@ -1196,10 +1203,11 @@ function downloadTemplate() {
         tplCopy[side].items = (tplCopy[side].items || []).filter((it) =>
             selection[side].has(it._id)
         );
-        // Clean up internal _id before export
         tplCopy[side].items.forEach((it) => delete it._id);
 
-        if (tplCopy[side].items.length > 0) hasItemsToExport = true;
+        if (tplCopy[side].items.length > 0) {
+            hasItemsToExport = true;
+        }
     });
 
     ['front', 'back'].forEach((side) => {
@@ -1207,27 +1215,190 @@ function downloadTemplate() {
             delete tplCopy[side];
         }
     });
-    
+
     if (!hasItemsToExport) {
-        return alert('The current selection is empty. Nothing to export.');
+        return alert('Error: No items selected for export.');
     }
 
-    const pretty = JSON.stringify(tplCopy, null, 2);
-    const blob = new Blob([pretty], { type: 'application/json' });
+    tplToExport = tplCopy; 
 
-    const defaultName = `${idTypeSelect.value.toUpperCase()}_${pageType}PAGE_Template.json`;
-    const fileName = prompt('Enter filename to save (with or without .json):', defaultName);
+    // --- 2. Dynamic Modal Creation and Setup (Attractive & Centered) ---
+    const MODAL_ID = 'dynamicExportModal';
+    let modal = document.getElementById(MODAL_ID);
+    
+    // अगर Modal पहले से मौजूद नहीं है, तो इसे dynamically बनाएँ
+    if (!modal) {
+        // --- 2.1. Dynamic CSS Injection ---
+        if (!document.getElementById('modalStyles')) {
+            const style = document.createElement('style');
+            style.id = 'modalStyles';
+            style.textContent = `
+                /* Primary Color: Modern Purple-Blue */
+                :root { --primary-color: #6c5ce7; } 
 
-    if (fileName) {
-        const finalName = fileName.endsWith('.json') ? fileName : `${fileName}.json`;
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = finalName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(a.href);
+                /* Modal Overlay: Fully Centered */
+                #${MODAL_ID} {
+                    display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+                    width: 100%; height: 100%; background-color: rgba(0,0,0,0.7);
+                    transition: opacity 0.3s; opacity: 0;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+                    
+                    /* Center Content */
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center;
+                }
+                
+                /* Modal Card Style */
+                #${MODAL_ID} .modal-content {
+                    background-color: #fff; padding: 30px;
+                    width: 90%; max-width: 380px;
+                    border-radius: 12px; 
+                    box-shadow: 0 15px 30px rgba(0,0,0,0.3); /* Attractive Shadow */
+                    transform: translateY(-20px);
+                    transition: all 0.3s ease-out;
+                }
+                
+                /* Close Button */
+                #${MODAL_ID} .close-button {
+                    color: #999; float: right; font-size: 30px; font-weight: 300; cursor: pointer;
+                    line-height: 1; /* Aligns better */
+                }
+                
+                /* Header */
+                #${MODAL_ID} h2 { 
+                    margin: 0 0 25px 0; font-size: 20px; color: #333; font-weight: 700;
+                    border-bottom: 2px solid var(--primary-color);
+                    display: inline-block; padding-bottom: 5px;
+                }
+                
+                /* Input Field */
+                #templateFileName { 
+                    display: block; width: 100%; box-sizing: border-box; 
+                    padding: 12px 15px; margin: 15px 0 25px 0; border: 1px solid #ddd; 
+                    border-radius: 6px; font-size: 15px; 
+                    transition: border-color 0.3s, box-shadow 0.3s;
+                }
+                #templateFileName:focus {
+                    border-color: var(--primary-color); 
+                    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+                    outline: none;
+                }
+                
+                /* Download Button */
+                #downloadConfirmBtn {
+                    background-color: var(--primary-color); 
+                    color: white; padding: 14px 15px;
+                    border: none; border-radius: 6px; cursor: pointer; font-size: 16px; 
+                    width: 100%; font-weight: 600; letter-spacing: 0.5px;
+                    transition: background-color 0.2s, transform 0.1s;
+                }
+                #downloadConfirmBtn:hover {
+                    background-color: #5d48e0;
+                }
+                #downloadConfirmBtn:active {
+                    transform: translateY(1px);
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // --- 2.2. Dynamic HTML Structure Creation ---
+        modal = document.createElement('div');
+        modal.id = MODAL_ID;
+        modal.innerHTML = `
+            <div class="modal-content">
+                <span class="close-button" id="modalCloseBtn">&times;</span>
+                <h2>Download Template</h2>
+                <input type="text" id="templateFileName" placeholder="Enter School Name & Template Type" />
+                <button id="downloadConfirmBtn">Download</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        // --- 2.3. Event Listeners Setup ---
+        
+        const content = modal.querySelector('.modal-content');
+
+        const closeModal = () => {
+            modal.style.opacity = '0';
+            content.style.transform = 'translateY(-20px)'; // Reset transform
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            window.onkeydown = null; 
+            tplToExport = null; 
+        };
+        
+        const confirmDownload = () => {
+            const fileNameInput = document.getElementById('templateFileName');
+            const fileName = fileNameInput.value.trim();
+
+            if (!tplToExport) {
+                closeModal();
+                return alert('Export data not found.');
+            }
+            if (!fileName) {
+                alert('Please enter a valid filename.');
+                fileNameInput.focus();
+                return;
+            }
+            
+            // Download process
+            const pretty = JSON.stringify(tplToExport, null, 2);
+            const blob = new Blob([pretty], { type: 'application/json' });
+            
+            const finalName = fileName.endsWith('.json') ? fileName : `${fileName}.json`;
+            
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = finalName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+            
+            closeModal();
+        };
+
+        // Attach listeners
+        document.getElementById('modalCloseBtn').onclick = closeModal;
+        document.getElementById('downloadConfirmBtn').onclick = confirmDownload;
+        
+        // Background click to close modal
+        modal.addEventListener('click', (e) => {
+            if (e.target.id === MODAL_ID) {
+                closeModal();
+            }
+        });
+
+        // Enter key press in input should trigger download
+        document.getElementById('templateFileName').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                confirmDownload();
+            }
+        });
     }
+
+    // --- 3. Modal Show and Data Update ---
+    
+    const fileNameInput = document.getElementById('templateFileName');
+    const content = modal.querySelector('.modal-content');
+    
+    fileNameInput.value = ''; // Empty by default
+    
+    // Modal को दिखाएँ और Fade-in Effect दें
+    modal.style.display = 'flex'; // Use flex to ensure centering
+    setTimeout(() => { 
+        modal.style.opacity = '1'; 
+        content.style.transform = 'translateY(0)'; // Animate content in
+    }, 10); 
+    fileNameInput.focus();
+
+    // ESC key listener
+    window.onkeydown = function(event) {
+        if (event.key === 'Escape') {
+            document.getElementById('modalCloseBtn').click();
+        }
+    };
 }
 
 
