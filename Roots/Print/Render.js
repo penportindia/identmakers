@@ -498,6 +498,9 @@ function saveCurrentBatch() {
     const renderedCards = document.getElementById("slidesWrapper")?.querySelectorAll(".editor");
     if (!renderedCards || !renderedCards.length) return alert("No rendered cards to save. Please render cards first.");
 
+    // Assuming crypto.randomUUID(), schoolFilter, schoolIDSelect, dataTypeSelect, 
+    // templateData, templateFileName, getBatches(), setBatches(), 
+    // renderBatchList(), and togglePages() are defined elsewhere.
     const batchId = crypto.randomUUID();
     const schoolName = (schoolFilter?.value && schoolFilter.selectedIndex !== -1) ? schoolFilter.options[schoolFilter.selectedIndex].text : "Unknown School";
     const idValue = (schoolIDSelect?.value) ? schoolIDSelect.value : "N/A ID";
@@ -527,6 +530,7 @@ function renderBatchList() {
     const batchListDiv = document.getElementById("batchList");
     if (!batchListDiv) return;
 
+    // Assuming getBatches(), lucide.createIcons(), deleteBatch(), previewBatch(), and togglePages() are defined elsewhere.
     const batches = getBatches().reverse();
 
     const printClearActions = document.getElementById("printClearActions");
@@ -659,14 +663,44 @@ function handlePrintAllBatches() {
 }
 
 /**
- * Opens a new window and writes the print HTML to it.
+ * Opens a temporary iframe in the current window for printing, 
+ * and reloads the page after printing/canceling. (MODIFIED) 🔄
  */
 function openPrintWindow(html) {
-    const printWindow = window.open("", "_blank");
-    if (!printWindow) return alert("Pop-up blocked. Please allow pop-ups for this site.");
-    printWindow.document.open();
-    printWindow.document.write(html);
-    printWindow.document.close();
+    const iframe = document.createElement('iframe');
+    // iframe को छुपा दें, लेकिन प्रिंटिंग के लिए उपलब्ध रखें
+    iframe.style.position = 'absolute';
+    iframe.style.top = '-9999px';
+    iframe.style.left = '-9999px';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    
+    document.body.appendChild(iframe);
+
+    // iframe के डॉक्यूमेंट में HTML लिखें
+    iframe.contentWindow.document.open();
+    iframe.contentWindow.document.write(html); 
+    iframe.contentWindow.document.close();
+    
+    // iframe लोड होने के बाद प्रिंट कमांड दें
+    iframe.onload = function() {
+        try {
+            // iframe के अंदर प्रिंट कमांड चलाएं
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+        } catch(e) {
+            console.error("Print failed:", e);
+            alert("Printing could not be initiated. Check console for error.");
+        }
+        
+        // प्रिंटिंग के बाद iframe को हटा दें (रीलोड लॉजिक HTML में है)
+        document.body.removeChild(iframe);
+    };
+    
+    // कुछ ब्राउज़रों के लिए जो onload इवेंट को तुरंत ट्रिगर करते हैं
+    if (iframe.contentWindow.document.readyState === 'complete') {
+        iframe.onload();
+    }
 }
 
 
@@ -700,7 +734,7 @@ function buildPrintHTML(cardsHTMLArray, title = "Print") {
     const a4WidthMM = 297; 
     const a4HeightMM = 210; 
     const a4Orientation = `${a4WidthMM}mm ${a4HeightMM}mm`; 
-    const pageMarginMM = 5;     
+    const pageMarginMM = 5; 
     const horizontalGapMM = 3;
     const verticalGapMM = 5;
     
@@ -720,7 +754,6 @@ function buildPrintHTML(cardsHTMLArray, title = "Print") {
     } else {
         const tempWidthStyle = firstCardEditor.style.width || "350px";
         
-        // 🎯 FIX APPLIED HERE: Corrected the typo 'firstCardCardEditor' to 'firstCardEditor'
         const tempHeightStyle = firstCardEditor.style.height || "220px"; 
         
         var actualWidth = getMMValue(tempWidthStyle); 
@@ -750,7 +783,7 @@ function buildPrintHTML(cardsHTMLArray, title = "Print") {
     const finalCardStyleWidth = `${gridCardWidthMM}mm`;
     const finalCardStyleHeight = `${gridCardHeightMM}mm`;
 
-    // --- 3. Print Style Generation (Sharp Quality, NO Grid Lines, Horizontal Fix) ---
+    // --- 2. Print Style Generation (Sharp Quality, NO Grid Lines, Horizontal Fix) ---
     const style = `<style>
         @page { size: ${a4Orientation}; margin: 0; }
         html, body { 
@@ -794,9 +827,8 @@ function buildPrintHTML(cardsHTMLArray, title = "Print") {
             /* Apply transformation for HORIZONTAL cards to rotate them 90 deg. */
             ${isPortrait ? '' : `
                 /* Rotate 90deg clockwise */
-                transform: rotate(90deg);
-                /* Translate to move the rotated card back into the center of its grid cell. */
                 transform-origin: 0 0;
+                /* Translate to move the rotated card back into the center of its grid cell. */
                 transform: rotate(90deg) translate(0, -${gridCardHeightMM}mm);
             `}
         }
@@ -817,6 +849,14 @@ function buildPrintHTML(cardsHTMLArray, title = "Print") {
         img { max-width: 100%; max-height: 100%; display: block; }
         .card-item { position: absolute; box-sizing: border-box; display: flex; align-items: center; }
     </style>`;
+    
+    // --- 3. Page Reload Script (MODIFIED) 🔄
+    const reloadScript = `<script>
+        // Print खत्म होने (या Cancel होने) के बाद पेज को रीलोड करने के लिए
+        window.addEventListener('afterprint', function() {
+            window.location.reload(); 
+        });
+    </script>`;
     
     // --- 4. Arrange Cards in Zig-Zag (Front/Back) Order (Same as before) ---
     let allPagesHTML = '';
@@ -856,7 +896,7 @@ function buildPrintHTML(cardsHTMLArray, title = "Print") {
         allPagesHTML += `<div class="page">${pageCardsHTML}</div>`;
     }
 
-    // Final HTML Document Structure
-    const html = `<html><head><title>${title}</title>${style}</head><body onload="setTimeout(()=>{window.print();},300);">${allPagesHTML}</body></html>`;
+    // Final HTML Document Structure - Note: 'onload' removed since printing is triggered externally.
+    const html = `<html><head><title>${title}</title>${style}${reloadScript}</head><body>${allPagesHTML}</body></html>`;
     return html;
 }
