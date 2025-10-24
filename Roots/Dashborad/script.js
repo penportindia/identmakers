@@ -1,5 +1,5 @@
 // ====================================================
-// Active Schools Dashboard - script.js (VENDOR FEATURE ADDED)
+// Active Schools Dashboard - script.js (FULL PROOF VERSION)
 // ====================================================
 
 // ----------------------------------------------------
@@ -15,7 +15,7 @@ import {
     onValue
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-// Import your specific Firebase Config
+// Import your specific Firebase Config (Assuming this path is correct)
 import { firebaseConfig } from "../Database/Database.js"; 
 
 const app = initializeApp(firebaseConfig);
@@ -26,20 +26,25 @@ const db = getDatabase(app);
 // ----------------------------------------------------
 
 const DOM = {
+    // Stat Cards
     studentCount: document.getElementById("studentCount"),
     staffCount: document.getElementById("staffCount"),
     totalEnrollment: document.getElementById("totalEnrollment"),
     uniqueSchools: document.getElementById("uniqueSchools"),
     
-    // ✅ NEW ELEMENT FOR VENDOR CARD
-    vendorCardContainer: document.getElementById("vendorCardContainer"), 
+    // VENDOR ELEMENT
+    vendorStatusText: document.getElementById("vendorStatusText"), 
+    vendorCardContainer: document.getElementById("vendorCardContainer"),
     
+    // Lists & Filters
     schoolList: document.getElementById("schoolList"),
     searchBox: document.getElementById("searchBox"),
     sortType: document.getElementById("sortType"),
     dateWiseList: document.getElementById("dateWiseList"),
-    totalOnlineUsers: document.getElementById("totalOnlineUsers"),
+    
+    // Online Status
     onlineSchoolsCount: document.getElementById("onlineSchoolsCount"),
+    onlineSchoolsCountPlaceholder: document.getElementById("onlineSchoolsCountPlaceholder"),
     onlineSchoolsList: document.getElementById("onlineSchoolsList")
 };
 
@@ -59,7 +64,7 @@ let staffCount = 0;
 /** Map<string, {students: number, staff: number}> - Date key: YYYY-MM-DD */
 const dateMap = new Map();
 
-// ✅ NEW GLOBAL STATE FOR VENDOR DATA
+// GLOBAL STATE FOR VENDOR DATA
 let vendorData = null; 
 
 // ----------------------------------------------------
@@ -102,12 +107,11 @@ function debounce(fn, wait = DEBOUNCE_WAIT) {
 }
 
 // ----------------------------------------------------
-// 5. FIREBASE DATA LISTENERS (Vendor Listener Added)
+// 5. FIREBASE DATA LISTENERS
 // ----------------------------------------------------
 
 /** Starts the Firebase listeners for student/staff changes across all schools. */
 function listenToEnrollmentChanges() {
-    // ... (Existing logic remains unchanged)
     const masterRef = ref(db, "DATA-MASTER");
 
     onChildAdded(masterRef, (schoolNameSnapshot) => {
@@ -141,7 +145,6 @@ function listenToEnrollmentChanges() {
 
 /** Listens for changes to the 'activeSchools' path for real-time online status. */
 function listenActiveSchools() {
-    // ... (Existing logic remains unchanged)
     try {
         const baseRef = ref(db, "activeSchools");
         onValue(baseRef, (snapshot) => {
@@ -152,20 +155,19 @@ function listenActiveSchools() {
     }
 }
 
-
-// ✅ NEW: Listen for Vendor Data
+/** NEW: Listen for Vendor Data */
 function listenVendorData() {
     try {
         const vendorRef = ref(db, "roles/vendor");
         onValue(vendorRef, (snapshot) => {
             vendorData = snapshot.val();
-            renderVendorCard(); // Render the new card
+            // Vendor Card is now part of the master render, which includes showing the loaded data.
+            renderAll(); 
         });
     } catch (err) {
         console.error("listenVendorData error:", err);
     }
 }
-
 
 // ----------------------------------------------------
 // 6. CORE LOGIC FUNCTIONS
@@ -173,7 +175,6 @@ function listenVendorData() {
 
 /** Updates global and per-school counts for enrollment changes. */
 function updateCounts(schoolName, type, change, enrollmentId) {
-    // ... (Existing logic remains unchanged)
     const norm = normalizeName(schoolName);
 
     if (!schoolsData.has(norm)) {
@@ -202,6 +203,7 @@ function updateCounts(schoolName, type, change, enrollmentId) {
 
     const d = parseEnrollmentDate(enrollmentId);
     if (d) {
+        // YYYY-MM-DD format for map key
         const key = d.toISOString().slice(0, 10); 
         
         if (!dateMap.has(key)) {
@@ -220,12 +222,12 @@ function updateCounts(schoolName, type, change, enrollmentId) {
         }
     }
 
-    renderAll();
+    // Debounced rendering is best here to prevent UI flicker on rapid updates
+    debouncedRenderAll(); 
 }
 
 /** Processes the activeSchools data from Firebase and updates the state. */
 function processActiveSchools(val) {
-    // ... (Existing logic remains unchanged)
     const map = Object.create(null);
     const onlineNames = [];
 
@@ -257,35 +259,43 @@ function processActiveSchools(val) {
 
     activeSchools = map;
     
+    // We update the online status part and then call renderSchools()
     renderOnlineStatus(onlineNames);
-    
     renderSchools();
 }
 
 // ----------------------------------------------------
-// 7. UI RENDER FUNCTIONS (renderDateWise is UPDATED)
+// 7. UI RENDER FUNCTIONS
 // ----------------------------------------------------
 
 /** Renders all main dashboard elements (counts and lists). */
-function renderAll() {
-    setText(DOM.studentCount, studentCount);
-    setText(DOM.staffCount, staffCount);
-    setText(DOM.totalEnrollment, studentCount + staffCount);
-    setText(DOM.uniqueSchools, schoolsData.size);
+const debouncedRenderAll = debounce(renderAll);
 
+function renderAll() {
+    // 1. Update the Main Stat Counts
+    setText(DOM.studentCount, studentCount.toLocaleString('en-IN'));
+    setText(DOM.staffCount, staffCount.toLocaleString('en-IN'));
+    setText(DOM.totalEnrollment, (studentCount + staffCount).toLocaleString('en-IN'));
+    setText(DOM.uniqueSchools, schoolsData.size.toLocaleString('en-IN'));
+
+    // 2. Render Lists
     renderSchools();
     const dateEntries = Array.from(dateMap.entries())
         .map(([key, counts]) => ({ dateKey: key, counts }));
         
     renderDateWise(dateEntries);
     
-    // Vendor Card is now part of the master render (but also renders on its own data update)
+    // 3. Render Vendor Card
     renderVendorCard(); 
+    
+    // 4. ⭐ CRITICAL: Show the Loaded Data (Hides Skeletons) ⭐
+    if (window.showLoadedData) {
+        window.showLoadedData();
+    }
 }
 
 /** Renders the list of schools, applying search and sort filters. */
 function renderSchools() {
-    // ... (Existing logic remains unchanged)
     if (!DOM.schoolList) return;
 
     let schoolsDataArray = Array.from(schoolsData.values());
@@ -306,11 +316,6 @@ function renderSchools() {
         else if (v === "low") filtered.sort((a, b) => a.total - b.total);
     }
 
-    const totalOnlineSchools = filtered.filter(s => activeSchools[s.normalized]).length;
-    if (DOM.totalOnlineUsers) {
-        DOM.totalOnlineUsers.textContent = `Active Schools: ${totalOnlineSchools}`;
-    }
-
     if (!filtered.length) {
         DOM.schoolList.innerHTML = SCHOOL_LIST_NO_RESULTS_HTML;
         return;
@@ -323,80 +328,75 @@ function renderSchools() {
     attachSchoolCardEventListeners();
 }
 
-/** 🚀 UPDATED: Renders the date-wise enrollment counts, showing date + 1 day. */
+/** Renders the date-wise enrollment counts, showing date + 1 day. */
 function renderDateWise(dateEntries) {
-    // ... (Existing logic remains unchanged)
     if (!DOM.dateWiseList) return;
 
-    // Sort by dateKey in descending order (newest date first)
     const sortedEntries = dateEntries.sort(
         (a, b) => parseDateString(b.dateKey) - parseDateString(a.dateKey)
     );
 
     if (!sortedEntries.length) {
-        DOM.dateWiseList.innerHTML = `<div style="text-align:center;padding:20px;color:#6b7280;">No date-wise data</div>`;
+        DOM.dateWiseList.innerHTML = `<div style="text-align:center;padding:20px;color:#6b7280;grid-column:1/-1;">No date-wise data</div>`;
+        DOM.dateWiseList.style.display = "block";
         return;
     }
 
-    // Get the latest 7 entries
-    const last7 = sortedEntries.slice(0, 7);
-
-    // Set up grid layout
-    DOM.dateWiseList.style.display = "grid";
+    // Restore grid layout if it was block
+    DOM.dateWiseList.style.display = "grid"; 
     DOM.dateWiseList.style.gridTemplateColumns = "repeat(7, 1fr)";
     DOM.dateWiseList.style.gap = "14px";
     
+    const last7 = sortedEntries.slice(0, 7);
+
     DOM.dateWiseList.innerHTML = last7.map((entry, index) => {
-        // --- 🎯 मुख्य बदलाव: तारीख को एक दिन आगे बढ़ाना ---
-        
-        // 1. Original date string को Date ऑब्जेक्ट में बदलें
+        // --- Logic to increment date by 1 day ---
         const originalDate = parseDateString(entry.dateKey);
-        
-        // 2. तारीख में 1 दिन जोड़ें
         originalDate.setDate(originalDate.getDate() + 1);
         
-        // 3. अपडेटेड Date ऑब्जेक्ट को YYYY-MM-DD स्ट्रिंग में वापस फॉर्मेट करें
         const nextDayDateKey = [
             originalDate.getFullYear(),
             String(originalDate.getMonth() + 1).padStart(2, '0'), 
             String(originalDate.getDate()).padStart(2, '0')
         ].join('-');
         
-        // 4. बढ़ी हुई तारीख और original counts के साथ कार्ड जेनरेट करें
         return generateDateCardHTML(nextDayDateKey, entry.counts, index);
     }).join('');
-    // ----------------------------------------------------
     
     injectDateCardCSS(DOM.dateWiseList.id);
 }
 
 /** Renders the online status counts and list. */
 function renderOnlineStatus(onlineNames) {
-    // ... (Existing logic remains unchanged)
+    // 1. Update the Count
     if (DOM.onlineSchoolsCount) {
-        DOM.onlineSchoolsCount.innerHTML = `
-            <i class="ri-user-line"></i> ${onlineNames.length}
-            <span style="width:10px;height:10px;background:#22c55e;border-radius:50%;display:inline-block;margin-left:6px;"></span>`;
+        // Hide placeholder and show count
+        if (DOM.onlineSchoolsCountPlaceholder) {
+            DOM.onlineSchoolsCountPlaceholder.classList.add('hidden-by-js');
+        }
+        DOM.onlineSchoolsCount.classList.remove('hidden-by-js');
+        
+        DOM.onlineSchoolsCount.textContent = onlineNames.length;
     }
 
+    // 2. Update the List
     if (DOM.onlineSchoolsList) {
         DOM.onlineSchoolsList.innerHTML = "";
         onlineNames.sort((a, b) => a.localeCompare(b)).forEach(name => {
             const card = document.createElement("div");
-            card.className = "online-school-card";
-            card.innerHTML = `<span class="online-school-dot"></span>${name}`;
+            card.className = "online-school-card flex items-center gap-1.5 px-3 py-1 bg-green-50 rounded-full text-xs font-medium text-green-700 border border-green-200";
+            card.innerHTML = `<span class="w-2 h-2 rounded-full bg-green-500 animate-ping-once"></span>${name}`;
             DOM.onlineSchoolsList.appendChild(card);
         });
     }
 }
 
-// ✅ FINAL REVISED UPDATE: Applied Gold Card Styling
+/** FINAL REVISED UPDATE: Renders the Gold Card using data. */
 function renderVendorCard() {
-    if (!DOM.vendorCardContainer) return;
+    if (!DOM.vendorCardContainer || !DOM.vendorStatusText) return;
 
     if (!vendorData) {
-        DOM.vendorCardContainer.innerHTML = `<div style="text-align:center;color:#9ca3af;padding:10px;">Vendor data loading...</div>`;
-        return;
+        return; 
     }
 
     const { name, credits, deu, isActive } = vendorData;
@@ -404,64 +404,146 @@ function renderVendorCard() {
     // Status Logic
     const statusText = isActive ? "Active" : "Inactive";
     const statusColor = isActive ? "#10b981" : "#ef4444"; // Green or Red
+    // ⭐ DESIRED CHANGE: Status text color is set to white
+    const statusTextColor = 'white'; 
 
     // --- Core Logic: Determine what to display (Credit or Due) ---
-    let mainIcon, mainLabel, mainValue, mainColor, mainPrefix;
+    let mainLabel, mainValue, mainIcon, mainColor, mainPrefix;
+    const dueAmount = deu ?? 0;
+    const creditAmount = credits ?? 0;
     
     // 1. Check for DUE first (Highest Priority for alert)
-    if ((deu ?? 0) > 0) {
+    if (dueAmount > 0) {
         mainLabel = "Amount Due";
-        mainValue = deu;
+        mainValue = dueAmount.toLocaleString('en-IN');
         mainIcon = "ri-alert-line";
-        mainColor = "#ef4444"; // Red
+        mainColor = "rgb(239, 68, 68)"; // Tailwind red-500
         mainPrefix = '₹';
     } 
     // 2. Check for CREDITS
-    else if ((credits ?? 0) > 0) {
+    else if (creditAmount > 0) {
         mainLabel = "Credits Available";
-        mainValue = credits;
+        mainValue = creditAmount.toLocaleString('en-IN');
         mainIcon = "ri-wallet-3-line";
-        mainColor = "#1a535c"; // Dark Teal/Green to contrast Gold
+        mainColor = "rgb(20, 184, 166)"; // Tailwind teal-500
         mainPrefix = '₹';
     }
-    // 3. Default (Balance 0)
+    // 3. Default (Balance 0 or less)
     else {
         mainLabel = "Account Balance";
         mainValue = 0;
         mainIcon = "ri-check-circle-line";
-        mainColor = "#1f2937"; // Dark Gray
+        mainColor = "rgb(75, 85, 99)"; // Tailwind gray-600
         mainPrefix = '₹';
     }
-    // -----------------------------------------------------------------
 
-    // Helper Styles
+    // 1. Update the status text span (for the main stat area)
+    DOM.vendorStatusText.textContent = statusText;
+
+    // 2. Dynamically update the main card container (CSS-in-JS used for custom gold/status colors)
+    DOM.vendorCardContainer.innerHTML = generateVendorCardHTML({
+        name, statusText, statusColor, statusTextColor,
+        mainLabel, mainValue, mainIcon, mainColor, mainPrefix
+    });
+
+    // We can also update the border color based on the main focus (Due/Credit) for extra emphasis
+    if (dueAmount > 0) {
+        DOM.vendorCardContainer.style.borderColor = 'rgb(239, 68, 68)'; // Red
+    } else if (creditAmount > 0) {
+        DOM.vendorCardContainer.style.borderColor = 'rgb(20, 184, 166)'; // Teal
+    } else {
+        DOM.vendorCardContainer.style.borderColor = 'rgb(109, 40, 217)'; // Default Purple
+    }
+}
+
+// ----------------------------------------------------
+// 8. TEMPLATING & RENDERING UTILITIES
+// ----------------------------------------------------
+
+function parseDateString(dateStr) {
+    if (!dateStr) return new Date();
+    const [year, month, day] = dateStr.split("-").map(Number);
+    // Month is 0-indexed in JS Date, so we subtract 1
+    return new Date(year, month - 1, day); 
+}
+
+const DATE_CARD_HEADER_COLORS = [
+    "linear-gradient(135deg,#9333ea,#a855f7)", // Purple
+    "linear-gradient(135deg,#2563eb,#3b82f6)", // Blue
+    "linear-gradient(135deg,#16a34a,#22c55e)", // Green
+    "linear-gradient(135deg,#f59e0b,#fbbf24)", // Amber
+    "linear-gradient(135deg,#dc2626,#ef4444)", // Red
+    "linear-gradient(135deg,#0d9488,#14b8a6)", // Teal
+    "linear-gradient(135deg,#be185d,#ec4899)"  // Pink
+];
+
+const SCHOOL_LIST_NO_RESULTS_HTML = `
+    <div style="grid-column:1/-1;text-align:center;padding:40px;background:#f9fafb;
+    border-radius:16px;border:2px dashed #d1d5db;color:#6b7280;font-size:15px;">
+        <i class="ri-search-eye-line" style="font-size:32px;color:#9ca3af;
+        margin-bottom:10px;display:block;"></i>
+        No schools found.<br>Try adjusting your search or filters.
+    </div>`;
+
+
+/** Generates the HTML string for a single school card. */
+function generateSchoolCardHTML(s) {
+    const displayName = s.name || "School";
+    const isOnline = !!activeSchools[s.normalized];
+    const onlineDot = isOnline ? `<span class="inline-block w-2.5 h-2.5 rounded-full bg-green-400 animate-ping-once"></span>` : "";
+    const headerBg = isOnline
+        ? "linear-gradient(135deg,#16a34a,#22c55e)" 
+        : "linear-gradient(135deg,#2563eb,#3b82f6)"; 
+        
+    return `
+        <div class="school-card" data-normalized="${s.normalized}" style="
+            background:#fff;border-radius:14px;box-shadow:0 3px 8px rgba(0,0,0,0.08);
+            overflow:hidden;transition:all 0.25s ease;display:flex;flex-direction:column;position:relative;">
+            
+            <div style="background:${headerBg};padding:12px;color:white;font-weight:600;
+            font-size:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <i class="ri-building-4-line"></i>
+                    <div>${displayName}</div>
+                </div>
+                ${onlineDot}
+            </div>
+            <div style="flex:1;padding:14px 16px;display:grid;gap:10px;font-size:14px;color:#374151;">
+                <div><i class="ri-user-3-line" style="color:#2563eb;"></i> Students: <b>${s.students.toLocaleString('en-IN')}</b></div>
+                <div><i class="ri-team-line" style="color:#16a34a;"></i> Staff: <b>${s.staff.toLocaleString('en-IN')}</b></div>
+                <div><i class="ri-bar-chart-2-line" style="color:#f59e0b;"></i> Total: <b>${s.total.toLocaleString('en-IN')}</b></div>
+            </div>
+        </div>
+    `;
+}
+
+/** Generates the new styled HTML for the Vendor Card (CSS-in-JS for complex layout/style). */
+function generateVendorCardHTML({ name, statusText, statusColor, statusTextColor, mainLabel, mainValue, mainIcon, mainColor, mainPrefix }) {
+    // --- GOLD STYLING VARIABLES ---
+    const goldGradient = 'linear-gradient(135deg, #FFD700 0%, #B8860B 100%)'; 
+    const goldShadow = '0 5px 15px rgba(255, 215, 0, 0.4)';
+    const headerTextColor = '#4b5563'; 
+    // -----------------------------
     const itemStyle = `padding: 12px 15px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start;`;
     const labelStyle = `font-size: 11px; color: #9ca3af; margin-bottom: 2px; text-transform: uppercase; font-weight: 500; letter-spacing: 0.5px;`;
     const valueStyle = `font-size: 18px; font-weight: 700; display:flex; align-items:center; gap:5px; line-height: 1;`;
 
-    // --- GOLD STYLING VARIABLES ---
-    const goldGradient = 'linear-gradient(135deg, #FFD700 0%, #B8860B 100%)'; // Gold color gradient
-    const goldShadow = '0 5px 15px rgba(255, 215, 0, 0.4)'; // Gold glow shadow
-    const headerTextColor = '#4b5563'; // Dark text for better contrast on Gold
-    // -----------------------------
-
-
-    DOM.vendorCardContainer.innerHTML = `
+    return `
         <div style="
             width: 100%; 
             background: #ffffff;
             border-radius: 8px;
-            box-shadow: ${goldShadow}; /* Gold Glow Shadow */
+            box-shadow: ${goldShadow};
             overflow: hidden;
-            border: 1px solid #fde047; /* Lighter Gold Border */
+            border: 1px solid #fde047; 
             display: flex;
             flex-direction: column; 
         ">
             <div style="
-                background: ${goldGradient}; /* Applied Gold Gradient */
+                background: ${goldGradient};
                 padding: 5px 15px; 
-                color: ${headerTextColor}; /* Dark text on Gold */
-                font-weight: 700; /* Bolder text */
+                color: ${headerTextColor};
+                font-weight: 700;
                 font-size: 13px; 
                 display: flex;
                 align-items: center;
@@ -491,10 +573,10 @@ function renderVendorCard() {
                     <div style="
                         font-size: 16px; 
                         font-weight: 700; 
-                        color: ${statusColor}; 
+                        color: ${statusTextColor}; /* ⭐ THIS IS NOW WHITE ⭐ */
                         padding: 2px 8px; 
                         border-radius: 4px;
-                        background: ${isActive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'};
+                        background: ${statusColor}; /* Background is still Green/Red */
                         border: 1px solid ${statusColor};
                         line-height: 1.2;
                     ">
@@ -507,65 +589,6 @@ function renderVendorCard() {
     `;
 }
 
-// ----------------------------------------------------
-// 8. TEMPLATING & RENDERING UTILITIES
-// ----------------------------------------------------
-
-function parseDateString(dateStr) {
-    if (!dateStr) return new Date();
-    const [year, month, day] = dateStr.split("-").map(Number);
-    return new Date(year, month - 1, day);
-}
-
-const DATE_CARD_HEADER_COLORS = [
-    "linear-gradient(135deg,#9333ea,#a855f7)", // Purple
-    "linear-gradient(135deg,#2563eb,#3b82f6)", // Blue
-    "linear-gradient(135deg,#16a34a,#22c55e)", // Green
-    "linear-gradient(135deg,#f59e0b,#fbbf24)", // Amber
-    "linear-gradient(135deg,#dc2626,#ef4444)", // Red
-    "linear-gradient(135deg,#0d9488,#14b8a6)", // Teal
-    "linear-gradient(135deg,#be185d,#ec4899)"  // Pink
-];
-
-const SCHOOL_LIST_NO_RESULTS_HTML = `
-    <div style="grid-column:1/-1;text-align:center;padding:40px;background:#f9fafb;
-    border-radius:16px;border:2px dashed #d1d5db;color:#6b7280;font-size:15px;">
-        <i class="ri-search-eye-line" style="font-size:32px;color:#9ca3af;
-        margin-bottom:10px;display:block;"></i>
-        No schools found.<br>Try adjusting your search or filters.
-    </div>`;
-
-
-/** Generates the HTML string for a single school card. */
-function generateSchoolCardHTML(s) {
-    const displayName = s.name || "School";
-    const isOnline = !!activeSchools[s.normalized];
-    const onlineDot = isOnline ? `<span class="online-dot-pulse"></span>` : "";
-    const headerBg = isOnline
-        ? "linear-gradient(135deg,#16a34a,#22c55e)" 
-        : "linear-gradient(135deg,#2563eb,#3b82f6)"; 
-        
-    return `
-        <div class="school-card" data-normalized="${s.normalized}" style="
-            background:#fff;border-radius:14px;box-shadow:0 3px 8px rgba(0,0,0,0.08);
-            overflow:hidden;transition:all 0.25s ease;display:flex;flex-direction:column;position:relative;">
-            
-            <div style="background:${headerBg};padding:12px;color:white;font-weight:600;
-            font-size:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;">
-                <div style="display:flex;align-items:center;gap:8px;">
-                    <i class="ri-building-4-line"></i>
-                    <div>${displayName}</div>
-                </div>
-                ${onlineDot}
-            </div>
-            <div style="flex:1;padding:14px 16px;display:grid;gap:10px;font-size:14px;color:#374151;">
-                <div><i class="ri-user-3-line" style="color:#2563eb;"></i> Students: <b>${s.students}</b></div>
-                <div><i class="ri-team-line" style="color:#16a34a;"></i> Staff: <b>${s.staff}</b></div>
-                <div><i class="ri-bar-chart-2-line" style="color:#f59e0b;"></i> Total: <b>${s.total}</b></div>
-            </div>
-        </div>
-    `;
-}
 
 /** Attaches hover/unhover events to the newly rendered school cards. */
 function attachSchoolCardEventListeners() {
@@ -611,17 +634,17 @@ function generateDateCardHTML(dateKey, counts, index) {
                 <div style="display:flex;align-items:center;gap:6px;">
                     <i class="ri-user-3-line" style="color:#2563eb;" title="Students"></i>
                     <span class="label" style="display:inline;">Students:</span>
-                    <b>${counts.students || 0}</b>
+                    <b>${(counts.students || 0).toLocaleString('en-IN')}</b>
                 </div>
                 <div style="display:flex;align-items:center;gap:6px;">
                     <i class="ri-team-line" style="color:#16a34a;" title="Staff"></i>
                     <span class="label" style="display:inline;">Staff:</span>
-                    <b>${counts.staff || 0}</b>
+                    <b>${(counts.staff || 0).toLocaleString('en-IN')}</b>
                 </div>
                 <div style="display:flex;align-items:center;gap:6px;">
                     <i class="ri-bar-chart-2-line" style="color:#f59e0b;" title="Total"></i>
                     <span class="label" style="display:inline;">Total:</span>
-                    <b>${total}</b>
+                    <b>${total.toLocaleString('en-IN')}</b>
                 </div>
             </div>
         </div>
@@ -665,5 +688,5 @@ if (DOM.sortType) DOM.sortType.addEventListener("change", renderSchools);
 // Start the real-time data flow
 listenToEnrollmentChanges();
 listenActiveSchools();
-// ✅ NEW: Start Vendor Data Listener
+// Start Vendor Data Listener
 listenVendorData();
