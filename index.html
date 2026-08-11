@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="pageTitle">Penport India - ID Card Solution</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary-color: #0077b6;
+            --secondary-color: #023e8a;
+            --accent-color: #48cae4;
+            --bg-dark: #1e293b;
+            --bg-light: #f1f5f9;
+            --bg-content: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --credit-low: #ef4444;
+            --credit-high: #22c55e;
+            --credit-normal: #f97316;
+            --sidebar-width: 70px;
+            --border-radius-xl: 12px;
+            --COMPANY_LOGO_URL: url('https://i.ibb.co/ym5yxYwM/Penport-logo-001.png');
+            --LOGIN_BG_IMAGE_URL: url('https://i.ibb.co/vCFMjrn8/vecteezy-abstract-white-and-orange-corporate-background-11171106-1.jpg');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        body {
+            background: var(--bg-light);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #loginScreen {
+            align-items: center;
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), var(--LOGIN_BG_IMAGE_URL);
+            background-position: center;
+            background-size: cover;
+            display: flex;
+            height: 100%;
+            justify-content: center;
+            left: 0;
+            padding: 20px;
+            position: absolute;
+            top: 0;
+            transition: opacity 0.5s ease, visibility 0.5s;
+            width: 100%;
+            z-index: 10000;
+        }
+
+        #loginScreen.hidden {
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
+        }
+
+        .login-ad-wrapper {
+            animation: fadeIn 0.8s ease-out;
+            align-items: stretch;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            display: flex;
+            max-width: 900px;
+            overflow: hidden;
+            width: 95%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-container {
+            background: rgba(255,255,255,0.98);
+            color: var(--text-dark);
+            flex-shrink: 0;
+            max-width: 440px;
+            padding: 40px;
+            width: 100%;
+        }
+
+        .ad-container {
+            background: var(--bg-dark);
+            border-bottom-right-radius: var(--border-radius-xl);
+            border-top-right-radius: var(--border-radius-xl);
+            display: none;
+            flex-shrink: 0;
+            overflow: hidden;
+            padding: 20px;
+            position: relative;
+            width: 460px;
+        }
+
+        @media (min-width: 768px) {
+            .ad-container {
+                display: block;
+            }
+        }
+
+        .ad-content {
+            background-color: #0d1a2b;
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        .ad-image-header {
+            align-items: center;
+            background-color: var(--secondary-color);
+            background-position: center;
+            background-size: cover;
+            display: flex;
+            font-size: 1.5rem;
+            font-weight: 600;
+            height: 80%;
+            justify-content: center;
+            opacity: 0.9;
+            transition: all 0.3s;
+        }
+
+        .ad-image-header:hover {
+            opacity: 1;
+        }
+
+        .ad-body {
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .ad-body h3 {
+            color: var(--accent-color);
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .ad-body p {
+            color: rgba(255,255,255,0.85);
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        .ad-loading {
+            align-items: center;
+            background: rgba(0,0,0,0.8);
+            border-radius: var(--border-radius-xl);
+            bottom: 0;
+            color: white;
+            display: flex;
+            font-size: 1.2rem;
+            justify-content: center;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .login-logo {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .logo-image {
+            background-color: var(--bg-content);
+            background-image: var(--COMPANY_LOGO_URL);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            border: none;
+            border-radius: 50%;
+            height: 110px;
+            margin: 0 auto 15px;
+            width: 110px;
+        }
+
+        .login-logo h1 {
+            color: var(--text-dark);
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-top: 0;
+        }
+
+        .login-logo h2 {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: -5px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-group input {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            color: var(--text-dark);
+            font-size: 1.05rem;
+            font-weight: 500;
+            padding: 15px 20px;
+            padding-left: 50px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0,119,182,0.25);
+            outline: none;
+        }
+
+        .input-group .fas,
+        .input-group .material-icons-round {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            left: 18px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .input-group .fas.fa-eye,
+        .input-group .fas.fa-eye-slash {
+            color: var(--primary-color);
+            cursor: pointer;
+            left: auto;
+            right: 18px;
+        }
+
+        .login-btn {
+            align-items: center;
+            background: var(--primary-color);
+            border: none;
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 8px 20px rgba(0,119,182,0.4);
+            color: #fff;
+            cursor: pointer;
+            display: inline-flex;
+            font-size: 1.1rem;
+            font-weight: 600;
+            gap: 10px;
+            justify-content: center;
+            letter-spacing: 1px;
+            padding: 16px;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            width: 100%;
+        }
+
+        .login-btn:hover {
+            background: var(--secondary-color);
+            box-shadow: 0 12px 25px rgba(0,119,182,0.5);
+            transform: translateY(-2px);
+        }
+
+        .login-btn:active {
+            box-shadow: 4px 10px rgba(0,119,182,0.3);
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            cursor: wait;
+            opacity: 0.75;
+            transform: none;
+        }
+
+        .login-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.45);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            display: inline-block;
+            animation: spin 0.75s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #fee2e2;
+            border: 1px solid var(--credit-low);
+            border-radius: 8px;
+            color: var(--credit-low);
+            display: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 20px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .footer {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .footer a {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .container {
+            display: none;
+            flex: 1;
+            overflow: visible;
+        }
+
+        .container.visible {
+            display: flex;
+            flex-direction: row; 
+            flex: 1; 
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #0d1a2b 0%, #1a2843 100%);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.5), inset -1px 0 rgba(72,202,228,0.1);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            width: var(--sidebar-width);
+            z-index: 100;
+            border-right: 1px solid rgba(72,202,228,0.15);
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .sidebar-header {
+            border-bottom: 1px solid rgba(72,202,228,0.2);
+            padding: 16px 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            background: rgba(72,202,228,0.05);
+        }
+
+        .sidebar-header:hover {
+            background: rgba(72,202,228,0.12);
+            border-bottom-color: rgba(72,202,228,0.4);
+        }
+
+        .sidebar-user-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-user-icon {
+            align-items: center;
+            background: linear-gradient(135deg, #0077b6 0%, #00b4d8 100%);
+            border-radius: 50%;
+            box-shadow: 0 8px 20px rgba(0,119,182,0.6), inset -2px -2px 6px rgba(0,0,0,0.3), inset 2px 2px 6px rgba(255,255,255,0.15);
+            color: #ffffff;
+            display: inline-flex;
+            font-size: 36px;
+            justify-content: center;
+            align-items: center;
+            height: 48px;
+            width: 48px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            flex-shrink: 0;
+            padding: 0;
+            border: 2px solid rgba(72,202,228,0.3);
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .sidebar-user-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: #ffffff;
+            display: block;
+        }
+
+        .sidebar-user-icon i {
+            display: none;
+        }
+
+        .sidebar-header:hover .sidebar-user-icon {
+            box-shadow: 0 12px 28px rgba(0,119,182,0.8), inset -2px -2px 6px rgba(0,0,0,0.2), inset 2px 2px 8px rgba(255,255,255,0.25);
+            transform: scale(1.15) rotateZ(-8deg);
+            border-color: rgba(72,202,228,0.6);
+        }
+
+        .sidebar-user-name {
+            display: none;
+        }
+
+        .sidebar-header i {
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            color: var(--accent-color);
+            display: none;
+            font-size: 30px;
+            justify-content: center;
+            padding: 6px;
+        }
+
+        .sidebar-user-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: -250px;
+            margin-top: 12px;
+            background: linear-gradient(135deg, #0d1a2b 0%, #1e293b 100%);
+            border: 1px solid rgba(72,202,228,0.2);
+            border-top: 3px solid var(--accent-color);
+            z-index: 1001;
+            padding: 0;
+            min-width: 240px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .sidebar-user-menu.show {
+            display: block;
+        }
+
+        .sidebar-user-info {
+            background: rgba(72,202,228,0.1);
+            padding: 16px;
+            border-bottom: 1px solid rgba(72,202,228,0.2);
+            text-align: center;
+        }
+
+        .sidebar-user-info-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .sidebar-user-info-role {
+            font-size: 11px;
+            color: var(--accent-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-user-menu-item {
+            padding: 12px 16px;
+            color: rgba(255,255,255,0.85);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-user-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar-user-menu-item:hover {
+            background: rgba(72,202,228,0.15);
+            color: var(--accent-color);
+            padding-left: 20px;
+        }
+
+        .sidebar-user-menu-item i {
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-user-menu-item.logout {
+            background: rgba(239,68,68,0.05);
+            color: #ff7f7f;
+            border-top: 1px solid rgba(239,68,68,0.1);
+        }
+
+        .sidebar-user-menu-item.logout:hover {
+            background: rgba(239,68,68,0.15);
+            color: #ff6b6b;
+            padding-left: 20px;
+        }
+
+        .menu {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            margin-top: 12px;
+            padding: 8px 0;
+        }
+
+        .menu-item {
+            align-items: center;
+            border-radius: 10px;
+            color: #94a3b8;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            margin: 6px 8px;
+            padding: 16px 0;
+            position: relative;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .menu-item.disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .menu-item.vendor-restricted {
+            cursor: pointer;
+            opacity: 0.6;
+            pointer-events: auto;
+        }
+
+        .menu-item i {
+            font-size: 24px;
+            transition: all 0.25s ease;
+        }
+
+        .menu-item.active {
+            background: transparent;
+            color: #00d4ff;
+        }
+
+        .menu-item.active::before {
+            background: linear-gradient(180deg, #00d4ff 0%, #00a8cc 100%);
+            border-radius: 2px;
+            content: '';
+            height: 3px;
+            left: 12px;
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            box-shadow: 0 0 8px rgba(0,212,255,0.6);
+            display: none;
+        }
+
+        .menu-item:hover {
+            background: rgba(0,119,182,0.15);
+            color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,119,182,0.2);
+        }
+
+        .menu-item.active:hover {
+            background: linear-gradient(135deg, #0077b6 0%, #0099d8 100%);
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(0,119,182,0.5);
+        }
+
+        .menu-item.vendor-restricted:hover {
+            background: rgba(239,68,68,0.12);
+            color: #ff7f7f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239,68,68,0.15);
+        }
+
+        .menu-item::after {
+            background: linear-gradient(135deg, #0d1a2b 0%, #1e293b 100%);
+            border: 1px solid rgba(72,202,228,0.3);
+            border-radius: 8px;
+            color: #fff;
+            content: attr(data-tooltip);
+            font-size: 13px;
+            font-weight: 500;
+            left: calc(var(--sidebar-width) + 12px);
+            opacity: 0;
+            padding: 8px 12px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%) translateX(-10px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            visibility: hidden;
+            white-space: nowrap;
+            z-index: 100;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .menu-item:hover::after {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+            visibility: visible;
+        }
+
+        .main-area {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            overflow: visible;
+        }
+
+        .header {
+            display: none;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+            background: var(--bg-content);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            height: 64px;
+            justify-content: flex-start;
+            padding: 0 24px;
+        }
+
+        .header-title {
+            color: var(--text-dark);
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-container {
+            display: none;
+        }
+
+        .user-card {
+            display: none;
+        }
+
+        .user-icon {
+            display: none;
+        }
+
+        .user-text {
+            display: none;
+        }
+
+        .dropdown-arrow {
+            display: none;
+        }
+
+        .dropdown-menu {
+            display: none;
+        }
+
+        .logout-btn-dropdown {
+            display: none;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            overflow: visible;
+            padding: 0;
+            position: relative;
+        }
+
+        .content-view {
+            display: none !important;
+            flex-grow: 1;
+            width: 100%;
+            visibility: hidden;
+            height: 0;
+            overflow: hidden;
+        }
+
+        #iframeView.active,
+        #adManagementView.active {
+            display: flex !important;
+            flex: 1;
+            visibility: visible;
+            height: auto;
+            overflow: visible;
+        }
+
+        iframe {
+            background: var(--bg-content);
+            border: none;
+            display: block;
+            flex: 1;
+            height: 100%;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        #adManagementView {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e0f2fe 100%);
+            overflow-y: auto;
+            padding: 32px;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        #adManagementView.active {
+            display: flex;
+        }
+
+        .ad-manager-container {
+            background: var(--bg-content);
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 0 40px rgba(0, 119, 182, 0.1);
+            margin: 0 auto;
+            max-width: 1000px;
+            width: 100%;
+            padding: 40px;
+            border: 1px solid rgba(0, 119, 182, 0.1);
+        }
+
+        .ad-manager-container h2 {
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0099d8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: var(--primary-color);
+            display: flex;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 119, 182, 0.2);
+            letter-spacing: -0.5px;
+        }
+
+        .ad-manager-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 0;
+        }
+
+        .ad-manager-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .ad-form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .ad-preview-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .ad-preview-section h3 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0;
+            padding: 0;
+        }
+
+        .ad-manager-form label {
+            color: var(--text-dark);
+            display: block;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary-color);
+        }
+
+        .ad-manager-form input[type="text"],
+        .ad-manager-form textarea {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            padding: 14px 16px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 100%;
+            background: #f8fafc;
+        }
+
+        .ad-manager-form input[type="text"]:focus,
+        .ad-manager-form textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0, 119, 182, 0.15), inset 0 0 0 1px rgba(0, 119, 182, 0.05);
+            outline: none;
+            background: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .ad-manager-form textarea {
+            min-height: 180px;
+            resize: vertical;
+        }
+
+        .ad-form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-start;
+            margin-top: 25px;
+        }
+
+        .ad-form-actions button {
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 14px 30px;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.95rem;
+        }
+
+        #saveAdBtn {
+            background: linear-gradient(135deg, var(--credit-high) 0%, #16a34a 100%);
+            color: #fff;
+            box-shadow: 0 8px 16px rgba(34, 197, 94, 0.3);
+        }
+
+        #saveAdBtn:hover {
+            background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(34, 197, 94, 0.4);
+        }
+
+        #previewAdBtn {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #0099cc 100%);
+            color: #fff;
+            box-shadow: 0 8px 16px rgba(0, 153, 204, 0.3);
+        }
+
+        #previewAdBtn:hover {
+            background: linear-gradient(135deg, #00d4ff 0%, #0077b6 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 119, 182, 0.4);
+        }
+
+        .ad-preview-area {
+            border: 2px dashed rgba(0, 119, 182, 0.3);
+            border-radius: 14px;
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(0, 119, 182, 0.03) 0%, rgba(72, 202, 228, 0.05) 100%);
+        }
+
+        .ad-preview-area h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .ad-manager-alert {
+            border-radius: 10px;
+            display: none;
+            font-weight: 700;
+            margin-bottom: 25px;
+            padding: 16px 20px;
+            border-left: 4px solid;
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ad-manager-alert.success {
+            background: linear-gradient(135deg, #d1fae5 0%, #dcfce7 100%);
+            color: #065f46;
+            border-left-color: #22c55e;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+        }
+
+        .ad-manager-alert.error {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+            border-left-color: #ef4444;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+        }
+
+        #restrictionModal {
+            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            height: 100%;
+            justify-content: center;
+            left: 0;
+            opacity: 0;
+            position: fixed;
+            top: 0;
+            transition: opacity 0.3s ease;
+            width: 100%;
+            z-index: 11000;
+        }
+
+        #restrictionModal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--bg-content);
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            max-width: 400px;
+            padding: 30px;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            width: 90%;
+        }
+
+        #restrictionModal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            align-items: center;
+            border-bottom: 2px solid var(--credit-low);
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+        }
+
+        .modal-header i {
+            color: var(--credit-low);
+            font-size: 36px;
+        }
+
+        .modal-header h3 {
+            color: var(--text-dark);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .modal-body p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .modal-body p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .modal-body strong {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .deu-amount {
+            background: #ffe0e0;
+            border: 1px solid var(--credit-low);
+            border-radius: 8px;
+            color: var(--credit-low);
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin: 15px 0;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .modal-actions button {
+            background: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 10px 20px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .modal-actions button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 767px) {
+            #loginScreen {
+                align-items: flex-start;
+                overflow-y: auto;
+                padding: 16px;
+            }
+
+            .login-ad-wrapper {
+                margin: 24px 0;
+                width: 100%;
+            }
+
+            .login-container {
+                padding: 28px 22px;
+            }
+
+            .logo-image {
+                height: 92px;
+                width: 92px;
+            }
+
+            .login-logo h1 {
+                font-size: 1.7rem;
+            }
+
+            .sidebar {
+                width: 62px;
+            }
+
+            .menu-item {
+                margin: 6px 7px;
+                padding: 14px 0;
+            }
+
+            .menu-item i {
+                font-size: 22px;
+            }
+
+            .sidebar-user-icon {
+                height: 44px;
+                width: 44px;
+            }
+
+            .sidebar-user-icon svg {
+                width: 26px;
+                height: 26px;
+            }
+
+            .sidebar-user-menu {
+                right: auto;
+                left: 68px;
+                min-width: 220px;
+            }
+
+            #adManagementView {
+                padding: 16px;
+            }
+
+            .ad-manager-container {
+                padding: 24px;
+                border-radius: 12px;
+            }
+
+            .ad-manager-container h2 {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .ad-manager-wrapper {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .ad-manager-form {
+                gap: 16px;
+            }
+
+            .ad-form-actions {
+                flex-direction: row;
+                gap: 10px;
+                justify-content: space-between;
+            }
+
+            .ad-form-actions button {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .ad-preview-section {
+                border: 2px dashed rgba(0, 119, 182, 0.3);
+                border-radius: 12px;
+                padding: 16px;
+                background: linear-gradient(135deg, rgba(0, 119, 182, 0.03) 0%, rgba(72, 202, 228, 0.05) 100%);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loginScreen">
+        <div class="login-ad-wrapper">
+            <div class="login-container">
+                <div class="login-logo">
+                    <div class="logo-image"></div>
+                    <h1>Penport India</h1>
+                </div>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <i class="material-icons-round">mail_outline</i>
+                        <input type="email" id="email" placeholder="Email Address" required autocomplete="username">
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+                        <i class="fas fa-eye" id="togglePassword"></i>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+                        Log In
+                    </button>
+                    <div id="errorMsg" class="error-message"></div>
+                </form>
+                <div class="footer">
+                    Developed by
+                    <a href="https://penportindia.github.io/penport/" target="_blank" rel="noopener noreferrer">Penport India</a>
+                    <br>&copy; 2025 ID Card Solution
+                </div>
+            </div>
+
+            <div class="ad-container">
+                <div class="ad-content">
+                    <div id="adImageHeader" class="ad-image-header"
+                        style="background-image: url('https://placehold.co/460x200/0d1a2b/48cae4?text=Ad+Image+Loading');">
+                        Loading Ad...
+                    </div>
+                    <div class="ad-body">
+                        <h3 id="adTitle"></h3>
+                        <p id="adMessage"></p>
+                    </div>
+                    <div id="adLoading" class="ad-loading" style="display: flex;">
+                        Loading Advertisement...
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+    <div class="container" id="dashboardContainer">
+        <div class="sidebar">
+            <div class="sidebar-header" id="sidebarUserHeader" onclick="toggleSidebarUserMenu()">
+                <div class="sidebar-user-wrapper">
+                    <div class="sidebar-user-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="8" r="4" fill="white"/>
+                            <path d="M 12 14 C 8 14 4 16 4 20 L 4 22 L 20 22 L 20 20 C 20 16 16 14 12 14 Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="sidebar-user-name" id="sidebarUserName">User</div>
+                </div>
+                <div class="sidebar-user-menu" id="sidebarUserMenu">
+                    <div class="sidebar-user-info">
+                        <span class="sidebar-user-info-name" id="sidebarUserDisplayName">User Name</span>
+                        <span class="sidebar-user-info-role" id="sidebarUserDisplayRole">User Role</span>
+                    </div>
+                    <div class="sidebar-user-menu-item logout" onclick="logout()">
+                        <i class="material-icons-round">logout</i>
+                        <span>Logout</span>
+                    </div>
+                </div>
+            </div>
+            <div class="menu" id="sidebarMenu">
+                </div>
+        </div>
+
+        <div class="main-area">
+            <div style="display: none;">
+                <strong id="userName">User</strong>
+                <span id="userRole">Role</span>
+                <div id="dashboardHeaderTitle">Dashboard</div>
+            </div>
+
+            <div class="main-content">
+                <div id="iframeView" class="content-view active">
+                    <iframe id="contentFrame" title="Content"></iframe>
+                </div>
+
+                <div id="adManagementView" class="content-view">
+                    <div class="ad-manager-container">
+                        <h2>
+                            <i class="material-icons-round" style="font-size: 1.8rem; margin-right: 10px;">campaign</i>
+                            Advertisement Management
+                        </h2>
+                        <div id="adManagerAlert" class="ad-manager-alert"></div>
+
+                        <div class="ad-manager-wrapper">
+                            <div class="ad-form-section">
+                                <form id="adManagerForm" class="ad-manager-form">
+                                    <div class="input-group">
+                                        <label for="adTitleInput">Ad Title</label>
+                                        <input type="text" id="adTitleInput" placeholder="Penport India ID Card Solution"
+                                            maxlength="50" required>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="adMessageInput">Ad Message / Content</label>
+                                        <textarea id="adMessageInput"
+                                            placeholder="Start your digital ID card journey with our flexible subscription. Share compelling details about your service, features, and benefits in this section."
+                                            maxlength="250" required></textarea>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="adImageUrlInput">Image URL</label>
+                                        <input type="text" id="adImageUrlInput" placeholder="https://images.unsplash.com/photo-..." required>
+                                    </div>
+
+                                    <div class="ad-form-actions">
+                                        <button type="button" id="previewAdBtn" onclick="previewAd()">
+                                            <i class="material-icons-round" style="font-size: 1.2rem; margin-right: 5px;">visibility</i>
+                                            Preview
+                                        </button>
+                                        <button type="submit" id="saveAdBtn">
+                                            <i class="material-icons-round" style="font-size: 1.2rem; margin-right: 5px;">save</i>
+                                            Save Ad
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="ad-preview-section">
+                                <h3>Live Preview</h3>
+                                <div class="ad-content" style="height: 400px;">
+                                    <div id="previewImageHeader" class="ad-image-header">Image Preview</div>
+                                    <div class="ad-body" style="background: var(--secondary-color);">
+                                        <h3 id="previewTitle" style="color: var(--accent-color);">Title</h3>
+                                        <p id="previewMessage" style="color: rgba(255, 255, 255, 0.9);">Message</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+    </div>
+    <div id="restrictionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="material-icons-round" id="modalIcon">error_outline</i>
+                <h3 id="modalTitle">Feature Access Restricted</h3>
+            </div>
+            <div class="modal-body">
+                <p>Dear <strong id="modalUserName">Vendor</strong>,</p>
+                <p id="modalMainMessage">
+                    Your current subscription period has ended, which has temporarily suspended access to advanced
+                    functional modules. Your data and modules are otherwise active.
+                </p>
+                <div class="deu-amount">
+                    Outstanding Dues: <span id="modalDeuAmount">&#8377; 0.00</span>
+                </div>
+                <p style="font-size: 0.95rem; text-align: center; color: var(--text-dark); font-weight: 500;">
+                    To regain full module access and enjoy all features, please renew your subscription and clear your
+                    outstanding dues.
+                </p>
+            </div>
+            <div class="modal-actions">
+                <button onclick="closeRestrictionModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getDatabase, ref as dbRef, get, child, set, onValue } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+    import { firebaseConfig } from './Roots/Database/Database.js';
+    const USER_STORAGE_KEY = 'penport_id_user_data'; 
+    const SESSION_EXPIRY_KEY = 'penport_session_expiry';
+    const FIREBASE_AD_PATH = 'ads/loginBanner';
+    const DEFAULT_AD_IMG = 'https://placehold.co/460x200/0d1a2b/48cae4?text=Advertisement+Here';
+    const SESSION_DURATION_MS = 2 * 60 * 60 * 1000;
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth(app);
+    const authPersistenceReady = setPersistence(auth, browserLocalPersistence).catch((error) => {
+        console.warn("Auth persistence setup failed:", error);
+    });
+
+    let stopAdListener = null;
+
+    let sessionWatcher = null;
+
+    let currentVendorData = null;
+    let loginInProgress = false;
+
+    const loginForm = document.getElementById("loginForm");
+    const loginButton = loginForm ? loginForm.querySelector(".login-btn") : null;
+    const errorDiv = document.getElementById("errorMsg");
+    const loginScreen = document.getElementById("loginScreen");
+    const dashboardContainer = document.getElementById("dashboardContainer");
+    const passwordInput = document.getElementById("password");
+    const togglePasswordIcon = document.getElementById("togglePassword");
+    const userNameEl = document.getElementById("userName");
+    const userRoleEl = document.getElementById("userRole");
+    const userCardEl = document.getElementById("userCard");
+    const sidebarMenu = document.getElementById("sidebarMenu");
+    const iframe = document.getElementById("contentFrame");
+    const headerTitle = document.getElementById("dashboardHeaderTitle");
+    const sidebarUserHeader = document.getElementById("sidebarUserHeader");
+    const sidebarUserName = document.getElementById("sidebarUserName");
+    const sidebarUserDisplayName = document.getElementById("sidebarUserDisplayName");
+    const sidebarUserDisplayRole = document.getElementById("sidebarUserDisplayRole");
+    const sidebarUserMenu = document.getElementById("sidebarUserMenu");
+
+    const adLoading = document.getElementById('adLoading');
+    const adImageHeader = document.getElementById('adImageHeader');
+    const adTitleEl = document.getElementById('adTitle');
+    const adMessageEl = document.getElementById('adMessage');
+
+    const iframeView = document.getElementById('iframeView');
+    const adManagementView = document.getElementById('adManagementView');
+    const adManagerForm = document.getElementById('adManagerForm');
+    const adTitleInput = document.getElementById('adTitleInput');
+    const adMessageInput = document.getElementById('adMessageInput');
+    const adImageUrlInput = document.getElementById('adImageUrlInput');
+    const adManagerAlert = document.getElementById('adManagerAlert');
+    const previewImageHeader = document.getElementById('previewImageHeader');
+    const previewTitle = document.getElementById('previewTitle');
+    const previewMessage = document.getElementById('previewMessage');
+
+    const restrictionModal = document.getElementById("restrictionModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalIcon = document.getElementById("modalIcon");
+    const modalUserName = document.getElementById("modalUserName");
+    const modalMainMessage = document.getElementById("modalMainMessage");
+    const modalDeuAmount = document.getElementById("modalDeuAmount");
+
+    function setLoginLoading(isLoading) {
+        loginInProgress = isLoading;
+        if (!loginButton) return;
+        loginButton.disabled = isLoading;
+        loginButton.innerHTML = isLoading
+            ? '<span class="login-spinner" aria-hidden="true"></span><span>Signing in...</span>'
+            : '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i><span>Log In</span>';
+    }
+
+    const menuConfig = {
+        dashboard: { icon: 'dashboard_customize', tooltip: 'Dashboard', url: './Roots/Dashborad/Dashboard.html', internal: false },
+        schools: { icon: 'people_alt', tooltip: 'Clients', url: './Roots/Schools/User.html', internal: false },
+        create: { icon: 'post_add', tooltip: 'Create New ID', url: './Roots/Create/Create.html', internal: false },
+        manage: { icon: 'folder_special', tooltip: 'Manage', url: './Roots/Manage/Manage.html', internal: false },
+        template: { icon: 'style', tooltip: 'Templates', url: './Roots/Template/Template.html', internal: false },
+        print: { icon: 'print', tooltip: 'Print Manager', url: './Roots/Print/Print.html', internal: false },
+        data: { icon: 'storage', tooltip: 'Data Export', url: './Roots/Data%20Management/Data.html', internal: false },
+        account: { icon: 'manage_accounts', tooltip: 'Account', url: './Roots/Author/Author.html', internal: false },
+        adManage: { icon: 'ads_click', tooltip: 'Ad Management', internal: true }
+    };
+
+    const roleMenus = {
+        vendor:    ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data'],
+        developer: ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'account', 'adManage'],
+        manager:   ['dashboard', 'schools', 'create', 'manage', 'template', 'print', 'data', 'adManage']
+    };
+
+    async function performLogout({ skipRedirect = false } = {}) {
+        try {
+            if (stopAdListener) {
+                try { stopAdListener(); } catch (e) { }
+                stopAdListener = null;
+            }
+
+            if (sessionWatcher) {
+                clearInterval(sessionWatcher);
+                sessionWatcher = null;
+            }
+
+            try { localStorage.removeItem(SESSION_EXPIRY_KEY); } catch (e) {}
+            try { localStorage.removeItem(USER_STORAGE_KEY); } catch (e) {}
+
+            loginScreen.classList.remove("hidden");
+            dashboardContainer.classList.remove("visible");
+            loginForm.reset();
+            errorDiv.style.display = "none";
+            iframe.src = '';
+            sidebarMenu.innerHTML = '';
+            if (userNameEl) userNameEl.textContent = 'User';
+            if (userRoleEl) userRoleEl.textContent = 'Role';
+            if (sidebarUserName) sidebarUserName.textContent = 'User';
+            if (sidebarUserDisplayName) sidebarUserDisplayName.textContent = 'User Name';
+            if (sidebarUserDisplayRole) sidebarUserDisplayRole.textContent = 'User Role';
+            if (sidebarUserMenu) sidebarUserMenu.classList.remove('show');
+            currentVendorData = null;
+            closeRestrictionModal();
+            try {
+                await signOut(auth);
+            } catch (e) {
+                console.warn("Firebase sign-out failed:", e);
+            }
+            if (!skipRedirect) {
+
+                try { window.location.hash = '#login'; } catch (e) {}
+
+            }
+            fetchAndDisplayAd();
+
+        } catch (err) {
+            console.error("Error during performLogout:", err);
+        }
+    }
+
+    function saveUser(data) {
+        try {
+            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data));
+        } catch (e) {
+            console.error("Local storage save failed:", e);
+        }
+    }
+
+    function loadUser() {
+        try {
+            const data = localStorage.getItem(USER_STORAGE_KEY);
+            return data ? JSON.parse(data) : null;
+        } catch (e) {
+            console.error("Local storage load failed:", e);
+            return null;
+        }
+    }
+
+    function startSessionTimer({ resetExpiry = true } = {}) {
+        if (resetExpiry) {
+            try {
+                const expiry = Date.now() + SESSION_DURATION_MS;
+                localStorage.setItem(SESSION_EXPIRY_KEY, String(expiry));
+            } catch (e) {
+                console.warn("Session expiry could not be saved:", e);
+            }
+        }
+
+        if (sessionWatcher) {
+            clearInterval(sessionWatcher);
+            sessionWatcher = null;
+        }
+
+        sessionWatcher = setInterval(() => {
+            const expiryStr = localStorage.getItem(SESSION_EXPIRY_KEY);
+            const expiry = expiryStr ? Number(expiryStr) : 0;
+            if (!expiry || Date.now() >= expiry) {
+                clearInterval(sessionWatcher);
+                sessionWatcher = null;
+                performLogout();
+            }
+        }, 5000);
+    }
+
+    function isSessionValid() {
+        try {
+            const expiryStr = localStorage.getItem(SESSION_EXPIRY_KEY);
+            const expiry = expiryStr ? Number(expiryStr) : 0;
+            return Boolean(expiry && Date.now() < expiry);
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function isValidHttpUrl(value) {
+        try {
+            const parsedUrl = new URL(value);
+            return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:';
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function fetchAndDisplayAd() {
+        if (adLoading) adLoading.style.display = 'flex';
+
+        if (stopAdListener) {
+            try { stopAdListener(); } catch (e) {}
+            stopAdListener = null;
+        }
+
+        const adRef = dbRef(database, FIREBASE_AD_PATH);
+        stopAdListener = onValue(adRef, (snapshot) => {
+            const adData = snapshot.val();
+            if (adLoading) adLoading.style.display = 'none';
+
+            if (adData) {
+                const { title, message, imageUrl } = adData;
+                if (adTitleEl) adTitleEl.textContent = title || "ID Card Solution Software";
+                if (adMessageEl) adMessageEl.textContent = message || "Start your digital ID card journey.";
+                if (adImageHeader) {
+                    adImageHeader.style.backgroundImage = `url('${imageUrl || DEFAULT_AD_IMG}')`;
+                    adImageHeader.textContent = '';
+                }
+            } else {
+                if (adTitleEl) adTitleEl.textContent = "Penport ID Card Solution";
+                if (adMessageEl) adMessageEl.textContent = "Welcome! Create professional ID cards effortlessly. Start your trial today!";
+                if (adImageHeader) {
+                    adImageHeader.style.backgroundImage = `url('${DEFAULT_AD_IMG}')`;
+                    adImageHeader.textContent = '';
+                }
+            }
+        }, (error) => {
+            if (adLoading) adLoading.style.display = 'none';
+                console.error("Error fetching ad data:", error);
+            if (adTitleEl) adTitleEl.textContent = "Ad Load Error";
+            if (adMessageEl) adMessageEl.textContent = "Could not load latest advertisement details. Please check network.";
+            if (adImageHeader) adImageHeader.style.backgroundImage = `url('${DEFAULT_AD_IMG}')`;
+        });
+    }
+
+    async function loadAdDataToForm() {
+        try {
+            const snapshot = await get(child(dbRef(database), FIREBASE_AD_PATH));
+            const adData = snapshot.val();
+
+            adTitleInput.value = adData?.title || '';
+            adMessageInput.value = adData?.message || '';
+            adImageUrlInput.value = adData?.imageUrl || '';
+            previewAd();
+        } catch (error) {
+            console.error("Error loading ad data for form:", error);
+            showAlert('error', 'Error loading ad data for form.');
+        }
+    }
+
+    function showAlert(type, message) {
+        adManagerAlert.className = `ad-manager-alert ${type}`;
+        adManagerAlert.textContent = message;
+        adManagerAlert.style.display = 'block';
+        setTimeout(() => {
+            adManagerAlert.style.display = 'none';
+        }, 4000);
+    }
+
+    window.previewAd = () => {
+        const title = adTitleInput.value || 'Ad Title...';
+        const message = adMessageInput.value || 'Ad Message...';
+        const imageUrl = adImageUrlInput.value || DEFAULT_AD_IMG;
+
+        previewTitle.textContent = title;
+        previewMessage.textContent = message;
+        previewImageHeader.style.backgroundImage = `url('${imageUrl}')`;
+        previewImageHeader.textContent = 'Ad Preview';
+    }
+
+    if (adManagerForm) {
+        adManagerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = adTitleInput.value.trim();
+            const message = adMessageInput.value.trim();
+            const imageUrl = adImageUrlInput.value.trim();
+
+            if (!isValidHttpUrl(imageUrl)) {
+                showAlert('error', 'Please enter a valid image URL starting with http:// or https://.');
+                return;
+            }
+
+            const newAdData = { title, message, imageUrl };
+
+            try {
+                await set(dbRef(database, FIREBASE_AD_PATH), newAdData);
+                showAlert('success', 'Advertisement saved successfully.');
+            } catch (error) {
+            console.error("Error saving ad data:", error);
+                showAlert('error', `Error saving ad: ${error.message}`);
+            }
+        });
+    }
+
+    function updateHeaderUI(userData) {
+        const { name, roleKey } = userData;
+        const roleDisplay = roleKey ? (roleKey.charAt(0).toUpperCase() + roleKey.slice(1)) : '';
+        if (sidebarUserName) sidebarUserName.textContent = name || 'User';
+        if (sidebarUserDisplayName) sidebarUserDisplayName.textContent = name || 'User Name';
+        if (sidebarUserDisplayRole) sidebarUserDisplayRole.textContent = roleDisplay || 'User Role';
+        if (userNameEl) userNameEl.textContent = name || 'User';
+        if (userRoleEl) userRoleEl.textContent = roleDisplay || 'Role';
+    }
+
+    function setMainContentView(viewId) {
+        const views = [iframeView, adManagementView];
+        views.forEach(view => {
+            if (view) view.classList.remove('active');
+        });
+        const targetView = document.getElementById(viewId);
+        if (targetView) targetView.classList.add('active');
+    }
+
+    function showRestrictionModal(messageType = 'restriction') {
+        if (!currentVendorData) return;
+        const name = currentVendorData.name || "Vendor";
+        const deuAmount = currentVendorData.deu || 0;
+        modalUserName.textContent = name;
+        modalDeuAmount.textContent = `Rs. ${Number(deuAmount).toFixed(2)}`;
+
+        if (messageType === 'restriction') {
+            modalTitle.textContent = "Feature Access Restricted";
+            modalIcon.textContent = "error_outline";
+            modalIcon.style.color = "var(--credit-low)";
+            document.querySelector('.modal-header').style.borderBottom = "2px solid var(--credit-low)";
+            modalMainMessage.textContent = "Your current subscription period has ended, which has temporarily suspended access to advanced functional modules. Your data and modules are otherwise active.";
+        } else if (messageType === 'inactive_login') {
+            modalTitle.textContent = "Subscription Inactive";
+            modalIcon.textContent = "warning";
+            modalIcon.style.color = "var(--credit-normal)";
+            document.querySelector('.modal-header').style.borderBottom = "2px solid var(--credit-normal)";
+            modalMainMessage.textContent = "Welcome! Your account subscription is currently inactive. For your convenience, basic Dashboard access is available, but all other modules are inaccessible until renewal.";
+        }
+        restrictionModal.classList.add('show');
+    }
+
+    window.closeRestrictionModal = () => {
+        restrictionModal.classList.remove('show');
+        modalTitle.textContent = "Feature Access Restricted";
+        modalIcon.textContent = "error_outline";
+        modalIcon.style.color = "var(--credit-low)";
+        document.querySelector('.modal-header').style.borderBottom = "2px solid var(--credit-low)";
+        modalMainMessage.textContent = "Your current subscription period has ended, which has temporarily suspended access to advanced functional modules. Your data and modules are otherwise active.";
+    }
+
+    function buildSidebarMenu(role) {
+        sidebarMenu.innerHTML = '';
+        const menuItems = roleMenus[role.toLowerCase()] || [];
+        const userIsInactiveVendor = role.toLowerCase() === 'vendor' && currentVendorData && !currentVendorData.isActive;
+
+        menuItems.forEach((pageName) => {
+            const item = menuConfig[pageName];
+            if (!item) return;
+            const menuItemDiv = document.createElement('div');
+            menuItemDiv.className = 'menu-item';
+            menuItemDiv.dataset.page = pageName;
+            menuItemDiv.dataset.tooltip = item.tooltip;
+            menuItemDiv.innerHTML = `<i class="material-icons-round">${item.icon}</i>`;
+            if (userIsInactiveVendor && pageName !== 'dashboard') {
+                menuItemDiv.classList.add('vendor-restricted');
+            }
+            menuItemDiv.addEventListener("click", handleMenuClick);
+            sidebarMenu.appendChild(menuItemDiv);
+        });
+    }
+
+    function handleMenuClick(e) {
+        const item = e.currentTarget;
+        const page = item.dataset.page;
+        if (currentVendorData && !currentVendorData.isActive && page !== 'dashboard') {
+            showRestrictionModal('restriction');
+            return;
+        }
+        document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active"));
+        item.classList.add("active");
+        loadPage(page);
+        toggleDropdown(false);
+        if (sidebarUserMenu) sidebarUserMenu.classList.remove('show');
+    }
+
+    window.toggleSidebarUserMenu = () => {
+        if (sidebarUserMenu) {
+            sidebarUserMenu.classList.toggle('show');
+        }
+    };
+
+    function loadPage(page) {
+        const item = menuConfig[page];
+        if (!item) return;
+        headerTitle.textContent = item.tooltip;
+        if (item.internal) {
+            setMainContentView('adManagementView');
+            if (page === 'adManage') loadAdDataToForm();
+        } else {
+            iframe.src = item.url;
+            setMainContentView('iframeView');
+        }
+    }
+
+    if (togglePasswordIcon) {
+        togglePasswordIcon.addEventListener('click', () => {
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+            togglePasswordIcon.classList.toggle('fa-eye-slash');
+        });
+    }
+
+    window.toggleDropdown = (show) => {
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        if (!userCardEl) return;
+        const isVisible = userCardEl.classList.contains('open');
+        const shouldShow = typeof show === 'boolean' ? show : !isVisible;
+        userCardEl.classList.toggle('open', shouldShow);
+    };
+
+    document.addEventListener('click', (e) => {
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        if (userCardEl && userCardEl.classList.contains('open') && dropdownMenu && !userCardEl.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            toggleDropdown(false);
+        }
+        if (sidebarUserMenu && sidebarUserHeader && sidebarUserMenu.classList.contains('show')) {
+            if (!sidebarUserHeader.contains(e.target)) {
+                sidebarUserMenu.classList.remove('show');
+            }
+        }
+        if (restrictionModal.classList.contains('show') && !document.querySelector('.modal-content').contains(e.target) && e.target === restrictionModal) {
+            closeRestrictionModal();
+        }
+    });
+
+    window.logout = async () => {
+        await performLogout();
+    };
+
+    if (loginForm) {
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (loginInProgress) return;
+            errorDiv.style.display = "none";
+
+            const email = document.getElementById("email").value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!email || !password) {
+                errorDiv.textContent = "❌ Please enter both email and password.";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            try {
+                setLoginLoading(true);
+                await authPersistenceReady;
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                const rolesSnapshot = await get(child(dbRef(database), 'roles'));
+                const rolesData = rolesSnapshot.val();
+
+                let userRoleKey = null;
+                let userData = null;
+
+                for (const [role, data] of Object.entries(rolesData || {})) {
+                    if (data && data.email && data.email.toLowerCase() === email.toLowerCase()) {
+                        userRoleKey = role.toLowerCase();
+                        userData = data;
+                        break;
+                    }
+                }
+
+                if (!userRoleKey || !roleMenus[userRoleKey]) {
+                    errorDiv.textContent = "Your account role is not defined or supported (Developer/Manager/Vendor).";
+                    errorDiv.style.display = "block";
+                    await signOut(auth);
+                    return;
+                }
+
+                const name = userData.name || user.email.split('@')[0];
+
+                if (userRoleKey === "vendor") {
+                    currentVendorData = {
+                        isActive: userData.isActive === true,
+                        deu: userData.deu || 0,
+                        name: name
+                    };
+
+                    if (!currentVendorData.isActive) {
+                        showRestrictionModal('inactive_login');
+                    }
+                } else {
+                    currentVendorData = null;
+                }
+
+                saveUser({
+                    name: name,
+                    roleKey: userRoleKey,
+                    isActive: currentVendorData ? currentVendorData.isActive : true,
+                    deu: currentVendorData ? currentVendorData.deu : 0,
+                    uid: user.uid
+                });
+
+                startSessionTimer();
+
+                updateHeaderUI({ name: name, roleKey: userRoleKey });
+                loginScreen.classList.add("hidden");
+                dashboardContainer.classList.add("visible");
+
+                if (userRoleKey === 'vendor' && !currentVendorData.isActive) {
+                    initializeDashboard('vendor', false, 'dashboard');
+                } else {
+                    initializeDashboard(userRoleKey);
+                }
+            } catch (error) {
+                let msg = "Login failed. Please check your credentials.";
+                if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                    msg = "Invalid email or password.";
+                } else if (error.code === 'auth/too-many-requests') {
+                    msg = "Account temporarily locked due to too many failed attempts.";
+                } else {
+                    console.error("Login Error:", error.code, error.message);
+                }
+                errorDiv.textContent = msg;
+                errorDiv.style.display = "block";
+                passwordInput.value = "";
+            } finally {
+                setLoginLoading(false);
+            }
+        });
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userData = loadUser();
+            if (userData && roleMenus[userData.roleKey] && userData.uid === user.uid) {
+                if (userData.roleKey === 'vendor') {
+                    currentVendorData = {
+                        isActive: userData.isActive === true,
+                        deu: userData.deu || 0,
+                        name: userData.name
+                    };
+                } else {
+                    currentVendorData = null;
+                }
+
+                loginScreen.classList.add("hidden");
+                dashboardContainer.classList.add("visible");
+                updateHeaderUI(userData);
+
+                startSessionTimer({ resetExpiry: !isSessionValid() });
+
+                if (userData.roleKey === 'vendor' && !userData.isActive) {
+                    initializeDashboard('vendor', true, 'dashboard');
+                } else {
+                    initializeDashboard(userData.roleKey, true);
+                }
+            } else {
+                if (user) await performLogout();
+                loginScreen.classList.remove("hidden");
+                dashboardContainer.classList.remove("visible");
+            }
+        } else {
+            loginScreen.classList.remove("hidden");
+            dashboardContainer.classList.remove("visible");
+            currentVendorData = null;
+        }
+    });
+
+    function initializeDashboard(role, isInitialLoad = false, forcePage = null) {
+        buildSidebarMenu(role);
+
+        const userIsInactiveVendor = role.toLowerCase() === 'vendor' && currentVendorData && !currentVendorData.isActive;
+        const roleMenu = roleMenus[role.toLowerCase()];
+        const firstPageKey = forcePage || roleMenu[0];
+        const firstPageItem = menuConfig[firstPageKey];
+
+        if (isInitialLoad) {
+            const currentUrlKey = Object.keys(menuConfig).find(key => menuConfig[key].url && iframe.src.includes(menuConfig[key].url));
+            if (currentUrlKey && !userIsInactiveVendor) {
+                document.querySelector(`.menu-item[data-page="${currentUrlKey}"]`)?.classList.add('active');
+                headerTitle.textContent = menuConfig[currentUrlKey].tooltip;
+                setMainContentView('iframeView');
+                return;
+            }
+        }
+
+        loadPage(firstPageKey);
+        document.querySelector(`.menu-item[data-page="${firstPageKey}"]`)?.classList.add('active');
+    }
+
+    try { fetchAndDisplayAd(); } catch (e) { }
+
+    document.addEventListener('contextmenu', (e) => {
+        if (e.target.closest('.sidebar') || e.target.closest('.menu-item') || e.target.closest('.sidebar-user-icon')) {
+            e.preventDefault();
+        }
+    }, true);
+
+    document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        return false;
+    }, { passive: false, capture: true });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J' || e.key === 'K')) || (e.ctrlKey && (e.key === 's' || e.key === 'u'))) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    }, true);
+
+    if (typeof console !== 'undefined') {
+        console.clear = () => {};
+        console.log = () => {};
+        console.warn = () => {};
+        console.info = () => {};
+        console.debug = () => {};
+        console.error = () => {};
+        console.trace = () => {};
+        console.table = () => {};
+        console.dir = () => {};
+        console.dirxml = () => {};
+        console.group = () => {};
+        console.groupEnd = () => {};
+        console.time = () => {};
+        console.timeEnd = () => {};
+        console.profile = () => {};
+        console.profileEnd = () => {};
+        console.count = () => {};
+        console.assert = () => {};
+    }
+
+    let devtoolsOpen = false;
+    setInterval(() => {
+        const devtoolsThreshold = 160;
+        if (window.outerHeight - window.innerHeight > devtoolsThreshold || window.outerWidth - window.innerWidth > devtoolsThreshold) {
+            if (!devtoolsOpen) {
+                devtoolsOpen = true;
+                document.body.innerHTML = '';
+                window.stop();
+            }
+        } else {
+            devtoolsOpen = false;
+        }
+    }, 100);
+
+    if (document.addEventListener) {
+        document.addEventListener('keypress', function(e) {
+            if (e.ctrlKey && (e.which === 73 || e.which === 105)) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }, true);
+    }
+
+    const originalOpen = window.open;
+    window.open = function(...args) {
+        return null;
+    };
+
+    const originalEval = window.eval;
+    window.eval = function() {
+        return null;
+    };
+
+    Object.defineProperty(window, 'eval', {
+        value: function() { return null; },
+        writable: false,
+        configurable: false
+    });
+
+    document.addEventListener('selectstart', (e) => {
+        if (e.target.closest('.sidebar')) {
+            e.preventDefault();
+            return false;
+        }
+    }, true);
+
+    document.addEventListener('copy', (e) => {
+        if (!e.target.matches('input, textarea')) {
+            e.preventDefault();
+            return false;
+        }
+    }, true);
+
+    document.addEventListener('paste', (e) => {
+        if (!e.target.matches('input, textarea')) {
+            e.preventDefault();
+            return false;
+        }
+    }, true);
+
+    document.addEventListener('cut', (e) => {
+        if (!e.target.matches('input, textarea')) {
+            e.preventDefault();
+            return false;
+        }
+    }, true);
+
+    const noop = function() {};
+    window.debugger = noop;
+    Object.defineProperty(window, '__proto__', { value: noop, writable: false, configurable: false });
+
+    const originalLog = console.log;
+    Object.defineProperty(window, 'console', {
+        value: {},
+        writable: false,
+        configurable: false
+    });
+
+    setInterval(() => {
+        if (document.documentElement.innerHTML.length === 0 || !document.body) {
+            window.location.href = 'about:blank';
+        }
+    }, 500);
+
+    window.onerror = () => { return true; };
+
+    if (typeof window.chrome !== 'undefined') {
+        Object.defineProperty(window, 'chrome', {
+            value: {},
+            writable: false,
+            configurable: false
+        });
+    }
+
+    (function() {
+        const check = () => {
+            const start = new Date().getTime();
+            debugger;
+            const end = new Date().getTime();
+            if ((end - start) > 100) {
+                window.location.href = 'about:blank';
+            }
+        };
+        setInterval(check, 1000);
+    })();
+
+    </script>
+
+</body>
+
+</html>

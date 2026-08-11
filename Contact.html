@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact LIM – Lakshmi ID Maker support, developed by Penport India." />
+  <meta name="theme-color" content="#173b57" />
+  <title>Contact Us | LIM – Lakshmi ID Maker</title>
+
+  <style>
+    :root {
+      --primary: #0e4ea8;
+      --primary-dark: #0b3a76;
+      --accent: #7db7ff;
+      --bg: #f5f9ff;
+      --card: #ffffff;
+      --text: #12274b;
+      --muted: #5e7aa0;
+      --border: #d7e6fb;
+      --soft: #e8f1ff;
+      --success: #2272c7;
+      --danger: #b33a3a;
+      --shadow: 0 18px 50px rgba(14, 78, 168, 0.14);
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(14, 78, 168, 0.14), transparent 28rem),
+        linear-gradient(180deg, #f3f8ff 0, var(--bg) 22rem);
+      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--primary);
+      text-underline-offset: 3px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 54px 20px 100px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,.06);
+    }
+
+    .hero::before {
+      width: 340px;
+      height: 340px;
+      top: -160px;
+      right: -110px;
+    }
+
+    .hero::after {
+      width: 230px;
+      height: 230px;
+      left: -90px;
+      bottom: -130px;
+    }
+
+    .hero-inner,
+    .page {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    .logo {
+      width: 86px;
+      height: 86px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #ffffff;
+      border: 1px solid rgba(14, 78, 168, 0.16);
+      box-shadow: 0 10px 28px rgba(14,78,168,.14);
+    }
+
+    .logo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      margin: 0;
+    }
+
+    .brand-name {
+      font-weight: 800;
+      font-size: 1.08rem;
+    }
+
+    .brand-subtitle {
+      color: rgba(255,255,255,.74);
+      font-size: .91rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: -.035em;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 18px 0 0;
+      color: rgba(255,255,255,.82);
+      font-size: 1.06rem;
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      margin-top: -52px;
+      padding-bottom: 54px;
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .card {
+      border: 1px solid rgba(220,229,235,.96);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.97);
+      box-shadow: var(--shadow);
+    }
+
+    .form-card {
+      padding: clamp(24px, 5vw, 44px);
+    }
+
+    .side-card {
+      padding: 28px;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--primary);
+      font-size: .82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    h2 {
+      margin: 16px 0 8px;
+      color: var(--primary-dark);
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      line-height: 1.25;
+    }
+
+    .lead {
+      margin: 0 0 26px;
+      color: var(--muted);
+    }
+
+    form {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    label {
+      color: var(--primary-dark);
+      font-weight: 700;
+      font-size: .94rem;
+    }
+
+    .required {
+      color: var(--danger);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+
+    input,
+    select {
+      min-height: 48px;
+      padding: 0 14px;
+    }
+
+    textarea {
+      min-height: 150px;
+      padding: 13px 14px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(23,59,87,.10);
+    }
+
+    input[aria-invalid="true"],
+    select[aria-invalid="true"],
+    textarea[aria-invalid="true"] {
+      border-color: var(--danger);
+      background: #fffafa;
+    }
+
+    .help {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .error-text {
+      min-height: 1em;
+      color: var(--danger);
+      font-size: .8rem;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fbfdfe;
+    }
+
+    .checkbox-row input {
+      width: 18px;
+      min-height: 18px;
+      margin-top: 3px;
+      flex: 0 0 auto;
+    }
+
+    .checkbox-row label {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      min-height: 49px;
+      border: 0;
+      border-radius: 12px;
+      padding: 0 20px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(23,59,87,.20);
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(23,59,87,.25);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .65;
+      transform: none;
+    }
+
+    .status {
+      display: none;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: .92rem;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .status.success {
+      color: #14563c;
+      background: #e9f7f0;
+      border: 1px solid #bfe4d2;
+    }
+
+    .status.error {
+      color: #7b2525;
+      background: #fff0f0;
+      border: 1px solid #efc3c3;
+    }
+
+    .contact-point {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-point:last-child {
+      border-bottom: 0;
+    }
+
+    .contact-point strong {
+      display: block;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .contact-point p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .tips {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 14px;
+      background: #fff8e9;
+      border-left: 4px solid var(--accent);
+      color: #674d1e;
+    }
+
+    .tips strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .tips ul {
+      margin: 8px 0 0;
+      padding-left: 20px;
+    }
+
+    .tips li {
+      margin: 5px 0;
+      font-size: .9rem;
+    }
+
+    footer {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 0 0 36px;
+      text-align: center;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    @media (max-width: 860px) {
+      .contact-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hero-inner,
+      .page,
+      footer {
+        width: min(100% - 22px, 1080px);
+      }
+
+      .hero {
+        padding-top: 40px;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .form-card,
+      .side-card {
+        padding: 22px 18px;
+      }
+
+      .actions {
+        align-items: stretch;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="brand-row">
+        <div class="logo"><img src="LIM.png" alt="LIM logo"></div>
+        <div>
+          <div class="brand-name">LIM – Lakshmi ID Maker</div>
+          <div class="brand-subtitle">Developed by Penport India</div>
+        </div>
+      </div>
+
+      <h1>Contact Support</h1>
+      <p>
+        Need help with login, enrollment, student or staff records, photo upload,
+        editing, printing or another LIM service? Send the details below.
+      </p>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="contact-layout">
+      <section class="card form-card">
+        <span class="section-label">Support Request</span>
+        <h2>How can we help?</h2>
+        <p class="lead">
+          Please provide accurate details so the Penport India support team can
+          understand and resolve your issue.
+        </p>
+
+        <form id="contactForm" novalidate>
+          <div class="grid-2">
+            <div class="field">
+              <label for="name">Your Name <span class="required">*</span></label>
+              <input id="name" name="name" type="text" maxlength="80" autocomplete="name" required />
+              <div class="error-text" id="nameError"></div>
+            </div>
+
+            <div class="field">
+              <label for="schoolName">School / Organisation Name <span class="required">*</span></label>
+              <input id="schoolName" name="schoolName" type="text" maxlength="120" autocomplete="organization" required />
+              <div class="error-text" id="schoolNameError"></div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="phone">Phone Number <span class="required">*</span></label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                inputmode="numeric"
+                maxlength="10"
+                pattern="\d{10}"
+                autocomplete="tel"
+                placeholder="10 digit mobile number"
+                required
+              />
+              <div class="error-text" id="phoneError"></div>
+            </div>
+
+            <div class="field">
+              <label for="email">Email Address</label>
+              <input id="email" name="email" type="email" maxlength="120" autocomplete="email" placeholder="Optional" />
+              <div class="error-text" id="emailError"></div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="schoolId">School User ID</label>
+              <input id="schoolId" name="schoolId" type="text" maxlength="50" placeholder="Optional" />
+              <div class="help">Do not enter your password.</div>
+            </div>
+
+            <div class="field">
+              <label for="category">Issue Category <span class="required">*</span></label>
+              <select id="category" name="category" required>
+                <option value="">Select category</option>
+                <option value="Login Problem">Login Problem</option>
+                <option value="Enrollment Problem">Enrollment Problem</option>
+                <option value="Create New ID">Create New ID</option>
+                <option value="Edit Existing ID">Edit Existing ID</option>
+                <option value="Camera or Photo Upload">Camera or Photo Upload</option>
+                <option value="ID Preview or PDF">ID Preview or PDF</option>
+                <option value="Payment or Credit">Payment or Credit</option>
+                <option value="Privacy or Data Request">Privacy or Data Request</option>
+                <option value="Other">Other</option>
+              </select>
+              <div class="error-text" id="categoryError"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="subject">Subject <span class="required">*</span></label>
+            <input id="subject" name="subject" type="text" maxlength="120" required placeholder="Brief summary of the issue" />
+            <div class="error-text" id="subjectError"></div>
+          </div>
+
+          <div class="field">
+            <label for="message">Describe the Issue <span class="required">*</span></label>
+            <textarea
+              id="message"
+              name="message"
+              maxlength="1500"
+              required
+              placeholder="What happened, what you expected, and any error message shown..."
+            ></textarea>
+            <div class="help"><span id="messageCount">0</span>/1500 characters</div>
+            <div class="error-text" id="messageError"></div>
+          </div>
+
+          <div class="checkbox-row">
+            <input id="consent" name="consent" type="checkbox" required />
+            <label for="consent">
+              I confirm that the information provided is correct and I agree that
+              Penport India may use it to respond to this support request.
+              <span class="required">*</span>
+            </label>
+          </div>
+          <div class="error-text" id="consentError"></div>
+
+          <div id="formStatus" class="status" role="status" aria-live="polite"></div>
+
+          <div class="actions">
+            <button id="submitBtn" type="submit">Send Support Request</button>
+            <span class="help">Never share your password or unnecessary student data.</span>
+          </div>
+        </form>
+      </section>
+
+      <aside class="card side-card">
+        <span class="section-label">LIM Help</span>
+        <h2>Before sending</h2>
+
+        <div class="contact-point">
+          <strong>Login issues</strong>
+          <p>Mention the registered phone number and school user ID, but never share the password.</p>
+        </div>
+
+        <div class="contact-point">
+          <strong>ID or enrollment issues</strong>
+          <p>Mention whether the record is for a student or staff member and include only the last 5 enrollment digits when possible.</p>
+        </div>
+
+        <div class="contact-point">
+          <strong>Photo or PDF issues</strong>
+          <p>Mention the device, browser and exact error shown on the screen.</p>
+        </div>
+
+        <div class="tips">
+          <strong>Privacy reminder</strong>
+          <ul>
+            <li>Do not send full passwords.</li>
+            <li>Avoid unnecessary student records.</li>
+            <li>Share screenshots only after hiding sensitive details.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    © 2026 Penport India. LIM – Lakshmi ID Maker. All rights reserved.
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script type="module">
+    import { firebaseConfig } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    function sendSupportRequest(payload) {
+      return database.ref("supportRequests").push(payload);
+    }
+
+    const form = document.getElementById("contactForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const statusBox = document.getElementById("formStatus");
+    const messageInput = document.getElementById("message");
+    const messageCount = document.getElementById("messageCount");
+    const phoneInput = document.getElementById("phone");
+
+    const fields = {
+      name: document.getElementById("name"),
+      schoolName: document.getElementById("schoolName"),
+      phone: phoneInput,
+      email: document.getElementById("email"),
+      category: document.getElementById("category"),
+      subject: document.getElementById("subject"),
+      message: messageInput,
+      consent: document.getElementById("consent")
+    };
+
+    phoneInput.addEventListener("input", () => {
+      phoneInput.value = phoneInput.value.replace(/\D/g, "").slice(0, 10);
+    });
+
+    messageInput.addEventListener("input", () => {
+      messageCount.textContent = String(messageInput.value.length);
+    });
+
+    function setError(fieldName, message = "") {
+      const field = fields[fieldName];
+      const error = document.getElementById(fieldName + "Error");
+
+      if (error) error.textContent = message;
+      if (field && field.type !== "checkbox") {
+        field.setAttribute("aria-invalid", message ? "true" : "false");
+      }
+    }
+
+    function clearErrors() {
+      Object.keys(fields).forEach(name => setError(name));
+      statusBox.className = "status";
+      statusBox.textContent = "";
+    }
+
+    function validate() {
+      clearErrors();
+      let valid = true;
+
+      if (fields.name.value.trim().length < 2) {
+        setError("name", "Please enter your name.");
+        valid = false;
+      }
+
+      if (fields.schoolName.value.trim().length < 2) {
+        setError("schoolName", "Please enter the school or organisation name.");
+        valid = false;
+      }
+
+      if (!/^\d{10}$/.test(fields.phone.value.trim())) {
+        setError("phone", "Enter a valid 10 digit phone number.");
+        valid = false;
+      }
+
+      const email = fields.email.value.trim();
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setError("email", "Enter a valid email address.");
+        valid = false;
+      }
+
+      if (!fields.category.value) {
+        setError("category", "Please select an issue category.");
+        valid = false;
+      }
+
+      if (fields.subject.value.trim().length < 5) {
+        setError("subject", "Subject must be at least 5 characters.");
+        valid = false;
+      }
+
+      if (fields.message.value.trim().length < 15) {
+        setError("message", "Please describe the issue in at least 15 characters.");
+        valid = false;
+      }
+
+      if (!fields.consent.checked) {
+        setError("consent", "Please confirm consent before sending.");
+        valid = false;
+      }
+
+      return valid;
+    }
+
+    function showStatus(message, type) {
+      statusBox.textContent = message;
+      statusBox.className = "status show " + type;
+      statusBox.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+
+      if (!validate()) {
+        showStatus("Please correct the highlighted fields.", "error");
+        return;
+      }
+
+      const payload = {
+        name: fields.name.value.trim(),
+        schoolName: fields.schoolName.value.trim(),
+        phone: fields.phone.value.trim(),
+        email: fields.email.value.trim(),
+        schoolId: document.getElementById("schoolId").value.trim(),
+        category: fields.category.value,
+        subject: fields.subject.value.trim(),
+        message: fields.message.value.trim(),
+        submittedAt: new Date().toISOString(),
+        app: "LIM - Lakshmi ID Maker"
+      };
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending...";
+        showStatus("Sending your support request...", "success");
+
+        await sendSupportRequest(payload);
+
+        form.reset();
+        messageCount.textContent = "0";
+        showStatus("Your support request has been sent successfully.", "success");
+      } catch (error) {
+        console.error("Contact form error:", error);
+        showStatus(
+          "The request could not be sent. Please check your internet connection or try again later.",
+          "error"
+        );
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send Support Request";
+      }
+    });
+  </script>
+</body>
+</html>

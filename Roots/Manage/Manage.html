@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Record Management Console</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+
+        :root {
+            --primary-color: #047857;
+            --primary-light: #34d399;
+            --accent-color: #10b981;
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --shadow-lift: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --border-radius: 12px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-color);
+        }
+        .main-wrapper {
+            flex-grow: 1;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .ui-card {
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lift);
+            background-color: var(--card-bg);
+            margin-bottom: 30px;
+            border: none;
+            padding: 35px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #6c757d;
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 16px 20px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .input-group > .form-control {
+            border-radius: 8px 0 0 8px;
+            padding: 16px 20px;
+        }
+        .input-group .btn-search-icon {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            border-radius: 0 8px 8px 0;
+            margin-left: -1px;
+            padding: 12px 25px;
+            font-weight: 600;
+        }
+
+        .btn-barcode-icon {
+            background-color: #607d8b;
+            border-color: #607d8b;
+            color: white;
+            padding: 12px 18px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            margin-left: 10px;
+        }
+
+        #photoPreview {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--accent-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-bar {
+            padding: 1.25rem 2rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            margin-top: 20px;
+            font-size: 1rem;
+            border: 1px solid;
+        }
+        .message-bar-info {
+            background-color: #e3f2fd;
+            color: var(--primary-color);
+            border-color: #bbdefb;
+        }
+        .message-bar-warning {
+            background-color: #fffde7;
+            color: #ff9800;
+            border-color: #ffe082;
+        }
+        .message-bar-danger {
+            background-color: #ffebee;
+            color: #f44336;
+            border-color: #ef9a9a;
+        }
+
+        .card-header-separator {
+            font-weight: 700;
+            color: var(--primary-color);
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        :root {
+            --primary-color: #047857;
+            --primary-light: #ecfdf5;
+            --accent-color: #10b981;
+            --bg-color: #ffffff;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --muted-color: #6b7280;
+            --border-color: rgba(15, 23, 42, 0.1);
+            --shadow-lift: 0 14px 36px rgba(15, 23, 42, 0.08);
+            --shadow-hover: 0 20px 48px rgba(15, 23, 42, 0.12);
+            --border-radius: 14px;
+        }
+
+        body {
+            background: #ffffff;
+            color: var(--text-color);
+        }
+
+        .main-wrapper {
+            max-width: 1680px;
+            padding: 2rem 1.25rem 3rem;
+        }
+
+        .ui-card {
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lift);
+            padding: 1.25rem;
+        }
+
+        .top-panel {
+            display: grid;
+            grid-template-columns: 1fr minmax(420px, 680px);
+            gap: 1.25rem;
+            align-items: center;
+            position: sticky;
+            top: 1rem;
+            z-index: 10;
+        }
+
+        .brand-block h1 {
+            margin: 0;
+            font-size: 1.9rem;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        .brand-block p {
+            margin: 0.2rem 0 0;
+            color: var(--muted-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .search-tools {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 0.65rem;
+            align-items: end;
+        }
+
+        .form-label {
+            color: var(--muted-color);
+            font-weight: 800;
+            letter-spacing: 0.08em;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 0 1rem;
+            min-height: 44px;
+            font-weight: 600;
+            box-shadow: none;
+        }
+
+        .top-panel .form-label {
+            display: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(4, 120, 87, 0.12);
+        }
+
+        .input-group > .form-control {
+            border-radius: 12px 0 0 12px;
+            min-height: 46px;
+        }
+
+        .input-group .btn-search-icon,
+        .btn-barcode-icon,
+        .btn-clear-search {
+            min-height: 46px;
+            border-radius: 12px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+            white-space: nowrap;
+        }
+
+        .input-group .btn-search-icon {
+            border-radius: 0 12px 12px 0;
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 0 1rem;
+        }
+
+        .btn-barcode-icon,
+        .btn-clear-search {
+            margin-left: 0;
+            padding: 0 1rem;
+        }
+
+        .btn-barcode-icon {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+
+        .btn-clear-search {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--muted-color);
+        }
+
+        .input-group .btn-search-icon:hover,
+        .btn-barcode-icon:hover,
+        .btn-clear-search:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+        }
+
+        #loadingSpinner {
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background: #ffffff;
+            box-shadow: var(--shadow-lift);
+        }
+
+        body.is-searching .main-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        body.is-searching .top-panel,
+        body.is-searching #updateForm,
+        body.is-searching #infoMessage {
+            display: none !important;
+        }
+
+        body.is-searching #loadingSpinner {
+            display: block !important;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            padding: 0 !important;
+        }
+
+        body.is-searching #loadingSpinner p {
+            display: none;
+        }
+
+        .message-bar {
+            border-radius: 12px;
+            box-shadow: none;
+        }
+
+        .message-bar-info {
+            background: var(--primary-light);
+            color: var(--primary-color);
+            border-color: rgba(4, 120, 87, 0.18);
+        }
+
+        #updateForm {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .record-hero {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1.25rem;
+            align-items: center;
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        #photoPreview {
+            width: 132px;
+            height: 132px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: none;
+            background: #f8fafc;
+        }
+
+        .record-title {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-color);
+            overflow-wrap: anywhere;
+        }
+
+        .record-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.7rem;
+        }
+
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border: 1px solid var(--border-color);
+            background: #f8fafc;
+            border-radius: 999px;
+            padding: 0.35rem 0.65rem;
+            font-size: 0.82rem;
+            color: var(--text-color);
+            font-weight: 700;
+        }
+
+        .record-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .icon-action {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            color: var(--text-color);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .record-body {
+            padding: 1.25rem;
+        }
+
+        .card-header-separator {
+            color: var(--text-color);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .record-actions-panel {
+            border-top: 1px solid var(--border-color);
+            padding: 1.25rem;
+            background: #f8fafc;
+        }
+
+        .record-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+        }
+
+        .record-actions .btn,
+        .photo-action {
+            border-radius: 12px;
+            min-height: 44px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            padding: 0 1rem;
+        }
+
+        .btn-warning {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #ffffff;
+        }
+
+        .btn-warning:hover {
+            background: #065f46;
+            border-color: #065f46;
+            color: #ffffff;
+        }
+
+        .btn-danger {
+            background: #ffffff;
+            border-color: rgba(239, 68, 68, 0.35);
+            color: #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: #fef2f2;
+            border-color: rgba(239, 68, 68, 0.55);
+            color: #ef4444;
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            border-color: var(--border-color);
+            color: var(--muted-color);
+        }
+
+        .photo-action {
+            margin-top: 0.8rem;
+        }
+
+        .photo-upload-head .photo-action {
+            width: 36px;
+            min-height: 36px;
+            height: 36px;
+            padding: 0;
+            margin-top: 0;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 980px) {
+            .top-panel,
+            .record-hero {
+                grid-template-columns: 1fr;
+            }
+
+            .search-tools {
+                grid-template-columns: 1fr;
+            }
+
+            .record-toolbar,
+            .record-actions {
+                justify-content: flex-start;
+            }
+        }
+
+        body {
+            background: #ffffff;
+        }
+
+        .main-wrapper {
+            max-width: 1500px;
+            padding: 24px;
+        }
+
+        body.search-home .main-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ui-card {
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            border-radius: 12px;
+            box-shadow: none;
+            background: #ffffff;
+        }
+
+        .top-panel {
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            margin: 18px 0 28px;
+            position: static;
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        body.search-home .top-panel {
+            margin: auto 0;
+        }
+
+        .search-tools {
+            width: min(100%, 520px);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(320px, 1fr);
+            gap: 8px;
+            align-items: end;
+        }
+
+        .form-label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #64748b;
+            letter-spacing: 0.08em;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            min-height: 42px;
+            border-radius: 10px;
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            font-weight: 650;
+        }
+
+        .input-group > .form-control {
+            min-height: 44px;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .input-group .btn-search-icon,
+        .btn-barcode-icon,
+        .btn-clear-search {
+            min-height: 44px;
+            border-radius: 10px;
+            box-shadow: none;
+            padding: 0;
+        }
+
+        .input-group .btn-search-icon {
+            width: 44px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .btn-barcode-icon,
+        .btn-clear-search {
+            width: 44px;
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            color: #334155;
+        }
+
+        .btn-barcode-icon:hover,
+        .btn-clear-search:hover {
+            background: #f8fafc;
+            transform: none;
+            box-shadow: none;
+        }
+
+        #updateForm {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .record-hero {
+            display: grid;
+            grid-template-columns: 112px 1fr auto;
+            gap: 18px;
+            align-items: center;
+            padding: 18px;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+            background: #ffffff;
+        }
+
+        #photoPreview {
+            width: 112px;
+            height: 112px;
+            border-radius: 12px;
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            object-fit: cover;
+            box-shadow: none;
+        }
+
+        .record-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .record-meta {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .meta-pill {
+            background: #f8fafc;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 0.78rem;
+        }
+
+        .icon-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+        }
+
+        .record-body {
+            background: #f8fafc;
+            padding: 18px;
+        }
+
+        .card-header-separator {
+            margin: 0 0 14px;
+            padding: 0;
+            border: 0;
+            color: #111827;
+            font-size: 0.95rem;
+            font-weight: 800;
+        }
+
+        .field-card {
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.09);
+            border-radius: 12px;
+            padding: 12px;
+            min-height: 98px;
+        }
+
+        .field-card .form-label {
+            line-height: 1.2;
+        }
+
+        .field-card .form-control {
+            background: #ffffff;
+        }
+
+        .field-card .form-control:disabled {
+            background: #f8fafc;
+            color: #64748b;
+        }
+
+        .record-actions-panel {
+            background: #ffffff;
+            border-top: 1px solid rgba(15, 23, 42, 0.08);
+            padding: 18px;
+        }
+
+        .photo-upload-card {
+            border: 1px solid rgba(15, 23, 42, 0.09);
+            border-radius: 12px;
+            background: #f8fafc;
+            padding: 12px;
+        }
+
+        .photo-upload-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .photo-upload-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #111827;
+            font-weight: 800;
+            font-size: 0.86rem;
+        }
+
+        .photo-upload-title i {
+            width: 30px;
+            height: 30px;
+            border-radius: 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #ecfdf5;
+            color: #047857;
+        }
+
+        .photo-upload-input {
+            display: none;
+        }
+
+        .photo-upload-btn {
+            min-height: 42px;
+            border-radius: 10px;
+            border: 1px dashed rgba(4, 120, 87, 0.35);
+            background: #ffffff;
+            color: #047857;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background-color 0.18s ease, border-color 0.18s ease;
+            width: 100%;
+        }
+
+        .photo-upload-btn:hover {
+            background: #ecfdf5;
+            border-color: rgba(4, 120, 87, 0.55);
+        }
+
+        .photo-file-name {
+            display: block;
+            margin-top: 8px;
+            color: #64748b;
+            font-size: 0.78rem;
+            font-weight: 700;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .record-actions .btn,
+        .photo-action {
+            min-height: 42px;
+            border-radius: 10px;
+            font-weight: 800;
+            box-shadow: none;
+        }
+
+        .message-bar {
+            max-width: 760px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 12px 16px;
+            display: none !important;
+        }
+
+        .record-hero {
+            grid-template-columns: 118px 1fr auto;
+            gap: 20px;
+            padding: 18px;
+            background: #ffffff;
+        }
+
+        .photo-frame {
+            width: 118px;
+            height: 118px;
+            border-radius: 16px;
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            background: #f8fafc;
+            padding: 5px;
+        }
+
+        .photo-frame #photoPreview {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .record-type-badge {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            border-radius: 999px;
+            padding: 5px 10px;
+            background: #ecfdf5;
+            color: #047857;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+        }
+
+        .record-identity {
+            min-width: 0;
+        }
+
+        .record-title {
+            margin: 8px 0 12px;
+            font-size: 1.32rem;
+            line-height: 1.25;
+        }
+
+        .record-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .summary-item {
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 12px;
+            background: #f8fafc;
+            padding: 10px 12px;
+            min-width: 0;
+        }
+
+        .summary-item span {
+            display: block;
+            color: #64748b;
+            font-size: 0.68rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .summary-item strong {
+            display: block;
+            color: #111827;
+            font-size: 0.86rem;
+            font-weight: 800;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .record-meta {
+            display: none;
+        }
+
+        @media (max-width: 760px) {
+            .main-wrapper {
+                padding: 12px;
+            }
+
+            .search-tools {
+                grid-template-columns: 1fr;
+            }
+
+            .record-hero {
+                grid-template-columns: 1fr;
+            }
+
+            .record-summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+</head>
+<body class="search-home">
+    <div class="main-wrapper">
+
+        <div class="ui-card top-panel">
+            <div class="search-tools">
+                <div>
+                    <label for="enrollNo" class="form-label">Enrollment Number</label>
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            id="enrollNo"
+                            class="form-control"
+                            placeholder="ENTER FULL UNIQUE ID TO SEARCH"
+                            oninput="this.value = this.value.toUpperCase()"
+                            onkeypress="if(event.key === 'Enter') window.searchRecord()"
+                        />
+                        <button onclick="window.searchRecord()" class="btn btn-search-icon" type="button" title="Search Record">
+                             <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="loadingSpinner" class="text-center py-5" style="display:none;">
+            <div class="spinner-border text-primary" role="status" style="width: 3.5rem; height: 3.5rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="text-primary mt-3 fs-5"><span id="spinnerMessage">Processing request...</span></p>
+        </div>
+
+        <div class="ui-card" id="updateForm" style="display:none;">
+            </div>
+
+        <div id="infoMessage" class="message-bar message-bar-info text-center" style="display:none;"></div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module">
+
+        import { firebaseConfig, cloudinaryConfig } from '../Database/Database.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getDatabase, ref as dbRef, get, update, remove, set } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const CLOUDINARY_UPLOAD_URL = cloudinaryConfig.uploadUrl;
+        const CLOUDINARY_UPLOAD_PRESET = cloudinaryConfig.uploadPreset;
+        const CLOUDINARY_SIGNED = !!cloudinaryConfig.signed || false;
+
+        let currentSchoolName = "";
+        let currentSchoolId = "";
+        let currentType = "";
+        let currentEnroll = "";
+
+        function setInfoMessage(message, type = 'info') {
+            const form = document.getElementById("updateForm");
+            if (form && !form.innerHTML.trim()) form.style.display = "none";
+        }
+
+        function showSpinner(message = "Processing request...") {
+            document.body.classList.add("is-searching");
+            const spinner = document.getElementById("loadingSpinner");
+            const spinnerMsg = document.getElementById("spinnerMessage");
+            if (spinner) spinner.style.display = "block";
+            if (spinnerMsg) spinnerMsg.textContent = message;
+            const form = document.getElementById("updateForm");
+            if (form) form.style.display = "none";
+            const info = document.getElementById("infoMessage");
+            if (info) info.style.display = "none";
+        }
+
+        function hideSpinner() {
+            document.body.classList.remove("is-searching");
+            const spinner = document.getElementById("loadingSpinner");
+            if (spinner) spinner.style.display = "none";
+        }
+
+        async function logError(message, sourceFn) {
+            try {
+                const now = new Date().toISOString().replace(/:/g, "-");
+                const ref = dbRef(database, `errors/${now}`);
+                const log = {
+                    message: String(message || "Unknown error"),
+                    function: sourceFn || "unknown",
+                    time: new Date().toISOString(),
+                    user: currentEnroll || "UNKNOWN"
+                };
+
+                await set(ref, log);
+            } catch (e) {
+                console.error("Logging failed:", e);
+            }
+        }
+
+        async function uploadToCloudinary(file) {
+            if (!CLOUDINARY_UPLOAD_URL) {
+                throw new Error("Cloudinary upload URL is missing (cloudinaryConfig.uploadUrl).");
+            }
+            if (!file) throw new Error("No file provided for upload.");
+
+            async function doUpload(usePublicId = false) {
+                const formData = new FormData();
+                formData.append("file", file);
+                if (CLOUDINARY_UPLOAD_PRESET) formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+                const folder = currentSchoolId ? `${currentSchoolId}/${currentType.toLowerCase()}` : `${currentType.toLowerCase()}`;
+                formData.append("folder", folder);
+                if (usePublicId && currentEnroll) {
+
+                    formData.append("public_id", String(currentEnroll));
+
+                    formData.append("overwrite", "true");
+                }
+
+                const resp = await fetch(CLOUDINARY_UPLOAD_URL, {
+                    method: "POST",
+                    body: formData,
+                });
+
+                const text = await resp.text();
+                let json;
+                try { json = JSON.parse(text); } catch (e) { json = null; }
+
+                return { ok: resp.ok, status: resp.status, json, rawText: text };
+            }
+
+            try {
+
+                let attempt = await doUpload(CLOUDINARY_SIGNED);
+
+                if (!attempt.ok) {
+                    console.warn("Cloudinary first attempt failed", attempt.status, attempt.json || attempt.rawText);
+
+                    const retry = await doUpload(false);
+                    if (!retry.ok) {
+                        console.error("Cloudinary retry failed:", retry.status, retry.json || retry.rawText);
+                        const errMsg = (retry.json && retry.json.error && retry.json.error.message) ? retry.json.error.message : `Cloudinary failed with status ${retry.status}`;
+                        throw new Error(errMsg);
+                    } else {
+                        attempt = retry;
+                    }
+                }
+
+                const data = attempt.json;
+                if (!data) throw new Error("Cloudinary returned unexpected response: " + attempt.rawText);
+
+                if (data.secure_url) {
+                    return data.secure_url;
+                } else if (data.url) {
+                    return data.url;
+                } else {
+                    throw new Error("Cloudinary upload succeeded but no URL returned.");
+                }
+            } catch (err) {
+                console.error("uploadToCloudinary error:", err);
+                throw err;
+            }
+        }
+
+        function cacheBusted(url) {
+            if (!url) return url;
+            const t = Date.now();
+            return url.includes("?") ? `${url}&t=${t}` : `${url}?t=${t}`;
+        }
+
+        function escapeHtml(value) {
+            if (value === null || value === undefined) return "";
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        window.clearForm = function (full = true) {
+            const form = document.getElementById("updateForm");
+            if (form) {
+                form.innerHTML = "";
+                form.style.display = "none";
+            }
+            if (full) {
+                document.body.classList.add("search-home");
+                const enrollEl = document.getElementById("enrollNo");
+                if (enrollEl) enrollEl.value = "";
+                currentType = "";
+                currentEnroll = "";
+                currentSchoolName = "";
+                currentSchoolId = "";
+                const info = document.getElementById("infoMessage");
+                if (info) info.style.display = "none";
+                if (enrollEl) enrollEl.focus();
+            }
+        };
+
+        window.startScanner = function() {
+            const enrollEl = document.getElementById("enrollNo");
+            if (enrollEl) enrollEl.focus();
+            alert("Barcode scanner activated. Please scan the Enrollment ID.");
+        }
+
+        window.copyCurrentId = async function() {
+            if (!currentEnroll) return setInfoMessage("No record ID available to copy.", 'warning');
+            try {
+                await navigator.clipboard.writeText(currentEnroll);
+                setInfoMessage(`<i class="fas fa-copy me-2"></i> ID ${currentEnroll} copied.`, 'info');
+            } catch (err) {
+                console.error("Copy failed:", err);
+                setInfoMessage("Unable to copy ID.", 'warning');
+            }
+        };
+
+        window.searchRecord = async function () {
+            const enrollEl = document.getElementById("enrollNo");
+            const enroll = enrollEl ? enrollEl.value.trim().toUpperCase() : "";
+            if (!enroll) return setInfoMessage("Please enter an Enrollment Number / Staff ID to search.", 'warning');
+            if (!navigator.onLine) return setInfoMessage("You're offline. Please check your connection.", 'danger');
+
+            showSpinner(`Searching for ${enroll}...`);
+            window.clearForm(false);
+
+            try {
+                const masterRef = dbRef(database, "DATA-MASTER");
+                const masterSnap = await get(masterRef);
+
+                if (!masterSnap.exists()) {
+                    hideSpinner();
+                    return setInfoMessage('<i class="fas fa-exclamation-triangle me-2"></i> Master data node is empty.', 'danger');
+                }
+
+                const masterData = masterSnap.val();
+                let found = false, recordData = null;
+                outerLoop:
+                for (const schoolName in masterData) {
+                    for (const schoolId in masterData[schoolName]) {
+                        const schoolNode = masterData[schoolName][schoolId];
+                        if (!schoolNode) continue;
+
+                        if (schoolNode.STAFF && schoolNode.STAFF[enroll]) {
+                            found = true;
+                            currentSchoolName = schoolName;
+                            currentSchoolId = schoolId;
+                            currentType = "STAFF";
+                            currentEnroll = enroll;
+                            recordData = schoolNode.STAFF[enroll];
+                            break outerLoop;
+                        }
+                        if (schoolNode.STUDENT && schoolNode.STUDENT[enroll]) {
+                            found = true;
+                            currentSchoolName = schoolName;
+                            currentSchoolId = schoolId;
+                            currentType = "STUDENT";
+                            currentEnroll = enroll;
+                            recordData = schoolNode.STUDENT[enroll];
+                            break outerLoop;
+                        }
+                    }
+                }
+
+                hideSpinner();
+                if (!found) {
+                    setInfoMessage(`<i class="fas fa-search-minus me-2"></i> Record Not Found: ID ${enroll} was not located.`, 'warning');
+                } else {
+                    renderForm(currentType, recordData || {});
+                    setInfoMessage(`<i class="fas fa-check-circle me-2"></i> Record ${currentEnroll} loaded.`, 'info');
+                    const form = document.getElementById("updateForm");
+                    if (form) form.style.display = "block";
+                }
+            } catch (err) {
+                hideSpinner();
+                console.error("searchRecord error:", err);
+                await logError(err.message || err, "searchRecord");
+                setInfoMessage('<i class="fas fa-bug me-2"></i> System error occurred. See console.', 'danger');
+            }
+        };
+
+        function renderForm(type, data = {}) {
+            const form = document.getElementById("updateForm");
+            if (!form) return console.warn("updateForm not found");
+            document.body.classList.remove("search-home");
+
+            const disabledFields = ["schoolName", "schoolId", "staff_enroll", "student_enroll", "timestamp"];
+            const recordName = (data.staff_name || data.student_name || currentEnroll || "").toUpperCase();
+
+            let photoUrl = data.photo || 'https://via.placeholder.com/150/cccccc/000000?text=No+Photo';
+            if (photoUrl && photoUrl !== 'https://via.placeholder.com/150/cccccc/000000?text=No+Photo') {
+                photoUrl = cacheBusted(photoUrl);
+            }
+
+            let html = `
+                <div class="record-hero">
+                    <div class="photo-frame">
+                        <img id="photoPreview" src="${photoUrl}" alt="Record Photo" />
+                    </div>
+                    <div class="record-identity">
+                        <span class="record-type-badge">${escapeHtml(type)}</span>
+                        <h4 class="record-title">${escapeHtml(recordName || currentEnroll)}</h4>
+                        <div class="record-summary-grid">
+                            <div class="summary-item">
+                                <span>Enrollment</span>
+                                <strong title="${escapeHtml(currentEnroll)}">${escapeHtml(currentEnroll)}</strong>
+                            </div>
+                            <div class="summary-item">
+                                <span>School Name</span>
+                                <strong title="${escapeHtml(currentSchoolName)}">${escapeHtml(currentSchoolName)}</strong>
+                            </div>
+                            <div class="summary-item">
+                                <span>School ID</span>
+                                <strong title="${escapeHtml(currentSchoolId)}">${escapeHtml(currentSchoolId)}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="record-toolbar">
+                        <button class="icon-action" onclick="window.copyCurrentId()" type="button" title="Copy ID">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button class="icon-action" onclick="window.clearForm(true)" type="button" title="Clear">
+                            <i class="fas fa-eraser"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="record-body">
+                    <h5 class="card-header-separator">Edit Details</h5>
+                    <div class="row g-4">`;
+
+            const keys = Object.keys(data).sort();
+            keys.forEach((key) => {
+                if (["photo", "timestamp", "schoolName", "schoolId", "staff_enroll", "student_enroll"].includes(key)) return;
+                const label = key.replace(/_/g, " ").toUpperCase();
+                const val = String(data[key] || "").toUpperCase();
+                const disabled = disabledFields.includes(key) ? "disabled" : "";
+                html += `
+                    <div class="col-xl-4 col-lg-6 col-md-6">
+                        <div class="field-card">
+                            <label class="form-label" for="${escapeHtml(key)}">${escapeHtml(label)}</label>
+                            <input type="text" class="form-control text-uppercase" id="${escapeHtml(key)}" value="${escapeHtml(val)}" ${disabled} oninput="this.value=this.value.toUpperCase()" />
+                        </div>
+                    </div>`;
+            });
+
+            html += `</div>
+                </div>
+                <div class="record-actions-panel">
+                    <div class="row g-3 align-items-end">
+                    <div class="col-lg-5 col-md-6">
+                        <div class="photo-upload-card">
+                            <div class="photo-upload-head">
+                                <div class="photo-upload-title"><i class="fas fa-image"></i> Photo</div>
+                                ${data.photo ? `<button onclick="window.downloadPhoto('${data.photo}', '${currentEnroll}.jpg')" class="btn btn-primary photo-action" type="button"><i class="fas fa-download"></i></button>` : ''}
+                            </div>
+                            <input type="file" id="newPhoto" class="photo-upload-input" accept="image/*" />
+                            <label for="newPhoto" class="photo-upload-btn">
+                                <i class="fas fa-cloud-arrow-up"></i>
+                                Upload New Photo
+                            </label>
+                            <span id="photoFileName" class="photo-file-name">No file selected</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-md-6">
+                        <div class="record-actions">
+                            <button class="btn btn-warning" onclick="window.updateRecord()"><i class="fas fa-floppy-disk"></i> Update</button>
+                            <button class="btn btn-danger" onclick="window.deleteRecord()"><i class="fas fa-trash-alt"></i> Delete</button>
+                            <button class="btn btn-secondary" onclick="window.clearForm(true)"><i class="fas fa-eraser"></i> Clear</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>`;
+
+            form.innerHTML = html;
+
+            const newPhotoEl = document.getElementById("newPhoto");
+            const preview = document.getElementById("photoPreview");
+            const photoFileName = document.getElementById("photoFileName");
+            newPhotoEl?.addEventListener("change", (e) => {
+                const file = e.target.files?.[0];
+                if (file && preview) {
+                    preview.src = URL.createObjectURL(file);
+                }
+                if (photoFileName) {
+                    photoFileName.textContent = file ? file.name : "No file selected";
+                }
+            });
+        }
+
+        window.updateRecord = async function () {
+            if (!currentSchoolName || !currentSchoolId || !currentType || !currentEnroll) {
+                return setInfoMessage("Please search a record before updating.", 'warning');
+            }
+
+            const path = `DATA-MASTER/${currentSchoolName}/${currentSchoolId}/${currentType}/${currentEnroll}`;
+            const ref = dbRef(database, path);
+
+            try {
+                const snapshot = await get(ref);
+                const existing = snapshot.exists() ? snapshot.val() : {};
+                const inputs = Array.from(document.querySelectorAll("#updateForm input[type='text']"));
+                const updated = {};
+                let hasChanges = false;
+
+                inputs.forEach((el) => {
+                    const id = el.id;
+                    const val = String(el.value || "").trim().toUpperCase();
+                    const old = (existing[id] !== undefined && existing[id] !== null) ? String(existing[id]).toUpperCase() : "";
+                    updated[id] = val;
+                    if (!el.disabled && val !== old) hasChanges = true;
+                });
+                const disabledFieldsToRetain = ["schoolName", "schoolId", "staff_enroll", "student_enroll", "timestamp"];
+                disabledFieldsToRetain.forEach(k => {
+                    if (existing[k] !== undefined && updated[k] === undefined) updated[k] = existing[k];
+                });
+                const fileInput = document.getElementById("newPhoto");
+                const file = fileInput?.files?.[0];
+
+                showSpinner("Uploading image (if any) and saving...");
+
+                let photoUpdated = false;
+                let newPhotoURL = existing.photo || "";
+
+                if (file) {
+                    try {
+                        newPhotoURL = await uploadToCloudinary(file);
+                        photoUpdated = true;
+                    } catch (err) {
+                        console.error("Image upload failed:", err);
+                        await logError(err.message || err, "uploadToCloudinary");
+                        hideSpinner();
+                        return setInfoMessage(`<i class="fas fa-times-circle me-2"></i> Photo upload failed: ${err.message}`, 'danger');
+                    }
+                }
+
+                updated.photo = newPhotoURL;
+                if (photoUpdated) hasChanges = true;
+
+                if (!hasChanges) {
+                    hideSpinner();
+                    return setInfoMessage("No changes found to update.", 'info');
+                }
+                await update(ref, updated);
+                const newSnap = await get(ref);
+                const newData = newSnap.exists() ? newSnap.val() : { ...existing, ...updated };
+                renderForm(currentType, newData);
+                if (file && window.URL && document.getElementById("photoPreview")) {
+                    try { URL.revokeObjectURL(document.getElementById("photoPreview").src); } catch(e){ }
+                }
+                if (fileInput) { fileInput.value = ""; }
+
+                setInfoMessage(`<i class="fas fa-check-circle me-2"></i> Record ${currentEnroll} updated successfully.`, 'info');
+                hideSpinner();
+            } catch (err) {
+                console.error("updateRecord error:", err);
+                await logError(err.message || err, "updateRecord");
+                hideSpinner();
+                alert("Update failed: " + (err.message || err));
+            }
+        };
+
+        window.deleteRecord = async function () {
+            if (!currentSchoolName || !currentSchoolId || !currentType || !currentEnroll)
+                return setInfoMessage("Please search a record before deleting.", 'warning');
+
+            const confirmDelete = confirm(`Are you sure you want to permanently delete the record for ${currentEnroll}? THIS CANNOT BE UNDONE.`);
+            if (!confirmDelete) return;
+
+            try {
+                showSpinner("Deleting record...");
+                const recordRef = dbRef(database, `DATA-MASTER/${currentSchoolName}/${currentSchoolId}/${currentType}/${currentEnroll}`);
+                const snapshot = await get(recordRef);
+
+                if (!snapshot.exists()) {
+                    hideSpinner();
+                    setInfoMessage("Record not found. Already deleted or moved.", 'danger');
+                    window.clearForm(true);
+                    return;
+                }
+
+                await remove(recordRef);
+                window.clearForm(true);
+                setInfoMessage(`<i class="fas fa-trash-alt me-2"></i> Deleted: Record ${currentEnroll} removed.`, 'warning');
+            } catch (err) {
+                console.error("deleteRecord error:", err);
+                await logError(err.message || err, "deleteRecord");
+                hideSpinner();
+                alert("Delete failed: " + (err.message || err));
+            } finally {
+                hideSpinner();
+            }
+        };
+
+        window.downloadPhoto = async function (url, filename) {
+            if (!url) return setInfoMessage("Photo URL is missing.", 'warning');
+            try {
+                const response = await fetch(url, { mode: 'cors' });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const blob = await response.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = blobUrl;
+                a.download = filename || 'photo.jpg';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(blobUrl);
+                setInfoMessage(`<i class="fas fa-download me-2"></i> Photo downloaded successfully.`, 'info');
+            } catch (err) {
+                console.error("Download error:", err);
+                alert("Unable to download image.");
+            }
+        };
+        </script>
+
+</body>
+</html>

@@ -1,0 +1,2019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Penport ID Card Solution | Admin Billing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --bg: #f7f9fa;
+            --card: #ffffff;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            padding: 30px 15px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 1100px;
+        }
+        .card {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        h1 {
+            color: var(--primary-dark);
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 30px;
+        }
+        .section {
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .col {
+            flex: 1;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 9px;
+            border: 1px solid transparent;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+        }
+        .btn-ghost {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border-color);
+        }
+        .btn-ghost:hover:not(:disabled) {
+            background: #f1f5f9;
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-danger:hover:not(:disabled) {
+            background: #c33;
+        }
+        .btn.active-role {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+        }
+        .btn.active-role:hover:not(:disabled) {
+            background: var(--primary-dark);
+        }
+
+
+        .label {
+            display: block;
+            font-weight: 600;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+        .input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 9px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            font-size: 1rem;
+            color: var(--text);
+            background-color: #fcfdfe;
+        }
+        .input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        .small {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .mt-20 {
+            margin-top: 20px;
+        }
+        .label-tight {
+            margin-top: 0;
+        }
+        .flex-fill {
+            flex: 1;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .modal-title {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        #deleteBtn {
+            display: none;
+        }
+        .alert {
+            padding: 12px;
+            border-radius: 9px;
+            margin-top: 15px;
+            font-weight: 600;
+            display: none;
+        }
+        .alert.success {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .alert.error {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+
+        .role-indicator {
+            padding: 12px 20px;
+            border-radius: 12px;
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+            margin-bottom: 24px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        .credit-box {
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 10px;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: var(--success);
+        }
+        .credit-box.due-state {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            color: var(--warning);
+        }
+        .big {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .status {
+            display: inline-block;
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        .status-active {
+            background: var(--primary);
+            color: #fff;
+        }
+        .status-deactive {
+            background: var(--danger);
+            color: #fff;
+        }
+
+
+        .modal {
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+        .modal-content {
+            background-color: var(--card);
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .close-btn {
+            color: var(--text-light);
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-btn:hover,
+        .close-btn:focus {
+            color: var(--danger);
+        }
+
+        .history-item {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1fr;
+            gap: 15px;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        .history-header {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1fr;
+            gap: 15px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--primary);
+            padding: 5px 0 10px 0;
+            margin-bottom: 0px;
+        }
+        .history-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+        .history-details span {
+            display: block;
+        }
+        .history-label {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        .adjustment-danger,
+        .amount-muted,
+        .history-error {
+            color: var(--danger);
+        }
+        .icon-warning {
+            color: var(--warning);
+        }
+        .icon-success,
+        .adjustment-success,
+        .amount-positive {
+            color: var(--primary-dark);
+        }
+        .icon-wallet {
+            color: var(--success);
+        }
+        .transaction-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-top: 2px;
+        }
+        .history-amount-final {
+            font-weight: 800;
+            text-align: right;
+            font-size: 1.1rem;
+        }
+        .history-amount-final.amount-muted {
+            color: var(--text-light);
+        }
+        .history-billing-tools {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+            padding: 14px;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 14px;
+            background: #f8fafc;
+        }
+        .history-bill-action {
+            margin-top: 8px;
+            width: 100%;
+            min-height: 34px;
+            font-size: 0.78rem;
+            padding: 0 10px;
+        }
+        .no-records {
+            text-align: center;
+            color: var(--text-light);
+            padding: 20px;
+            font-style: italic;
+        }
+
+
+        @media(max-width: 1000px) {
+            .controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+        @media(max-width: 880px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .controls {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 10px;
+            }
+            .history-header, .history-item {
+                grid-template-columns: 1fr 1fr;
+            }
+            .history-item-primary { order: 1; }
+            .history-details { order: 3; margin-top: 10px; }
+            .history-amount-final { order: 2; text-align: right; }
+        }
+        @media(max-width: 500px) {
+            .row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                width: 100%;
+            }
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+        }
+
+        body {
+            background: #ffffff;
+            padding: 24px;
+        }
+        .container {
+            max-width: 1680px;
+        }
+        .card {
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+        }
+        .header {
+            position: sticky;
+            top: 24px;
+            z-index: 20;
+            background: var(--card);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 16px;
+            padding: 16px 18px;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+        }
+        h1 {
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        h1 i,
+        h3 i {
+            color: var(--primary-dark);
+        }
+        .controls {
+            background: #f8fafc;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 14px;
+            padding: 6px;
+        }
+        .btn {
+            min-height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 11px;
+            font-weight: 800;
+        }
+        .btn-primary {
+            background: #047857;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #065f46;
+        }
+        .btn.active-role {
+            background: #047857;
+            box-shadow: 0 10px 18px rgba(4, 120, 87, 0.18);
+        }
+        .card-grid {
+            grid-template-columns: minmax(0, 1fr) 420px;
+            gap: 18px;
+        }
+        .section {
+            border-color: rgba(15, 23, 42, 0.08);
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: none;
+        }
+        .section h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 0;
+            margin-bottom: 18px;
+            padding-bottom: 0;
+        }
+        .input {
+            min-height: 44px;
+            border-radius: 12px;
+            border-color: rgba(15, 23, 42, 0.1);
+            background: #f8fafc;
+            font-weight: 700;
+        }
+        .input:focus {
+            background: #ffffff;
+            border-color: #047857;
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.12);
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .role-indicator {
+            background: #ecfdf5;
+            border-color: rgba(4, 120, 87, 0.18);
+            border-radius: 16px;
+        }
+        .credit-box {
+            border-radius: 16px;
+            border-color: rgba(4, 120, 87, 0.18);
+        }
+        .admin-stack {
+            display: grid;
+            gap: 18px;
+        }
+        .finance-stack {
+            display: grid;
+            gap: 18px;
+        }
+        .finance-panel {
+            padding: 0;
+            overflow: hidden;
+        }
+        .finance-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 18px;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        }
+        .finance-header h3 {
+            margin: 0;
+        }
+        .finance-card-body {
+            padding: 18px;
+        }
+        .wallet-card {
+            display: grid;
+            gap: 14px;
+            padding: 26px 18px 18px;
+            border-radius: 16px;
+            background: #ecfdf5;
+            border: 1px solid rgba(4, 120, 87, 0.18);
+        }
+        .wallet-top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            text-align: center;
+        }
+        .wallet-label {
+            display: none;
+        }
+        .wallet-value {
+            margin-top: 0;
+            font-size: 3.25rem;
+            line-height: 1;
+            font-weight: 950;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-align: center;
+        }
+        .wallet-stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+        .wallet-stat {
+            border-radius: 12px;
+            padding: 11px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(4, 120, 87, 0.12);
+        }
+        .wallet-stat span {
+            display: block;
+            color: var(--text-light);
+            font-size: 0.72rem;
+            font-weight: 850;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .wallet-stat strong {
+            display: block;
+            margin-top: 4px;
+            color: var(--text);
+            font-size: 1.05rem;
+            font-weight: 900;
+        }
+        .finance-actions {
+            margin-top: 18px;
+            display: grid;
+            gap: 16px;
+        }
+        .action-group {
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 16px;
+            padding: 14px;
+            background: #ffffff;
+        }
+        .action-group-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            color: var(--text);
+            font-size: 0.9rem;
+            font-weight: 900;
+        }
+        .action-group-title i {
+            color: var(--primary-dark);
+        }
+        .action-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 10px;
+            align-items: center;
+        }
+        #addCreditsInput,
+        #addCreditsBtn {
+            min-height: 54px;
+        }
+        #addCreditsInput {
+            padding: 0 18px;
+            font-size: 15px;
+            font-weight: 650;
+        }
+        #addCreditsBtn {
+            min-width: 110px;
+            padding: 0 24px;
+            font-size: 15px;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+        .stack-actions {
+            display: grid;
+            gap: 10px;
+        }
+        .bill-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+        .bill-grid .full {
+            grid-column: 1 / -1;
+        }
+        .bill-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin: 16px 0;
+        }
+        .bill-metric {
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 14px;
+            padding: 12px;
+            background: #f8fafc;
+        }
+        .bill-metric span {
+            color: var(--text-light);
+            font-size: 0.76rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .bill-metric strong {
+            display: block;
+            margin-top: 5px;
+            color: var(--text);
+            font-size: 1.1rem;
+        }
+        .bill-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .invoice-box {
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            border-radius: 10px;
+            padding: 28px;
+            background: #ffffff;
+            color: #111827;
+        }
+        .invoice-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            border-bottom: 2px solid #047857;
+            padding-bottom: 18px;
+            margin-bottom: 20px;
+        }
+        .invoice-brand {
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+        }
+        .invoice-title {
+            margin-top: 4px;
+            color: var(--text);
+            font-size: 0.82rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .invoice-meta {
+            min-width: 310px;
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f8fafc;
+            font-size: 0.84rem;
+            font-weight: 800;
+        }
+        .invoice-meta-row {
+            display: grid;
+            grid-template-columns: 105px 1fr;
+            gap: 12px;
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        }
+        .invoice-meta-row:last-child {
+            border-bottom: 0;
+        }
+        .invoice-meta-label {
+            color: var(--text-light);
+        }
+        .invoice-meta-value {
+            color: var(--text);
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+        .invoice-parties {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+        .invoice-party {
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 10px;
+            padding: 14px;
+            background: #f8fafc;
+        }
+        .invoice-party-label {
+            color: var(--text-light);
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border: 1px solid rgba(15, 23, 42, 0.1);
+        }
+        .invoice-table th,
+        .invoice-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+            text-align: left;
+        }
+        .invoice-table th {
+            background: #ecfdf5;
+            color: var(--text-light);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .invoice-total {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 16px;
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+        }
+        .invoice-note {
+            margin-top: 18px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            color: #475569;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+        .invoice-note strong {
+            color: #111827;
+        }
+        .invoice-footer {
+            margin-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            color: var(--text-light);
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+        @media(max-width: 1100px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media(max-width: 720px) {
+            .action-row,
+            .button-grid,
+            .wallet-stats {
+                grid-template-columns: 1fr;
+            }
+            .finance-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+        @media(max-width: 700px) {
+            .invoice-top {
+                flex-direction: column;
+            }
+            .invoice-meta {
+                min-width: 0;
+                width: 100%;
+            }
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #billModal,
+            #billModal * {
+                visibility: visible;
+            }
+            #billModal {
+                position: absolute;
+                inset: 0;
+                display: block !important;
+                background: #ffffff;
+            }
+            #billModal .close-btn,
+        #printBillBtn {
+                display: none;
+            }
+        }
+        #billingSection {
+            display: none;
+        }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <h1><i class="fas fa-id-card"></i> Penport India</h1>
+            <div class="controls">
+                <button id="btnManageDev" class="btn btn-ghost"><i class="fas fa-user-tie"></i> Developer</button>
+                <button id="btnManageManager" class="btn btn-ghost"><i class="fas fa-user-shield"></i> Manager</button>
+                <button id="btnManageVendor" class="btn btn-ghost"><i class="fas fa-store"></i> Vendor</button>
+            </div>
+        </div>
+
+        <div class="card-grid">
+            <div class="admin-stack">
+                <div id="roleIndicator" class="role-indicator"></div>
+                <div class="section" id="setupSection">
+                    <h3 id="setupTitle"><i class="fas fa-id-badge"></i> Role Details</h3>
+
+                    <label class="label">Name *</label>
+                    <input id="nameInput" class="input" placeholder="Full name" />
+
+                    <label class="label">Email *</label>
+                    <input id="emailInput" class="input" placeholder="email@example.com" />
+
+                    <label class="label">Phone</label>
+                    <input id="phoneInput" class="input" placeholder="+91-XXXXXXXXXX" />
+
+                    <div class="actions">
+                        <button id="saveBtn" class="btn btn-primary"><i class="fas fa-save"></i> Save / Update Details</button>
+                        <button id="deleteBtn" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete Role</button>
+                    </div>
+
+                    <div id="setupAlert" class="alert"></div>
+                </div>
+            </div>
+
+            <div class="finance-stack" id="managementSection">
+                <div class="section finance-panel">
+                    <div class="finance-header">
+                        <h3><i class="fas fa-wallet"></i> Vendor Finance</h3>
+                        <span id="statusBadge" class="status status-deactive">LOADING...</span>
+                    </div>
+                    <div class="finance-card-body">
+                        <div id="financeBox" class="credit-box wallet-card">
+                            <div class="wallet-top">
+                                <div>
+                                    <div class="wallet-label" id="displayTitle">Current Credits (Wallet)</div>
+                                    <div id="currentValue" class="big wallet-value">--</div>
+                                </div>
+                            </div>
+                            <div class="wallet-stats">
+                                <div class="wallet-stat">
+                                    <span>Available Credit</span>
+                                    <strong id="totalCreditDisplay">--</strong>
+                                </div>
+                                <div class="wallet-stat">
+                                    <span>Total Due</span>
+                                    <strong id="totalDueDisplay">--</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="finance-actions" id="vendorControls">
+                            <div class="action-group">
+                                <div class="action-group-title"><i class="fas fa-credit-card"></i> Payment / Recharge</div>
+                                <div class="action-row">
+                                    <input id="addCreditsInput" class="input col" type="number" min="1" placeholder=" Amount " />
+                                    <button id="addCreditsBtn" class="btn btn-primary"><i class="fas fa-wallet"></i> Add</button>
+                                </div>
+                            </div>
+
+                            <div class="action-group">
+                                <div class="action-group-title"><i class="fas fa-sliders"></i> Admin Overrides & Status</div>
+                                <div class="button-grid">
+                                    <button id="zeroCreditsBtn" class="btn btn-ghost">Set ZERO</button>
+                                    <button id="vendorToggleBtn" class="btn btn-ghost"><i class="fas fa-toggle-on"></i> Status</button>
+                                </div>
+                            </div>
+
+                            <div class="stack-actions">
+                                <button id="viewHistoryBtn" class="btn btn-primary flex-fill"><i class="fas fa-history"></i> History</button>
+                                <button id="forceSyncBtn" class="btn btn-ghost flex-fill"><i class="fas fa-sync"></i> Refresh</button>
+                            </div>
+                        </div>
+
+                        <div id="moduleAlert" class="alert"></div>
+                    </div>
+                </div>
+
+                <div class="section" id="billingSection">
+                    <h3><i class="fas fa-file-invoice"></i> Bill Generator</h3>
+                    <div class="bill-grid">
+                        <div class="full">
+                            <label class="label label-tight">Real Payment</label>
+                            <select id="billPaymentSelect" class="input">
+                                <option value="">Select payment from history</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="label label-tight">Credit Rate</label>
+                            <input id="billCreditRate" class="input" type="number" min="1" placeholder="Rate per credit" />
+                        </div>
+                        <div>
+                            <label class="label label-tight">Discount</label>
+                            <input id="billDiscount" class="input" type="number" min="0" placeholder="Discount amount" />
+                        </div>
+                        <div class="full">
+                            <label class="label">Bill Note</label>
+                            <input id="billNote" class="input" placeholder="ID card credit billing note..." />
+                        </div>
+                    </div>
+
+                    <div class="bill-summary">
+                        <div class="bill-metric">
+                            <span>Payment</span>
+                            <strong id="billPreviewPayment">₹0</strong>
+                        </div>
+                        <div class="bill-metric">
+                            <span>Discount</span>
+                            <strong id="billPreviewDiscount">₹0</strong>
+                        </div>
+                        <div class="bill-metric">
+                            <span>Payable</span>
+                            <strong id="billPreviewTotal">₹0</strong>
+                        </div>
+                        <div class="bill-metric">
+                            <span>Credits</span>
+                            <strong id="billPreviewQty">0</strong>
+                        </div>
+                        <div class="bill-metric">
+                            <span>Rate</span>
+                            <strong id="billPreviewRate">₹0</strong>
+                        </div>
+                        <div class="bill-metric">
+                            <span>Gross</span>
+                            <strong id="billPreviewGross">₹0</strong>
+                        </div>
+                    </div>
+
+                    <div class="bill-actions">
+                        <button id="generateBillBtn" class="btn btn-primary flex-fill"><i class="fas fa-file-invoice-dollar"></i> Generate Bill</button>
+                        <button id="clearBillBtn" class="btn btn-ghost"><i class="fas fa-eraser"></i> Clear</button>
+                    </div>
+                    <div id="billAlert" class="alert"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="historyModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 class="modal-title"><i class="fas fa-receipt"></i> Payment History </h2>
+
+        <div class="history-billing-tools">
+            <div>
+                <label class="label label-tight">Credit Rate</label>
+                <input id="historyBillRate" class="input" type="number" min="1" placeholder="Rate per credit" />
+            </div>
+            <div>
+                <label class="label label-tight">Discount</label>
+                <input id="historyBillDiscount" class="input" type="number" min="0" placeholder="Discount amount" />
+            </div>
+        </div>
+
+        <div class="history-header">
+            <span>Date & Type</span>
+            <span>Due/Credit Adjustment</span>
+            <span class="text-right">Amount Paid</span>
+        </div>
+
+        <div id="historyRecords"></div>
+    </div>
+</div>
+
+<div id="billModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeBillBtn">&times;</span>
+        <div id="billPreview" class="invoice-box"></div>
+        <div class="actions">
+            <button id="printBillBtn" class="btn btn-primary flex-fill"><i class="fas fa-print"></i> Print Bill</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+
+import { firebaseConfig } from "../Database/Database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import {
+    getDatabase,
+    ref as dbRef,
+    get,
+    set,
+    update,
+    remove,
+    onValue
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+
+const nameInput = document.getElementById('nameInput');
+const emailInput = document.getElementById('emailInput');
+const phoneInput = document.getElementById('phoneInput');
+const saveBtn = document.getElementById('saveBtn');
+const deleteBtn = document.getElementById('deleteBtn');
+const setupAlert = document.getElementById('setupAlert');
+
+const financeBox = document.getElementById('financeBox');
+const displayTitle = document.getElementById('displayTitle');
+const currentValue = document.getElementById('currentValue');
+const totalCreditDisplay = document.getElementById('totalCreditDisplay');
+const totalDueDisplay = document.getElementById('totalDueDisplay');
+const statusBadge = document.getElementById('statusBadge');
+const addCreditsInput = document.getElementById('addCreditsInput');
+const addCreditsBtn = document.getElementById('addCreditsBtn');
+const zeroCreditsBtn = document.getElementById('zeroCreditsBtn');
+const vendorToggleBtn = document.getElementById('vendorToggleBtn');
+const moduleAlert = document.getElementById('moduleAlert');
+const forceSyncBtn = document.getElementById('forceSyncBtn');
+
+const btnManageDev = document.getElementById('btnManageDev');
+const btnManageManager = document.getElementById('btnManageManager');
+const btnManageVendor = document.getElementById('btnManageVendor');
+const roleIndicator = document.getElementById('roleIndicator');
+
+
+const historyModal = document.getElementById('historyModal');
+const closeBtn = document.querySelector('.close-btn');
+const viewHistoryBtn = document.getElementById('viewHistoryBtn');
+const historyRecords = document.getElementById('historyRecords');
+const historyBillRate = document.getElementById('historyBillRate');
+const historyBillDiscount = document.getElementById('historyBillDiscount');
+const billPaymentSelect = document.getElementById('billPaymentSelect');
+const billCreditRate = document.getElementById('billCreditRate');
+const billDiscount = document.getElementById('billDiscount');
+const billNote = document.getElementById('billNote');
+const billPreviewQty = document.getElementById('billPreviewQty');
+const billPreviewRate = document.getElementById('billPreviewRate');
+const billPreviewPayment = document.getElementById('billPreviewPayment');
+const billPreviewDiscount = document.getElementById('billPreviewDiscount');
+const billPreviewGross = document.getElementById('billPreviewGross');
+const billPreviewTotal = document.getElementById('billPreviewTotal');
+const generateBillBtn = document.getElementById('generateBillBtn');
+const clearBillBtn = document.getElementById('clearBillBtn');
+const billAlert = document.getElementById('billAlert');
+const billModal = document.getElementById('billModal');
+const closeBillBtn = document.getElementById('closeBillBtn');
+const printBillBtn = document.getElementById('printBillBtn');
+const billPreview = document.getElementById('billPreview');
+
+
+let currentRole = 'developer';
+let vendorData = null;
+let billPayments = [];
+const historyPaymentMap = new Map();
+
+
+const vendorRef = dbRef(db, 'roles/vendor');
+const paymentsRef = dbRef(db, 'vendorPayments');
+
+
+function showAlert(el, txt, kind='success', timeout=3000){
+    el.textContent = txt;
+    el.classList.remove('success','error');
+    el.classList.add(kind);
+    el.style.display = 'block';
+    if(timeout) setTimeout(()=>{ el.style.display='none'; }, timeout);
+}
+function hideAlert(el){ el.style.display='none'; }
+
+function money(value){
+    return `₹${Number(value || 0).toLocaleString('en-IN')}`;
+}
+
+function getSelectedPayment(){
+    return billPayments.find(payment => payment.id === billPaymentSelect.value) || null;
+}
+
+function getBillValues(){
+    const payment = getSelectedPayment();
+    const paymentAmount = Number(payment?.amountPaid || 0);
+    const discount = Number(billDiscount.value || 0);
+    const rate = Number(billCreditRate.value || 0);
+    const gross = paymentAmount + discount;
+    const quantity = rate > 0 ? Number((gross / rate).toFixed(2)) : Number(payment?.creditAdded || 0);
+    const total = paymentAmount;
+    return { payment, paymentAmount, discount, rate, gross, quantity, total };
+}
+
+function updateBillPreview(){
+    const { quantity, rate, total, paymentAmount, discount, gross } = getBillValues();
+    billPreviewPayment.textContent = money(paymentAmount);
+    billPreviewDiscount.textContent = money(discount);
+    billPreviewGross.textContent = money(gross);
+    billPreviewQty.textContent = quantity || 0;
+    billPreviewRate.textContent = money(rate);
+    billPreviewTotal.textContent = money(total);
+}
+
+function resetBillForm(){
+    billPaymentSelect.value = '';
+    billCreditRate.value = '';
+    billDiscount.value = '';
+    billNote.value = '';
+    updateBillPreview();
+    hideAlert(billAlert);
+}
+
+async function loadBillPayments(){
+    billPayments = [];
+    billPaymentSelect.innerHTML = '<option value="">Select payment from history</option>';
+
+    const snapshot = await get(paymentsRef);
+    if(!snapshot.exists()){
+        updateBillPreview();
+        return;
+    }
+
+    snapshot.forEach(childSnap => {
+        const payment = { id: childSnap.key, ...childSnap.val() };
+        if(Number(payment.amountPaid || 0) > 0){
+            billPayments.push(payment);
+        }
+    });
+
+    billPayments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    billPayments.forEach(payment => {
+        const option = document.createElement('option');
+        const date = new Date(payment.timestamp).toLocaleDateString('en-IN');
+        option.value = payment.id;
+        option.textContent = `${date} | ${money(payment.amountPaid)} | ${payment.type || 'Payment'}`;
+        billPaymentSelect.appendChild(option);
+    });
+
+    updateBillPreview();
+}
+
+function renderBillInvoice(bill){
+    const date = new Date(bill.billDate || bill.paymentTimestamp || bill.timestamp).toLocaleString('en-IN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    billPreview.innerHTML = `
+        <div class="invoice-top">
+            <div>
+                <div class="invoice-brand">Penport India</div>
+                <div class="invoice-title">Billing Invoice</div>
+                <div class="small">Duplex Colony, Anishabad, Patna-800002</div>
+                <div class="small">Phone: 7004848750</div>
+            </div>
+            <div class="invoice-meta">
+                <div class="invoice-meta-row">
+                    <span class="invoice-meta-label">Bill No</span>
+                    <span class="invoice-meta-value">${bill.billNo}</span>
+                </div>
+                <div class="invoice-meta-row">
+                    <span class="invoice-meta-label">Bill Date</span>
+                    <span class="invoice-meta-value">${date}</span>
+                </div>
+                <div class="invoice-meta-row">
+                    <span class="invoice-meta-label">Payment ID</span>
+                    <span class="invoice-meta-value">${bill.paymentId}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="invoice-parties">
+            <div class="invoice-party">
+                <div class="invoice-party-label">Bill To</div>
+                <strong>${bill.vendorName}</strong>
+                <div class="small">${bill.vendorEmail}</div>
+                <div class="small">${bill.vendorPhone}</div>
+            </div>
+        </div>
+
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Credits</th>
+                    <th>Rate</th>
+                    <th>Gross</th>
+                    <th>Discount</th>
+                    <th class="text-right">Payable</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>${bill.note || 'ID card credit billing'}</td>
+                    <td>${bill.quantity}</td>
+                    <td>${money(bill.rate)}</td>
+                    <td>${money(bill.gross)}</td>
+                    <td>${money(bill.discount)}</td>
+                    <td class="text-right">${money(bill.total)}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="invoice-total">Bill Amount: ${money(bill.total)}</div>
+
+        <div class="invoice-note">
+            Credit entry recorded at the request of <strong>${bill.vendorName}</strong>. Payment remains unverified and is subject to confirmation.
+        </div>
+
+        <div class="invoice-footer">
+            <span>Penport India</span>
+        </div>
+    `;
+}
+
+async function generateBillFromPayment(payment){
+    const rate = Number(historyBillRate.value || 0);
+    const discount = Number(historyBillDiscount.value || 0);
+    const creditCount = Number(payment.creditAdded || payment.credits || 0);
+
+    if(rate <= 0){
+        showAlert(moduleAlert, 'Enter credit rate in Payment History first.', 'error', 3000);
+        return;
+    }
+    if(discount < 0){
+        showAlert(moduleAlert, 'Discount cannot be negative.', 'error', 3000);
+        return;
+    }
+    if(creditCount <= 0){
+        showAlert(moduleAlert, 'This payment has no credit count for billing.', 'error', 3000);
+        return;
+    }
+
+    const gross = creditCount * rate;
+    const total = Math.max(gross - discount, 0);
+    const billId = 'B_' + Date.now();
+    const bill = {
+        billId,
+        billNo: billId,
+        timestamp: new Date().toISOString(),
+        billDate: payment.timestamp,
+        paymentTimestamp: payment.timestamp,
+        vendorId: 'vendor',
+        vendorName: vendorData?.name || 'Vendor',
+        vendorEmail: vendorData?.email || 'N/A',
+        vendorPhone: vendorData?.phone || 'N/A',
+        paymentId: payment.id || payment.paymentId || 'N/A',
+        paymentAmount: Number(payment.amountPaid || 0),
+        quantity: creditCount,
+        rate,
+        discount,
+        gross,
+        total,
+        dueCleared: Number(payment.dueCleared || 0),
+        creditAdded: creditCount,
+        note: payment.type || 'ID card credit billing',
+        status: 'PAID',
+        generatedBy: 'AdminPanel'
+    };
+
+    await set(dbRef(db, `vendorBills/${billId}`), bill);
+    renderBillInvoice(bill);
+    billModal.style.display = 'flex';
+}
+
+
+function setupVendorRealtime(){
+    onValue(vendorRef, snap=>{
+        vendorData = snap.exists() ? snap.val() : null;
+        updateCreditDisplayRealtime();
+
+        if(currentRole === 'vendor' && vendorData){
+             nameInput.value = vendorData.name || '';
+             emailInput.value = vendorData.email || '';
+             phoneInput.value = vendorData.phone || '';
+        }
+    });
+}
+
+
+
+
+function updateCreditDisplayRealtime(){
+    if(!vendorData){
+        currentValue.textContent = '--';
+        displayTitle.textContent = 'Vendor Status';
+        totalCreditDisplay.textContent = '--';
+        totalDueDisplay.textContent = '--';
+        statusBadge.textContent = 'NO VENDOR';
+        statusBadge.className = 'status status-deactive';
+        vendorToggleBtn.textContent = 'Status';
+        financeBox.className = 'credit-box wallet-card';
+        viewHistoryBtn.disabled = true;
+        return;
+    }
+
+    viewHistoryBtn.disabled = false;
+    const deu = Number(vendorData.deu || 0);
+    const credits = Number(vendorData.credits || 0);
+    const isActiveFlag = !!vendorData.isActive;
+
+    totalCreditDisplay.textContent = credits;
+    totalDueDisplay.textContent = deu;
+    vendorToggleBtn.textContent = isActiveFlag ? 'Deactivate' : 'Activate';
+
+
+    if(deu > 0){
+
+        displayTitle.textContent = 'Current DUE (Needs Payment)';
+        currentValue.textContent = `₹${deu}`;
+        financeBox.classList.add('due-state');
+        financeBox.style.color = 'var(--warning)';
+    } else {
+
+        displayTitle.textContent = 'Available Credits (Wallet)';
+        currentValue.textContent = `₹${credits}`;
+        financeBox.classList.remove('due-state');
+        financeBox.style.color = 'var(--success)';
+    }
+
+
+    if(isActiveFlag){
+        statusBadge.textContent = deu > 0 ? 'ACTIVE (DUE)' : 'ACTIVE';
+        statusBadge.className = 'status status-active';
+    } else {
+        statusBadge.textContent = 'DEACTIVATED';
+        statusBadge.className = 'status status-deactive';
+    }
+}
+
+
+async function loadRoleData(role){
+    hideAlert(setupAlert);
+    const roleRef = dbRef(db, 'roles/' + role);
+
+    try{
+        const snap = await get(roleRef);
+        const dataExists = snap.exists();
+
+        const d = dataExists ? snap.val() : {};
+
+        nameInput.value = d.name || '';
+        emailInput.value = d.email || '';
+        phoneInput.value = d.phone || '';
+
+
+        saveBtn.innerHTML = dataExists ? '<i class="fas fa-save"></i> Update Details' : '<i class="fas fa-plus-circle"></i> Save Details';
+
+
+        if (role === 'developer') {
+            deleteBtn.style.display = 'none';
+        } else {
+            deleteBtn.style.display = dataExists ? 'inline-flex' : 'none';
+        }
+
+        if(dataExists){
+             showAlert(setupAlert, `Loaded existing ${role} data`, 'success', 2000);
+        } else {
+             showAlert(setupAlert, `Ready to create new ${role}`, 'success', 2000);
+        }
+    }catch(err){
+         console.error("Error loading role data:", err);
+         showAlert(setupAlert, `Error loading ${role} data`, 'error', 5000);
+         saveBtn.innerHTML = '<i class="fas fa-save"></i> Save / Update Details';
+         deleteBtn.style.display = 'none';
+    }
+}
+
+
+function setRoleView(role){
+    currentRole = role;
+    localStorage.setItem('admin_selected_role', role);
+
+    btnManageDev.classList.remove('active-role');
+    btnManageManager.classList.remove('active-role');
+    btnManageVendor.classList.remove('active-role');
+
+    const isVendor = role === 'vendor';
+
+
+    if(role === 'vendor'){
+        btnManageVendor.classList.add('active-role');
+    } else if (role === 'manager') {
+        btnManageManager.classList.add('active-role');
+    } else {
+        btnManageDev.classList.add('active-role');
+    }
+
+
+    document.getElementById('managementSection').style.opacity = isVendor ? '1' : '0.5';
+    document.getElementById('vendorControls').style.pointerEvents = isVendor ? 'auto' : 'none';
+    document.getElementById('billingSection').style.pointerEvents = isVendor ? 'auto' : 'none';
+
+
+    let icon = '';
+    let roleTitle = role.charAt(0).toUpperCase() + role.slice(1);
+
+    if(role === 'vendor'){
+        icon = '<i class="fas fa-store"></i>';
+    } else if (role === 'manager'){
+        icon = '<i class="fas fa-user-shield"></i>';
+    } else {
+        icon = '<i class="fas fa-user-tie"></i>';
+    }
+
+    roleIndicator.innerHTML = `${icon} <strong>${roleTitle}</strong>`;
+    document.getElementById('setupTitle').textContent = `${roleTitle} Details`;
+
+    loadRoleData(role);
+    if(isVendor){
+        loadBillPayments();
+    } else {
+        resetBillForm();
+    }
+}
+
+
+saveBtn.addEventListener('click', async (e)=>{
+    e.preventDefault();
+    hideAlert(setupAlert);
+    const role = currentRole;
+    const roleRef = dbRef(db, 'roles/' + role);
+
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const phone = phoneInput.value.trim() || 'N/A';
+
+    if(!name || !email){ showAlert(setupAlert, 'Name and Email are required', 'error'); return; }
+
+    saveBtn.disabled = true;
+
+    try{
+        const snap = await get(roleRef);
+        const dataExists = snap.exists();
+        const now = new Date().toISOString();
+        let message = '';
+
+        if(!dataExists){
+
+            const payload = { name, email, phone, createdAt: now, updatedAt: now };
+            if(role === 'vendor'){
+                payload.deu = 0;
+                payload.credits = 0;
+                payload.isActive = false;
+            }
+            await set(roleRef, payload);
+            message = 'Created ' + role + ' successfully';
+        } else {
+
+            const updates = { name, email, phone, updatedAt: now };
+            await update(roleRef, updates);
+            message = 'Updated ' + role + ' successfully';
+        }
+
+        showAlert(setupAlert, message, 'success', 3000);
+
+        loadRoleData(role);
+    }catch(err){
+        console.error(err);
+        showAlert(setupAlert, 'Error: ' + (err.message||'Unknown error occurred'), 'error', 5000);
+    } finally {
+        saveBtn.disabled = false;
+    }
+});
+
+
+deleteBtn.addEventListener('click', async ()=>{
+    hideAlert(setupAlert);
+    const role = currentRole;
+    if(role === 'developer'){
+        showAlert(setupAlert, 'Developer role cannot be deleted.', 'error', 3000);
+        return;
+    }
+
+    const roleRef = dbRef(db, 'roles/' + role);
+
+    const snap = await get(roleRef);
+    if(!snap.exists()){
+        showAlert(setupAlert, `The ${role} does not exist to delete.`, 'error', 3000);
+        return;
+    }
+
+    if(!confirm(`Are you sure you want to permanently delete the ${role.toUpperCase()}? This action cannot be undone.`)) return;
+
+    deleteBtn.disabled = true;
+
+    try{
+        await remove(roleRef);
+        showAlert(setupAlert, role + ' removed successfully', 'success', 3000);
+
+        nameInput.value=''; emailInput.value=''; phoneInput.value='';
+
+        setRoleView('developer');
+    }catch(err){
+        console.error(err);
+        showAlert(setupAlert, 'Delete failed: ' + (err.message||err), 'error', 5000);
+    } finally {
+        deleteBtn.disabled = false;
+    }
+});
+
+
+
+
+addCreditsBtn.addEventListener('click', async ()=>{
+    hideAlert(moduleAlert);
+    if(currentRole !== 'vendor'){ showAlert(moduleAlert, 'Payment actions are only for the Vendor role.', 'error'); return; }
+    if(!vendorData){ showAlert(moduleAlert,'No vendor exists','error'); return; }
+
+    const amountPaid = Number(addCreditsInput.value);
+    if(!amountPaid || amountPaid <= 0 || !Number.isInteger(amountPaid)){
+        showAlert(moduleAlert,'Enter a valid positive integer amount paid','error');
+        return;
+    }
+
+    const currentCredits = Number(vendorData.credits || 0);
+    const currentDue = Number(vendorData.deu || 0);
+
+    if(!confirm(`Payment: ₹${amountPaid}. Proceed to clear Due and update Credits?`)) return;
+
+    addCreditsBtn.disabled = true;
+
+    try{
+        let creditAdded = 0;
+        let dueCleared = 0;
+        let newDue = currentDue;
+        const now = new Date().toISOString();
+        let message = '';
+
+
+        if(currentDue > 0){
+            if(amountPaid >= currentDue){
+                const remainingAmount = amountPaid - currentDue;
+                dueCleared = currentDue;
+                newDue = 0;
+                creditAdded = remainingAmount;
+                message = `Due of ₹${currentDue} cleared. ₹${remainingAmount} added to Credit.`;
+            } else {
+                dueCleared = amountPaid;
+                newDue = currentDue - amountPaid;
+                creditAdded = 0;
+                message = `Paid ₹${amountPaid}. Due partially cleared. Remaining Due: ₹${newDue}.`;
+            }
+        } else {
+            newDue = 0;
+            creditAdded = amountPaid;
+            message = `No Due. ₹${amountPaid} added directly to Credit.`;
+        }
+
+
+        const newCredits = currentCredits + creditAdded;
+        const updates = {
+            credits: newCredits,
+            deu: newDue,
+            isActive: newCredits > 0 ? true : vendorData.isActive,
+            updatedAt: now
+        };
+
+
+        const paymentId = 'P_' + Date.now();
+        const paymentRecord = {
+            paymentId,
+            vendorId: 'vendor',
+            timestamp: now,
+            amountPaid: amountPaid,
+            type: 'Payment/Recharge',
+            dueBefore: currentDue,
+            creditBefore: currentCredits,
+            dueCleared: dueCleared,
+            creditAdded: creditAdded,
+            dueAfter: newDue,
+            creditAfter: newCredits,
+            processedBy: 'AdminPanel'
+        };
+
+
+        await update(vendorRef, updates);
+        await set(dbRef(db, 'vendorPayments/' + paymentId), paymentRecord);
+        await loadBillPayments();
+
+        addCreditsInput.value = '';
+        showAlert(moduleAlert, message, 'success', 6000);
+
+    }catch(err){
+        console.error(err);
+        showAlert(moduleAlert,'Failed: ' + (err.message||err), 'error', 5000);
+    } finally {
+        addCreditsBtn.disabled = false;
+    }
+});
+
+
+
+
+zeroCreditsBtn.addEventListener('click', async ()=>{
+    hideAlert(moduleAlert);
+    if(currentRole !== 'vendor'){ showAlert(moduleAlert, 'Credit actions are only for the Vendor role.', 'error'); return; }
+    if(!vendorData){ showAlert(moduleAlert,'No vendor exists','error'); return; }
+
+    const zeroWarning = [
+        'WARNING: Vendor credit will become ZERO.',
+        'Vendor will be DEACTIVATED.',
+        'This action cannot be undone.',
+        '',
+        'Do you want to continue?'
+    ].join('\n');
+
+    if(!confirm(zeroWarning)) return;
+
+    zeroCreditsBtn.disabled = true;
+
+    try{
+        const updates = {
+            credits: 0,
+            isActive: false,
+            updatedAt: new Date().toISOString()
+        };
+        await update(vendorRef, updates);
+
+        const paymentId = 'A_' + Date.now();
+        const paymentRecord = {
+            vendorId: 'vendor',
+            timestamp: new Date().toISOString(),
+            amountPaid: 0,
+            type: 'Admin Override: Zero Credit',
+            creditBefore: Number(vendorData.credits || 0),
+            creditAfter: 0,
+            processedBy: 'AdminPanel'
+        };
+        await set(dbRef(db, 'vendorPayments/' + paymentId), paymentRecord);
+
+        showAlert(moduleAlert, 'Vendor Credit set to ₹0 and DEACTIVATED successfully', 'success', 3500);
+    }catch(err){
+        console.error(err);
+        showAlert(moduleAlert,'Failed: ' + (err.message||err), 'error', 5000);
+    } finally {
+        zeroCreditsBtn.disabled = false;
+    }
+});
+
+
+
+vendorToggleBtn.addEventListener('click', async ()=>{
+    hideAlert(moduleAlert);
+    if(currentRole !== 'vendor'){ showAlert(moduleAlert, 'Status actions are only for the Vendor role.', 'error'); return; }
+    if(!vendorData){ showAlert(moduleAlert,'No vendor exists','error'); return; }
+
+    const isCurrentlyActive = !!vendorData.isActive;
+    const credits = Number(vendorData.credits || 0);
+
+
+    if(!isCurrentlyActive && credits <= 0){
+        showAlert(moduleAlert, 'Cannot manually activate: Credit is ₹0. Add credit first.', 'error', 4000);
+        return;
+    }
+
+    vendorToggleBtn.disabled = true;
+
+    try{
+        const newFlag = !isCurrentlyActive;
+        const updates = { isActive: newFlag, updatedAt: new Date().toISOString() };
+        await update(vendorRef, updates);
+        showAlert(moduleAlert, 'Vendor is now ' + (newFlag ? 'ACTIVE' : 'DEACTIVATED') + ' successfully', 'success', 2500);
+    }catch(err){
+        console.error(err);
+        showAlert(moduleAlert,'Toggle failed: ' + (err.message||err), 'error', 5000);
+    } finally {
+        vendorToggleBtn.disabled = false;
+    }
+});
+
+
+viewHistoryBtn.addEventListener('click', async () => {
+    hideAlert(moduleAlert);
+    if (currentRole !== 'vendor' || !vendorData) {
+        showAlert(moduleAlert, 'No active vendor selected.', 'error', 3000);
+        return;
+    }
+
+    try {
+
+        const snapshot = await get(paymentsRef);
+
+        historyRecords.innerHTML = '';
+        historyPaymentMap.clear();
+
+        if (snapshot.exists()) {
+            const payments = [];
+
+            snapshot.forEach(childSnap => {
+                payments.push({ id: childSnap.key, ...childSnap.val() });
+            });
+
+
+            payments.sort((a, b) => {
+                return new Date(b.timestamp) - new Date(a.timestamp);
+            });
+
+
+            const recentPayments = payments.slice(0, 50);
+
+            if(recentPayments.length === 0){
+                historyRecords.innerHTML = '<div class="no-records">No payment records found.</div>';
+            } else {
+                recentPayments.forEach(record => {
+                    historyPaymentMap.set(record.id, record);
+                    const item = document.createElement('div');
+                    item.className = 'history-item';
+
+                    const date = new Date(record.timestamp).toLocaleString('en-IN', {
+                        year: 'numeric', month: 'short', day: 'numeric',
+                        hour: '2-digit', minute: '2-digit'
+                    });
+
+                    let amountText = '';
+                    let amountClass = '';
+                    let transactionType = record.type || 'Transaction';
+
+
+                    let adjustmentHtml = '';
+
+                    if (record.dueCleared > 0) {
+
+                        adjustmentHtml += `<span class="adjustment-danger"><i class="fas fa-minus-circle"></i> ₹${record.dueCleared} (Due Cleared)</span>`;
+                    }
+                    if (record.creditAdded > 0) {
+
+                        adjustmentHtml += `<span class="adjustment-success"><i class="fas fa-plus-circle"></i> ${record.creditAdded} Credit Added</span>`;
+                    }
+
+                    if (transactionType.includes('Zero Credit')) {
+                         adjustmentHtml = `<span class="adjustment-danger">Credit Reset: ${record.creditBefore || 0} → ${record.creditAfter || 0}</span>`;
+                    }
+                    if (!adjustmentHtml && record.amountPaid === 0) {
+                        adjustmentHtml = `<span class="history-label">No Wallet Change</span>`;
+                    }
+
+
+                    if(record.amountPaid > 0) {
+                        amountText = `₹${record.amountPaid}`;
+                        amountClass = 'amount-positive';
+                    } else {
+                        amountText = '₹0';
+                        amountClass = 'amount-muted';
+                    }
+
+
+                    item.innerHTML = `
+                        <div class="history-item-primary">
+                            <span class="history-item-date">${date}</span>
+                            <div class="transaction-title">${transactionType}</div>
+                        </div>
+                        <div class="history-details">
+                            ${adjustmentHtml}
+                            <span class="history-label">Balance After: ${record.creditAfter || 0} Cr. | ${record.dueAfter || 0} Due</span>
+                        </div>
+                        <div class="history-amount-final ${amountClass}">
+                            ${amountText}
+                            <button class="btn btn-primary history-bill-action" data-payment-id="${record.id}">
+                                <i class="fas fa-print"></i> Print Bill
+                            </button>
+                        </div>
+                    `;
+                    historyRecords.appendChild(item);
+                    item.querySelector('.history-bill-action')?.addEventListener('click', async () => {
+                        const payment = historyPaymentMap.get(record.id);
+                        if(payment) await generateBillFromPayment(payment);
+                    });
+                });
+            }
+        } else {
+            historyRecords.innerHTML = '<div class="no-records">No payment records found.</div>';
+        }
+
+
+        historyModal.style.display = 'flex';
+    } catch (err) {
+        console.error("Failed to load history:", err);
+        historyRecords.innerHTML = '<div class="no-records history-error">Error loading records. Check console for details.</div>';
+        historyModal.style.display = 'flex';
+    }
+});
+
+closeBtn.addEventListener('click', () => {
+    historyModal.style.display = 'none';
+});
+
+
+window.addEventListener('click', (event) => {
+    if (event.target === historyModal) {
+        historyModal.style.display = 'none';
+    }
+    if (event.target === billModal) {
+        billModal.style.display = 'none';
+    }
+});
+
+
+forceSyncBtn.addEventListener('click', async ()=>{
+    hideAlert(moduleAlert);
+    forceSyncBtn.disabled = true;
+
+    try{
+        await loadRoleData(currentRole);
+        if(currentRole === 'vendor') updateCreditDisplayRealtime();
+
+        showAlert(moduleAlert,'Full data refreshed successfully', 'success', 1500);
+    }catch(err){
+        console.error(err);
+        showAlert(moduleAlert,'Refresh failed: ' + (err.message||err),'error',2000);
+    } finally {
+        forceSyncBtn.disabled = false;
+    }
+});
+
+
+billPaymentSelect.addEventListener('change', () => {
+    const payment = getSelectedPayment();
+    if(payment && !billNote.value.trim()){
+        billNote.value = payment.type || 'ID card credit payment';
+    }
+    updateBillPreview();
+});
+billCreditRate.addEventListener('input', updateBillPreview);
+billDiscount.addEventListener('input', updateBillPreview);
+clearBillBtn.addEventListener('click', resetBillForm);
+
+generateBillBtn.addEventListener('click', async ()=>{
+    hideAlert(billAlert);
+
+    if(currentRole !== 'vendor'){
+        showAlert(billAlert, 'Billing is only available for the Vendor role.', 'error');
+        return;
+    }
+    if(!vendorData){
+        showAlert(billAlert, 'Create or load vendor before generating bill.', 'error');
+        return;
+    }
+
+    const { payment, quantity, rate, total, paymentAmount, discount, gross } = getBillValues();
+    if(!payment){
+        showAlert(billAlert, 'Select a real payment from history first.', 'error');
+        return;
+    }
+    if(rate <= 0){
+        showAlert(billAlert, 'Enter a valid credit rate.', 'error');
+        return;
+    }
+    if(discount < 0){
+        showAlert(billAlert, 'Discount cannot be negative.', 'error');
+        return;
+    }
+
+    generateBillBtn.disabled = true;
+
+    try{
+        const billId = 'B_' + Date.now();
+        const now = new Date().toISOString();
+        const bill = {
+            billId,
+            billNo: billId,
+            timestamp: now,
+            vendorId: 'vendor',
+            vendorName: vendorData.name || 'Vendor',
+            vendorEmail: vendorData.email || 'N/A',
+            vendorPhone: vendorData.phone || 'N/A',
+            paymentId: payment.id,
+            paymentAmount,
+            quantity,
+            rate,
+            discount,
+            gross,
+            total,
+            dueCleared: Number(payment.dueCleared || 0),
+            creditAdded: Number(payment.creditAdded || 0),
+            note: billNote.value.trim() || 'ID card credit billing',
+            status: 'PAID',
+            generatedBy: 'AdminPanel'
+        };
+
+        await set(dbRef(db, `vendorBills/${billId}`), bill);
+        renderBillInvoice(bill);
+        billModal.style.display = 'flex';
+        showAlert(billAlert, 'Bill generated successfully.', 'success', 3000);
+    }catch(err){
+        console.error(err);
+        showAlert(billAlert, 'Bill generation failed: ' + (err.message || err), 'error', 5000);
+    } finally {
+        generateBillBtn.disabled = false;
+    }
+});
+
+closeBillBtn.addEventListener('click', () => {
+    billModal.style.display = 'none';
+});
+
+printBillBtn.addEventListener('click', () => {
+    window.print();
+});
+
+
+btnManageDev.addEventListener('click', ()=>{ setRoleView('developer'); });
+btnManageManager.addEventListener('click', ()=>{ setRoleView('manager'); });
+btnManageVendor.addEventListener('click', ()=>{ setRoleView('vendor'); });
+
+
+(function init(){
+    setupVendorRealtime();
+    updateBillPreview();
+    loadBillPayments();
+
+    const savedRole = localStorage.getItem('admin_selected_role') || 'developer';
+    setRoleView(savedRole);
+})();
+</script>
+</body>
+</html>

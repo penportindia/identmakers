@@ -1,0 +1,175 @@
+{
+  "front": {
+    "pageStyle": {
+      "width": "220px",
+      "height": "340px",
+      "background": "transparent",
+      "padding": "12px",
+      "boxSizing": "border-box",
+      "border": "1px solid #90caf9",
+      "borderRadius": "14px",
+      "boxShadow": "0 4px 12px rgba(0,0,0,0.2)",
+      "position": "relative",
+      "overflow": "hidden",
+      "fontFamily": "\"Segoe UI\", sans-serif"
+    },
+    "items": [
+      {
+        "type": "image",
+        "bookmark": "photo",
+        "top": "65px",
+        "left": "65px",
+        "width": "90px",
+        "height": "110px",
+        "borderRadius": "14px",
+        "border": "2px solid #0288d1"
+      },
+      {
+        "type": "text",
+        "bookmark": "staff_name",
+        "text": "{{staff_name}}",
+        "top": "180px",
+        "left": "10px",
+        "width": "200px",
+        "fontSize": "15px",
+        "fontWeight": "bold",
+        "color": "#d32f2f",
+        "textAlign": "center"
+      },
+      {
+        "type": "text",
+        "text": "Designation:",
+        "top": "210px",
+        "left": "15px",
+        "width": "75px",
+        "fontSize": "10px",
+        "fontWeight": "bold",
+        "color": "#0288d1",
+        "textAlign": "left"
+      },
+      {
+        "type": "text",
+        "bookmark": "staff_designation",
+        "text": "{{staff_designation}}",
+        "top": "210px",
+        "left": "85px",
+        "width": "125px",
+        "fontSize": "10px",
+        "color": "#000",
+        "textAlign": "left"
+      },
+      {
+        "type": "text",
+        "text": "F/H Name:",
+        "top": "225px",
+        "left": "15px",
+        "width": "75px",
+        "fontSize": "10px",
+        "fontWeight": "bold",
+        "color": "#0288d1",
+        "textAlign": "left"
+      },
+      {
+        "type": "text",
+        "bookmark": "staff_father",
+        "text": "{{staff_father}}",
+        "top": "225px",
+        "left": "85px",
+        "width": "125px",
+        "fontSize": "8px",
+        "color": "#000",
+        "textAlign": "left"
+      },
+      {
+        "type": "text",
+        "text": "DOB:",
+        "top": "240px",
+        "left": "15px",
+        "width": "75px",
+        "fontSize": "10px",
+        "fontWeight": "bold",
+        "color": "#0288d1",
+        "textAlign": "left"
+      },
+      {
+        "type": "text",
+        "bookmark": "staff_dob",
+        "text": "{{staff_dob}}",
+        "top": "240px",
+        "left": "85px",
+        "width": "125px",
+        "fontSize": "10px",
+        "color": "#000",
+        "textAlign": "left"
+      },
+      {
+        "type": "text",
+        "text": "Blood Group:",
+        "top": "255px",
+        "left": "15px",
+        "width": "75px",
+        "fontSize": "10px",
+        "fontWeight": "bold",
+        "color": "#0288d1",
+        "textAlign": "left"
+      },
+      {
+        "type": "text",
+        "bookmark": "staff_blood",
+        "text": "{{staff_blood}}",
+        "top": "255px",
+        "left": "85px",
+        "width": "125px",
+        "fontSize": "10px",
+        "color": "#000",
+        "textAlign": "left"
+      },
+      {
+        "type": "text",
+        "text": "Contact:",
+        "top": "270px",
+        "left": "15px",
+        "width": "75px",
+        "fontSize": "10px",
+        "fontWeight": "bold",
+        "color": "#0288d1",
+        "textAlign": "left"
+      },
+      {
+        "type": "text",
+        "bookmark": "staff_contact",
+        "text": "{{staff_contact}}",
+        "top": "270px",
+        "left": "85px",
+        "width": "125px",
+        "fontSize": "10px",
+        "color": "#000",
+        "textAlign": "left"
+      },
+      {
+        "type": "text",
+        "text": "Address:",
+        "top": "285px",
+        "left": "15px",
+        "width": "75px",
+        "fontSize": "10px",
+        "fontWeight": "bold",
+        "color": "#0288d1",
+        "textAlign": "left"
+      },
+      {
+        "type": "text",
+        "bookmark": "staff_address",
+        "text": "{{staff_address}}",
+        "top": "285px",
+        "left": "85px",
+        "width": "125px",
+        "fontSize": "10px",
+        "lineHeight": "12px",
+        "color": "#000",
+        "textAlign": "left"
+      }
+    ]
+  }
+}
+

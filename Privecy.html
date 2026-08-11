@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Privacy Policy for LIM – Lakshmi ID Maker, developed by Penport India." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0b3a76" />
+  <title>Privacy Policy | LIM – Lakshmi ID Maker</title>
+
+  <style>
+    :root {
+      --primary: #0e4ea8;
+      --primary-dark: #0b3a76;
+      --accent: #7db7ff;
+      --bg: #f5f9ff;
+      --card: #ffffff;
+      --text: #12274b;
+      --muted: #5e7aa0;
+      --border: #d7e6fb;
+      --soft: #e8f1ff;
+      --success: #2272c7;
+      --shadow: 0 18px 50px rgba(14, 78, 168, 0.14);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top right, rgba(14, 78, 168, 0.13), transparent 28rem),
+        linear-gradient(180deg, #f3f8ff 0, var(--bg) 24rem);
+      color: var(--text);
+      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.72;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    a:hover {
+      color: var(--primary-dark);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #fff;
+      padding: 66px 20px 92px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .hero::before {
+      width: 330px;
+      height: 330px;
+      right: -120px;
+      top: -150px;
+    }
+
+    .hero::after {
+      width: 230px;
+      height: 230px;
+      left: -90px;
+      bottom: -130px;
+    }
+
+    .hero-inner,
+    .page {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 28px;
+    }
+
+    .logo {
+      width: 86px;
+      height: 86px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #ffffff;
+      border: 1px solid rgba(14, 78, 168, 0.16);
+      box-shadow: 0 10px 30px rgba(14,78,168,.14);
+    }
+
+    .logo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      margin: 0;
+    }
+
+    .brand-name {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: .02em;
+    }
+
+    .brand-subtitle {
+      color: rgba(255,255,255,.75);
+      font-size: .92rem;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(2.15rem, 6vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 22px 0 0;
+      color: rgba(255,255,255,.82);
+      font-size: 1.08rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 27px;
+    }
+
+    .meta span {
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.9);
+      font-size: .88rem;
+    }
+
+    .page {
+      margin-top: -48px;
+      padding-bottom: 55px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .toc,
+    .content {
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(220,229,235,.95);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      padding: 22px;
+    }
+
+    .toc h2 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+      color: var(--primary);
+    }
+
+    .toc a {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 9px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: .91rem;
+    }
+
+    .toc a:hover {
+      background: var(--soft);
+      color: var(--primary);
+    }
+
+    .content {
+      padding: clamp(24px, 5vw, 48px);
+    }
+
+    .notice {
+      margin: 0 0 32px;
+      padding: 18px 20px;
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      background: #fff8e9;
+      color: #654b1d;
+    }
+
+    section {
+      scroll-margin-top: 20px;
+      padding: 4px 0 30px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-of-type {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    h2 {
+      margin: 24px 0 12px;
+      color: var(--primary-dark);
+      font-size: clamp(1.35rem, 3vw, 1.8rem);
+      line-height: 1.3;
+    }
+
+    h3 {
+      margin: 22px 0 8px;
+      color: var(--primary);
+      font-size: 1.08rem;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    ul {
+      margin: 10px 0;
+      padding-left: 23px;
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .info-card {
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: #fbfdfe;
+    }
+
+    .info-card strong {
+      display: block;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .tag {
+      display: inline-block;
+      margin: 2px 5px 2px 0;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--primary);
+      font-size: .82rem;
+      font-weight: 700;
+    }
+
+    .contact-box {
+      margin-top: 18px;
+      padding: 22px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #fff;
+    }
+
+    .contact-box strong {
+      display: block;
+      font-size: 1.08rem;
+      margin-bottom: 5px;
+    }
+
+    .contact-box p {
+      color: rgba(255,255,255,.82);
+      margin-bottom: 0;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 16px;
+      padding: 11px 16px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--primary-dark);
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 8px 22px rgba(11, 58, 118, 0.18);
+    }
+
+    .contact-link:hover {
+      color: var(--primary);
+      background: #f4f8ff;
+    }
+
+    footer {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 0 0 38px;
+      color: var(--muted);
+      text-align: center;
+      font-size: .9rem;
+    }
+
+    .back-top {
+      display: inline-block;
+      margin-top: 22px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    @media (max-width: 820px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .toc {
+        position: static;
+      }
+
+      .toc nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hero {
+        padding-top: 42px;
+      }
+
+      .hero-inner,
+      .page,
+      footer {
+        width: min(100% - 22px, 1080px);
+      }
+
+      .toc nav {
+        grid-template-columns: 1fr;
+      }
+
+      .content {
+        padding: 22px 18px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .hero {
+        padding: 30px;
+      }
+
+      .page {
+        margin-top: 0;
+        width: 100%;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .toc {
+        display: none;
+      }
+
+      .content {
+        box-shadow: none;
+        border: 0;
+      }
+
+      section {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body id="top">
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="brand-row">
+        <div class="logo"><img src="LIM.png" alt="LIM logo"></div>
+        <div>
+          <div class="brand-name">LIM – Lakshmi ID Maker</div>
+          <div class="brand-subtitle">Developed by Penport India</div>
+        </div>
+      </div>
+
+      <h1>Privacy Policy</h1>
+      <p>
+        This Privacy Policy explains how LIM – Lakshmi ID Maker collects, uses,
+        stores and protects information while providing school ID-card creation,
+        editing, photo-upload and related services.
+      </p>
+
+      <div class="meta">
+        <span>Effective date: 31 July 2026</span>
+        <span>Last updated: 31 July 2026</span>
+        <span>Applicable to LIM users</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="layout">
+      <aside class="toc" aria-label="Table of contents">
+        <h2>On this page</h2>
+        <nav>
+          <a href="#about">1. About this policy</a>
+          <a href="#information">2. Information collected</a>
+          <a href="#use">3. How information is used</a>
+          <a href="#legal-basis">4. Authority and consent</a>
+          <a href="#sharing">5. Service providers</a>
+          <a href="#storage">6. Storage and retention</a>
+          <a href="#security">7. Security</a>
+          <a href="#children">8. Children’s information</a>
+          <a href="#permissions">9. Device permissions</a>
+          <a href="#rights">10. User rights</a>
+          <a href="#links">11. Third-party links</a>
+          <a href="#changes">12. Policy changes</a>
+          <a href="#contact">13. Contact</a>
+        </nav>
+      </aside>
+
+      <article class="content">
+        <div class="notice">
+          <strong>Important:</strong> Schools and authorised operators must enter
+          personal information into LIM only when they have a lawful purpose and
+          the necessary permission from the concerned student, parent, guardian,
+          employee or staff member.
+        </div>
+
+        <section id="about">
+          <h2>1. About this Privacy Policy</h2>
+          <p>
+            LIM, also known as <strong>Lakshmi ID Maker</strong>, is an application
+            developed by <strong>Penport India</strong> to help authorised schools
+            and operators create, manage, edit and prepare student and staff ID-card
+            records.
+          </p>
+          <p>
+            By accessing or using LIM, the school or authorised user acknowledges
+            this Privacy Policy and agrees to handle all information entered into
+            the application responsibly and in accordance with applicable law.
+          </p>
+        </section>
+
+        <section id="information">
+          <h2>2. Information We Collect and Process</h2>
+
+          <h3>A. School account and login information</h3>
+          <p>
+            LIM may process the school name, school user ID, registered phone
+            number, account status, password or credential submitted for login,
+            and other account information maintained for authentication and
+            access control.
+          </p>
+
+          <h3>B. Student information</h3>
+          <p>Depending on the fields completed by an authorised user, LIM may process:</p>
+          <div class="info-grid">
+            <div class="info-card">
+              <strong>Identity and academic details</strong>
+              Student name, enrollment number, admission number, class, section
+              and roll number.
+            </div>
+            <div class="info-card">
+              <strong>Personal details</strong>
+              Date of birth, father’s name, mother’s name, contact number and address.
+            </div>
+            <div class="info-card">
+              <strong>School-related details</strong>
+              Mode of transport, house name and school identity details.
+            </div>
+            <div class="info-card">
+              <strong>Optional sensitive details</strong>
+              Blood group and photograph, where supplied for the ID card.
+            </div>
+          </div>
+
+          <h3>C. Staff information</h3>
+          <p>
+            LIM may process staff name, enrollment number, employee ID,
+            designation, father’s or spouse’s name, date of birth, contact
+            number, address, blood group, photograph and school details.
+          </p>
+
+          <h3>D. Photographs and camera/gallery data</h3>
+          <p>
+            The application may allow an authorised user to capture a photograph
+            using the device camera or choose an image from the device gallery.
+            The selected image may be cropped, resized and compressed before upload.
+            LIM does not require continuous camera access and does not intentionally
+            record audio.
+          </p>
+
+          <h3>E. Technical and session information</h3>
+          <p>
+            For account security and active-session management, LIM may process
+            the user’s public IP address, online status, login time, session
+            expiry time and school account identifier. The application may also
+            process basic browser, device, network and error information that is
+            ordinarily generated while using web-based services.
+          </p>
+
+          <h3>F. Information not intentionally collected</h3>
+          <p>
+            LIM is not designed to collect precise GPS location, contacts,
+            call logs, SMS messages, microphone recordings, financial account
+            details or advertising identifiers unless a future feature clearly
+            requests such information and this policy is updated.
+          </p>
+        </section>
+
+        <section id="use">
+          <h2>3. How We Use Information</h2>
+          <p>Information is processed for purposes such as:</p>
+          <ul>
+            <li>Authenticating schools and authorised users.</li>
+            <li>Creating unique student or staff enrollment numbers.</li>
+            <li>Creating, displaying, editing and preparing ID-card records.</li>
+            <li>Uploading and linking photographs with the relevant record.</li>
+            <li>Generating previews, barcodes, receipts or downloadable ID-card files.</li>
+            <li>Maintaining login sessions and reducing unauthorised account use.</li>
+            <li>Providing technical support, troubleshooting and service improvements.</li>
+            <li>Maintaining operational records, usage credits and service administration.</li>
+            <li>Complying with applicable legal, regulatory or lawful authority requirements.</li>
+          </ul>
+          <p>
+            LIM does not sell personal information. Information is not intended
+            to be used for behavioural advertising or unrelated marketing.
+          </p>
+        </section>
+
+        <section id="legal-basis">
+          <h2>4. Authority, Responsibility and Consent</h2>
+          <p>
+            The school or organisation using LIM generally decides whose
+            information is entered and why it is used. The school or organisation
+            is responsible for ensuring that it has a valid educational,
+            administrative, contractual or legal basis to process that information.
+          </p>
+          <p>
+            Where a student is a minor, the school must obtain any consent or
+            authorisation required from the parent or lawful guardian before
+            submitting the child’s personal information or photograph.
+          </p>
+          <p>
+            Users must not upload information that is unnecessary, misleading,
+            unlawful, unauthorised or unrelated to ID-card creation and school
+            administration.
+          </p>
+        </section>
+
+        <section id="sharing">
+          <h2>5. Third-Party Services and Information Sharing</h2>
+          <p>
+            LIM uses external technology providers to operate its services.
+            Information may therefore be transmitted to or processed by:
+          </p>
+
+          <div class="info-grid">
+            <div class="info-card">
+              <strong>Google Firebase</strong>
+              Used for application database functions, school account verification,
+              session records and storage of student or staff record data.
+            </div>
+            <div class="info-card">
+              <strong>Cloudinary</strong>
+              Used for uploading, hosting and delivering photographs associated
+              with ID-card records.
+            </div>
+            <div class="info-card">
+              <strong>IP information service</strong>
+              A third-party IP lookup service may be contacted to obtain the
+              public IP address used for session-security purposes.
+            </div>
+            <div class="info-card">
+              <strong>Technical libraries</strong>
+              External libraries may be used for barcode generation, page rendering
+              and PDF creation.
+            </div>
+          </div>
+
+          <p>
+            These providers may process technical information according to their
+            own terms and privacy practices. Personal information may also be
+            disclosed when required by law, court order, governmental authority,
+            fraud prevention, security investigation, or to protect legal rights
+            and the safety of users.
+          </p>
+        </section>
+
+        <section id="storage">
+          <h2>6. Data Storage and Retention</h2>
+          <p>
+            Student, staff and school records may be stored in a cloud-hosted
+            database. Photographs may be stored through a cloud image-hosting
+            service. Data may be processed or hosted on servers located outside
+            the user’s state or country, subject to the service provider’s
+            infrastructure and applicable safeguards.
+          </p>
+          <p>
+            Records are retained for as long as reasonably necessary to provide
+            the ID-card service, maintain school records, complete printing or
+            delivery, resolve disputes, provide support, meet contractual
+            requirements or comply with law.
+          </p>
+          <p>
+            Active-session information is intended to be temporary and may be
+            removed upon logout, connection termination or session expiry.
+            However, technical failures or provider logs may cause limited
+            information to remain for a longer period.
+          </p>
+          <p>
+            Schools should periodically review records and request correction or
+            deletion when information is no longer required. Deleting a database
+            record may not automatically remove all backups, cached files,
+            previously generated PDFs or separately hosted images immediately.
+          </p>
+        </section>
+
+        <section id="security">
+          <h2>7. Data Security</h2>
+          <p>
+            Penport India uses reasonable technical and organisational measures
+            intended to protect information against unauthorised access, misuse,
+            loss, alteration or disclosure. These measures may include
+            authenticated access, input validation, session limits, controlled
+            database access and secure HTTPS connections.
+          </p>
+          <p>
+            No internet-based system can guarantee absolute security. Schools and
+            users must protect their login credentials, use trusted devices and
+            networks, log out after use, restrict access to authorised personnel,
+            and promptly report suspected account misuse.
+          </p>
+        </section>
+
+        <section id="children">
+          <h2>8. Children’s and Students’ Privacy</h2>
+          <p>
+            LIM may process information relating to school students, including
+            minors, only for legitimate school identification and administration
+            purposes. The application is intended to be operated by schools,
+            authorised personnel or responsible adults and is not intended for
+            unsupervised use by children.
+          </p>
+          <p>
+            Schools must collect only the minimum information necessary, limit
+            access to authorised persons and avoid displaying or sharing student
+            records publicly.
+          </p>
+        </section>
+
+        <section id="permissions">
+          <h2>9. Device Permissions</h2>
+          <p>LIM may request the following device or browser permissions:</p>
+          <ul>
+            <li>
+              <strong>Camera:</strong> to capture a photograph for an ID card.
+              Camera access begins only after the user selects the camera option.
+            </li>
+            <li>
+              <strong>Photos, media or file access:</strong> to allow the user to
+              choose an existing image and save or download an ID-card PDF.
+            </li>
+            <li>
+              <strong>Internet/network access:</strong> to authenticate accounts,
+              store records, upload photographs and generate online services.
+            </li>
+          </ul>
+          <p>
+            Permission availability and labels may vary by browser, device and
+            operating system. A user may deny a permission, but the related
+            feature may then be unavailable.
+          </p>
+        </section>
+
+        <section id="rights">
+          <h2>10. Access, Correction and Deletion Requests</h2>
+          <p>
+            Subject to applicable law and verification, a concerned person may
+            request access to, correction of or deletion of their personal
+            information. Because schools generally submit and manage the records,
+            the request should first be made to the relevant school or organisation.
+          </p>
+          <p>
+            The school may then use the available edit functions or contact
+            Penport India for technical assistance. A request may require proof
+            of identity, authority or guardianship before action is taken.
+          </p>
+          <p>
+            Certain information may be retained when required for legal compliance,
+            fraud prevention, security, dispute resolution, service records or
+            legitimate operational purposes.
+          </p>
+        </section>
+
+        <section id="links">
+          <h2>11. Third-Party Websites and Services</h2>
+          <p>
+            LIM may load or link to services operated by third parties. Penport
+            India does not control every third-party website, library, hosting
+            provider or service and is not responsible for their independent
+            privacy practices. Users should review the privacy terms of those
+            providers where appropriate.
+          </p>
+        </section>
+
+        <section id="changes">
+          <h2>12. Changes to This Privacy Policy</h2>
+          <p>
+            This Privacy Policy may be updated to reflect changes in the
+            application, service providers, legal requirements or data-handling
+            practices. The revised effective date will be displayed at the top
+            of this page. Continued use of LIM after an update means the user
+            should review and follow the revised policy.
+          </p>
+        </section>
+
+        <section id="contact">
+          <h2>13. Contact and Privacy Questions</h2>
+          <p>
+            For privacy questions, correction or deletion assistance, first
+            contact the school or organisation that created the relevant ID-card
+            record.
+          </p>
+
+          <div class="contact-box">
+            <strong>Penport India – LIM Support</strong>
+            <p>
+              For technical privacy assistance, contact Penport India through
+              the official support details displayed in the LIM application,
+              official website, invoice or service communication. Please do not
+              send passwords, full student records or unnecessary sensitive
+              information in an initial support request.
+            </p>
+            <a class="contact-link" href="Contact.html">Contact</a>
+          </div>
+
+          <a class="back-top" href="#top">↑ Back to top</a>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    © 2026 Penport India. LIM – Lakshmi ID Maker. All rights reserved.
+  </footer>
+</body>
+</html>

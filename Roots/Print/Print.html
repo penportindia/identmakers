@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Pro-ID Generator Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="Style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet" />
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <section id="page-1" class="app-section active">
+        <div class="main-layout-grid">
+            <aside class="control-panel glass-panel">
+                <div class="filter-group">
+                    <label for="schoolFilter">
+                        <i data-lucide="building-2" class="label-icon"></i>
+                        School Name
+                    </label>
+                    <div class="custom-select-wrapper">
+                        <input type="hidden" id="schoolFilter" class="custom-select-input" value="">
+                        <div class="custom-select-display" id="schoolFilterDisplay">
+                            <span class="custom-select-text">Select School</span>
+                            <i data-lucide="chevron-down" class="custom-select-icon"></i>
+                        </div>
+                        <div class="custom-select-dropdown" id="schoolFilterDropdown">
+                            <input type="text" class="custom-select-search" placeholder="Search school...">
+                            <ul class="custom-select-options" id="schoolFilterOptions"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group hidden-filter" aria-hidden="true">
+                    <label for="schoolIDSelect">
+                        <i data-lucide="hash" class="label-icon"></i>
+                        School ID
+                    </label>
+                    <div class="custom-select-wrapper">
+                        <input type="hidden" id="schoolIDSelect" class="custom-select-input" value="">
+                        <div class="custom-select-display" id="schoolIDSelectDisplay">
+                            <span class="custom-select-text">Select School ID</span>
+                            <i data-lucide="chevron-down" class="custom-select-icon"></i>
+                        </div>
+                        <div class="custom-select-dropdown" id="schoolIDSelectDropdown">
+                            <input type="text" class="custom-select-search" placeholder="Search school ID...">
+                            <ul class="custom-select-options" id="schoolIDSelectOptions"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label for="dataTypeSelect">
+                        <i data-lucide="users-2" class="label-icon"></i>
+                        ID Type
+                    </label>
+                    <div class="custom-select-wrapper">
+                        <input type="hidden" id="dataTypeSelect" class="custom-select-input" value="">
+                        <div class="custom-select-display" id="dataTypeSelectDisplay">
+                            <span class="custom-select-text">Select ID Type</span>
+                            <i data-lucide="chevron-down" class="custom-select-icon"></i>
+                        </div>
+                        <div class="custom-select-dropdown" id="dataTypeSelectDropdown">
+                            <input type="text" class="custom-select-search" placeholder="Search type...">
+                            <ul class="custom-select-options" id="dataTypeSelectOptions">
+                                <li data-value="STUDENT">Students</li>
+                                <li data-value="STAFF">Staff</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-box glass-summary">
+                    <div class="summary-item">
+                        <span data-lucide="users" class="summary-icon"></span>
+                        <div class="summary-details">
+                            <div id="recordCount" class="summary-value">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons-stack">
+                    <button id="openLocalImportBtn" class="action-btn tertiary-style">
+                        <i data-lucide="hard-drive-upload" class="icon-sm"></i>
+                        Excel
+                    </button>
+
+                    <button id="resetBtn" class="action-btn secondary-style">
+                        <i data-lucide="rotate-ccw" class="icon-sm"></i>
+                        Reset Filters
+                    </button>
+
+                    <button id="generateBtn" class="action-btn primary-style">
+                        <i data-lucide="arrow-right" class="icon-sm"></i>
+                        Next: Generate IDs
+                    </button>
+                </div>
+            </aside>
+
+            <div class="data-display-area">
+                <div class="data-table-container glass-panel">
+                    <div class="table-header-controls">
+                        <button id="columnSettingBtn" class="table-settings-btn" aria-label="Column settings" title="Column settings">
+                            <i data-lucide="settings" class="icon-sm"></i>
+                        </button>
+                    </div>
+
+                    <div class="table-wrapper-advanced">
+                        <table id="data-table">
+                            <thead id="tableHead"></thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="page-4" class="app-section">
+        <div class="local-import-page">
+            <div class="local-import-topbar glass-panel">
+                <button id="backFromLocalImportBtn" class="action-btn secondary-style">
+                    <i data-lucide="arrow-left" class="icon-sm"></i>
+                    Back to Records
+                </button>
+
+                <div class="local-import-topbar-title">
+                    <h2>
+                        <i data-lucide="hard-drive-upload" class="title-icon"></i>
+                        Excel
+                    </h2>
+                    <span id="localImportStatus" class="stat-badge">No file</span>
+                </div>
+            </div>
+
+            <div class="local-import-page-grid">
+                <div class="local-import-card glass-panel">
+                    <div class="local-import-card-header">
+                        <div>
+                            <div class="local-import-kicker">Step 1</div>
+                            <h3>Select Files</h3>
+                        </div>
+                    </div>
+
+                    <div class="local-import-subtitle">Use Excel data and photo files to generate printable records.</div>
+
+                    <div class="local-import-actions">
+                        <label for="localExcelUpload" class="action-btn tertiary-style local-import-btn">
+                            <i data-lucide="file-spreadsheet" class="icon-sm"></i>
+                            Select Excel
+                        </label>
+                        <input type="file" id="localExcelUpload" accept=".xlsx,.xls,.csv" hidden />
+
+                        <label for="localPhotoFolderUpload" class="action-btn tertiary-style local-import-btn">
+                            <i data-lucide="folder-open" class="icon-sm"></i>
+                            Photo Folder
+                        </label>
+                        <input type="file" id="localPhotoFolderUpload" accept="image/*" multiple webkitdirectory hidden />
+                    </div>
+
+                    <button id="clearLocalImportBtn" class="action-btn secondary-style local-import-clear">
+                        <i data-lucide="trash-2" class="icon-sm"></i>
+                        Clear Files
+                    </button>
+                </div>
+
+                <div class="local-import-card glass-panel">
+                    <div class="local-import-card-header">
+                        <div>
+                            <div class="local-import-kicker">Step 2</div>
+                            <h3>Map Excel Columns</h3>
+                        </div>
+                    </div>
+
+                    <div id="localMappingPanel" class="local-mapping-panel" hidden></div>
+                    <div id="localMappingEmpty" class="local-mapping-empty">
+                        Select an Excel file to show column mapping.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="page-2" class="app-section">
+        <div class="render-controls-bar glass-panel">
+            <div class="controls-left">
+                <button id="goToDataBtn" class="action-btn secondary-style">
+                    <i data-lucide="arrow-left" class="icon-sm"></i>
+                    Back
+                </button>
+            </div>
+
+            <div class="control-actions-right">
+                <label for="templateUpload" class="action-btn upload-style">
+                    <i data-lucide="upload-cloud" class="icon-sm"></i>
+                    Upload Template
+                </label>
+                <input type="file" id="templateUpload" accept=".json" hidden />
+
+                <button id="renderBtn" class="action-btn primary-style">
+                    <i data-lucide="zap" class="icon-sm"></i>
+                    Render Cards
+                </button>
+
+                <button id="printBtn" class="action-btn print-style">
+                    <i data-lucide="printer" class="icon-sm"></i>
+                    Print
+                </button>
+
+                <button id="goToBatchBtn" class="action-btn success-style">
+                    <i data-lucide="arrow-right" class="icon-sm"></i>
+                    Next: Batch
+                </button>
+            </div>
+        </div>
+
+        <div class="card-preview-area">
+            <div class="preview-header">
+                <h3 class="preview-title">
+                    <i data-lucide="sparkles" class="title-icon"></i>
+                    ID Card Preview
+                </h3>
+                <div class="preview-stats">
+                    <span id="cardCount" class="stat-badge">0 cards</span>
+                </div>
+            </div>
+            <div class="slides-wrapper" id="slidesWrapper"></div>
+        </div>
+    </section>
+
+    <section id="page-3" class="app-section">
+        <div class="batch-hub-content">
+            <div class="batch-page-header">
+                <h2 class="panel-title">
+                    <i data-lucide="package" class="title-icon"></i>
+                    Batch Management
+                </h2>
+            </div>
+
+            <div class="batch-top-controls">
+                <button id="backToRendererBtn" class="action-btn secondary-style">
+                    <i data-lucide="arrow-left" class="icon-sm"></i>
+                    Back to Render
+                </button>
+            </div>
+
+            <div id="page-3-controls" class="batch-controls glass-panel"></div>
+        </div>
+    </section>
+
+    <div id="cropContainer" class="crop-modal-overlay">
+        <div class="crop-modal-content">
+            <div class="crop-modal-header">
+                <div>
+                    <div class="crop-modal-kicker">Image editor</div>
+                    <h3 class="crop-modal-title">Crop Profile Image</h3>
+                </div>
+                <button id="cropCloseBtn" class="crop-close-btn" type="button" aria-label="Close crop editor">
+                    <i data-lucide="x" class="icon-sm"></i>
+                </button>
+            </div>
+
+            <div class="crop-workspace">
+                <img id="cropImage" class="crop-image-preview" alt="Crop Preview" />
+            </div>
+
+            <div class="modal-buttons">
+                <button id="cropConfirm" class="action-btn primary-style">Crop & Save</button>
+                <button id="cropCancel" class="action-btn secondary-style">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="Data.js"></script>
+    <script type="module" src="Render.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script type="module" src="LocalImport.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+        });
+    </script>
+
+</body>
+</html>
+

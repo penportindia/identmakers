@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f5f8fb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>LIM — Lakshmi ID Maker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg: #eef3f7;
+      --white: #fff;
+      --text: #101828;
+      --muted: #667085;
+      --line: #e7ebf0;
+      --green: #079765;
+      --green2: #05734e;
+      --greenSoft: #eaf8f3;
+      --blue: #2563eb;
+      --blueSoft: #edf3ff;
+      --gold: #f5b83d;
+      --dark: #080c10;
+      --shadow: 0 28px 80px rgba(16, 24, 40, .18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    body {
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: #fff;
+    }
+
+    .phone {
+      width: min(100%, 390px);
+      height: min(760px, calc(100vh - 28px));
+      min-height: 600px;
+      padding: 8px;
+      border-radius: 40px;
+      background: linear-gradient(145deg, #303640, #090c11);
+      box-shadow: var(--shadow), inset 0 0 0 1px rgba(255, 255, 255, .12);
+      position: relative;
+    }
+
+    .phone:before {
+      content: "";
+      position: absolute;
+      z-index: 60;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 116px;
+      height: 28px;
+      background: #07090c;
+      border-radius: 0 0 18px 18px;
+    }
+
+    .screen {
+      height: 100%;
+      overflow: auto;
+      scrollbar-width: none;
+      background: #fff;
+      border-radius: 32px;
+      position: relative;
+    }
+
+    .screen::-webkit-scrollbar {
+      display: none;
+    }
+
+    .status {
+      height: 40px;
+      padding: 11px 18px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(18px);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .status-icons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      color: #344054;
+      height: 100%;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .status-icons i {
+      font-size: 12px;
+      width: 12px;
+      display: inline-flex;
+      justify-content: center;
+    }
+
+    .status-icons span {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    .topbar {
+      height: 61px;
+      padding: 8px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 40px;
+      z-index: 39;
+      background: rgba(255, 255, 255, .90);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(231, 235, 240, .8);
+    }
+
+    .top-left,
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .icon-btn {
+      width: 41px;
+      height: 41px;
+      border-radius: 50%;
+      background: transparent;
+      color: #475467;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .icon-btn:hover {
+      background: #f2f5f8;
+    }
+
+    .top-title {
+      font: 800 15px Manrope;
+      opacity: 0;
+      transition: .2s;
+    }
+
+    .screen.scrolled .top-title {
+      opacity: 1;
+    }
+
+    .hero {
+      padding: 20px 16px 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfefd 72%, #f6faf8 100%);
+    }
+
+    .identity {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .app-icon {
+      position: relative;
+      width: 86px;
+      height: 86px;
+      flex: 0 0 86px;
+      border-radius: 24px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #2878ef, #079765);
+      box-shadow: 0 15px 34px rgba(7, 151, 101, .23), 0 3px 8px rgba(16, 24, 40, .08);
+      border: 1px solid rgba(255, 255, 255, .7);
+    }
+
+    .app-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .app-icon i {
+      font-size: 34px;
+      color: #fff;
+    }
+
+    .app-copy {
+      min-width: 0;
+    }
+
+    .app-copy h1 {
+      margin: 0;
+      font: 800 27px/1.05 Manrope;
+      letter-spacing: -.7px;
+    }
+
+    .developer {
+      margin-top: 7px;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .developer i {
+      font-size: 10px;
+    }
+
+    .meta {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 17px;
+      padding: 15px 5px;
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      background: linear-gradient(180deg, #fcfdfe, #f5f7f9);
+    }
+
+    .metric {
+      text-align: center;
+      position: relative;
+    }
+
+    .metric:not(:last-child):after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 12%;
+      height: 76%;
+      width: 1px;
+      background: var(--line);
+    }
+
+    .metric-value {
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .metric-value .star {
+      color: var(--gold);
+      font-size: 11px;
+    }
+
+    .metric-label {
+      margin-top: 4px;
+      font-size: 9.5px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 50px;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .install,
+    .share {
+      min-height: 50px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .install {
+      gap: 8px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: 0 10px 23px rgba(7, 151, 101, .22);
+    }
+
+    .install:hover {
+      transform: translateY(-1px);
+    }
+
+    .share {
+      background: #fff;
+      border: 1px solid var(--line);
+      color: #344054;
+      font-size: 16px;
+    }
+
+    .share:hover {
+      background: #f7f9fb;
+      transform: translateY(-1px);
+    }
+
+    .security {
+      margin-top: 12px;
+      padding: 11px 12px;
+      border-radius: 14px;
+      background: var(--greenSoft);
+      border: 1px solid #d5eee4;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #50645d;
+      font-size: 9.5px;
+      font-weight: 700;
+    }
+
+    .security i {
+      font-size: 14px;
+      color: var(--green);
+    }
+
+    .security a {
+      margin-left: auto;
+      color: var(--green2);
+      font-weight: 800;
+    }
+
+    .section {
+      padding: 19px 17px;
+      border-top: 7px solid #f4f6f8;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h2 {
+      margin: 0;
+      font: 800 16px Manrope;
+      letter-spacing: -.25px;
+    }
+
+    .arrow {
+      color: #98a2b3;
+      font-size: 12px;
+    }
+
+    .description {
+      margin: 10px 0 0;
+      color: #667085;
+      font-size: 11.5px;
+      line-height: 1.68;
+    }
+
+    .description strong {
+      color: #344054;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 13px;
+    }
+
+    .tag {
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: #475467;
+      font-size: 9.5px;
+      font-weight: 700;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .feature {
+      padding: 12px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+    }
+
+    .feature-icon {
+      width: 31px;
+      height: 31px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: var(--blueSoft);
+      color: var(--blue);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .feature:nth-child(2) .feature-icon {
+      background: var(--greenSoft);
+      color: var(--green);
+    }
+
+    .feature:nth-child(3) .feature-icon {
+      background: #fff5df;
+      color: #c98300;
+    }
+
+    .feature:nth-child(4) .feature-icon {
+      background: #f2efff;
+      color: #7655d6;
+    }
+
+    .feature strong {
+      font-size: 10.5px;
+    }
+
+    .feature span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.45;
+    }
+
+    .support {
+      padding: 19px 17px 20px;
+      border-top: 7px solid #f4f6f8;
+    }
+
+    .support-card {
+      padding: 17px;
+      border-radius: 21px;
+      border: 1px solid #d9eee6;
+      background: radial-gradient(circle at 100% 0, rgba(37, 99, 235, .11), transparent 42%), linear-gradient(145deg, #f7fcfa, #eef8f4);
+    }
+
+    .support-head {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .support-icon {
+      width: 43px;
+      height: 43px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      color: var(--green);
+      box-shadow: 0 6px 15px rgba(7, 151, 101, .10);
+    }
+
+    .support-copy h3 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .support-copy p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 9.5px;
+      font-weight: 600;
+    }
+
+    .call {
+      margin-top: 13px;
+      width: 100%;
+      min-height: 44px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid #cfe8df;
+      color: var(--green2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .bottom-nav {
+      position: sticky;
+      bottom: 0;
+      z-index: 50;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      padding: 8px 5px calc(9px + env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, .95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(231, 235, 240, .95);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: #98a2b3;
+      font-size: 8.5px;
+      font-weight: 800;
+    }
+
+    .nav-icon {
+      min-width: 52px;
+      padding: 6px 10px;
+      border-radius: 13px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .nav-item.active {
+      color: var(--blue);
+    }
+
+    .nav-item.active .nav-icon {
+      background: var(--blueSoft);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      z-index: 100;
+      transform: translate(-50%, 20px);
+      background: #101828;
+      color: #fff;
+      padding: 11px 15px;
+      border-radius: 12px;
+      font-size: 10.5px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s;
+      box-shadow: 0 12px 30px rgba(16, 24, 40, .25);
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 420px) {
+      .page {
+        padding: 6px;
+        background: #fff;
+      }
+
+      .phone {
+        width: min(calc(100vw - 12px), 380px);
+        height: calc(100dvh - 12px);
+        min-height: calc(100dvh - 12px);
+        padding: 0;
+        border-radius: 20px;
+        box-shadow: none;
+      }
+
+      .phone:before {
+        display: none;
+      }
+
+      .screen {
+        border-radius: 20px;
+      }
+
+      .status {
+        padding: 11px 14px 0;
+      }
+
+      .status-icons {
+        gap: 8px;
+      }
+
+      .status-icons span {
+        font-size: 10px;
+      }
+    }
+
+    @media (max-height: 740px) {
+      .phone {
+        height: calc(100vh - 18px);
+        min-height: 580px;
+      }
+
+      .hero {
+        padding-top: 15px;
+        padding-bottom: 14px;
+      }
+
+      .app-icon {
+        position: relative;
+        width: 78px;
+        height: 78px;
+        flex-basis: 78px;
+      }
+
+      .metrics {
+        margin-top: 12px;
+        padding: 12px 5px;
+      }
+
+      .actions {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="phone">
+      <div class="screen" id="screen">
+        <div class="status">
+          <span id="clock">9:41</span>
+          <div class="status-icons">
+            <span>4G</span>
+            <i class="fa-solid fa-wifi"></i>
+            <i class="fa-solid fa-signal"></i>
+            <i class="fa-solid fa-battery-three-quarters"></i>
+          </div>
+        </div>
+
+        <header class="topbar">
+          <div class="top-left">
+            <button class="icon-btn" aria-label="Back" onclick="history.back()">
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <span class="top-title">LIM</span>
+          </div>
+          <div class="top-right">
+            <button class="icon-btn" aria-label="Search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <button class="icon-btn" aria-label="More" onclick="showToast('More options')">
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+          </div>
+        </header>
+
+        <section class="hero">
+          <div class="identity">
+            <div class="app-icon">
+              <img src="../../LIM.png" alt="LIM App Icon" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=&quot;fa-solid fa-id-card&quot;></i>'">
+            </div>
+            <div class="app-copy">
+              <h1>LIM</h1>
+              <div class="developer">Penport India <i class="fa-solid fa-circle-check"></i></div>
+              <div class="meta">Official app • Easy &amp; reliable</div>
+            </div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-value">4.7 <i class="fa-solid fa-star star"></i></div>
+              <div class="metric-label">150 reviews</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">1K+</div>
+              <div class="metric-label">Downloads</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">
+                <i class="fa-solid fa-shield-halved" style="color:var(--green)"></i>
+              </div>
+              <div class="metric-label">Rated for 3+</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <a class="install" href="https://play.google.com/store/apps/details?id=com.penport.wings&pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
+              <i class="fa-brands fa-google-play"></i> Install
+            </a>
+            <button class="share" aria-label="Share LIM app" onclick="shareApp()">
+              <i class="fa-solid fa-share-nodes"></i>
+            </button>
+          </div>
+
+          <div class="security">
+            <i class="fa-solid fa-lock"></i>
+            <span>No data shared with third parties</span>
+            <a href="../../Privecy.html">Details</a>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h2>About this app</h2>
+            <span class="arrow"><i class="fa-solid fa-chevron-right"></i></span>
+          </div>
+          <p class="description">
+            LIM is built for <strong>Lakshmi ID Maker</strong> users to enter school, student, and staff ID card details, capture photos, and prepare clean, professional ID cards for printing. Designed and developed by Penport India with a smooth, reliable workflow.
+          </p>
+          <div class="tags">
+            <span class="tag">Business</span>
+            <span class="tag">ID Generation</span>
+            <span class="tag">Productivity</span>
+          </div>
+
+          <div class="feature-grid">
+            <div class="feature">
+              <div class="feature-icon"><i class="fa-solid fa-id-card"></i></div>
+              <strong>ID Card Ready</strong>
+              <span>Create clean cards for school &amp; staff.</span>
+            </div>
+            <div class="feature">
+              <div class="feature-icon"><i class="fa-solid fa-camera"></i></div>
+              <strong>Photo Capture</strong>
+              <span>Add photos directly to your workflow.</span>
+            </div>
+            <div class="feature">
+              <div class="feature-icon"><i class="fa-solid fa-print"></i></div>
+              <strong>Print Friendly</strong>
+              <span>Prepare professional cards for printing.</span>
+            </div>
+            <div class="feature">
+              <div class="feature-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+              <strong>Simple Flow</strong>
+              <span>Quick, focused and easy to use.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="support">
+          <div class="support-card">
+            <div class="support-head">
+              <div class="support-icon"><i class="fa-solid fa-headset"></i></div>
+              <div class="support-copy">
+                <h3>Lakshmi ID Card Support</h3>
+                <p>Get instant assistance and support</p>
+              </div>
+            </div>
+            <a href="tel:9304394825" class="call">
+              <i class="fa-solid fa-phone"></i> Call Now: 93043 94825
+            </a>
+          </div>
+        </section>
+
+        <nav class="bottom-nav" aria-label="App navigation">
+          <a class="nav-item" href="#" onclick="navClick(this);return false">
+            <span class="nav-icon"><i class="fa-solid fa-gamepad"></i></span>
+            <span>Games</span>
+          </a>
+          <a class="nav-item active" href="#" onclick="navClick(this);return false">
+            <span class="nav-icon"><i class="fa-solid fa-mobile-screen"></i></span>
+            <span>Apps</span>
+          </a>
+          <a class="nav-item" href="#" onclick="navClick(this);return false">
+            <span class="nav-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <span>Search</span>
+          </a>
+          <a class="nav-item" href="#" onclick="navClick(this);return false">
+            <span class="nav-icon"><i class="fa-solid fa-book"></i></span>
+            <span>Books</span>
+          </a>
+          <a class="nav-item" href="#" onclick="navClick(this);return false">
+            <span class="nav-icon"><i class="fa-solid fa-user"></i></span>
+            <span>You</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const screen = document.getElementById('screen');
+    const toast = document.getElementById('toast');
+    let toastTimer;
+
+    screen.addEventListener('scroll', () => screen.classList.toggle('scrolled', screen.scrollTop > 35));
+
+    function showToast(msg) {
+      clearTimeout(toastTimer);
+      toast.textContent = msg;
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    /* Real native share: shares the LIM app name + Play Store link */
+    async function shareApp() {
+      const appUrl = 'https://play.google.com/store/apps/details?id=com.penport.wings&pcampaignid=web_share';
+      const shareData = {
+        title: 'LIM — Lakshmi ID Maker',
+        text: 'Install LIM — Lakshmi ID Maker by Penport India:',
+        url: appUrl
+      };
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+          return;
+        }
+
+        if (navigator.clipboard) {
+          await navigator.clipboard.writeText(appUrl);
+          showToast('App link copied — share it anywhere');
+          return;
+        }
+
+        window.prompt('Copy this LIM app link:', appUrl);
+      } catch (err) {
+        if (err && err.name !== 'AbortError') showToast('Unable to open share');
+      }
+    }
+
+    function navClick(el) {
+      document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+      el.classList.add('active');
+      showToast(el.querySelector('span:last-child').textContent);
+    }
+
+    function updateClock() {
+      const d = new Date();
+      document.getElementById('clock').textContent = d.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      });
+    }
+
+    updateClock();
+    setInterval(updateClock, 30000);
+  </script>
+</body>
+</html>

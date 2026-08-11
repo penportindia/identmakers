@@ -1,0 +1,1042 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Report Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-light: #f6f8fb;
+            --white: #ffffff;
+            --green: #34D399;
+            --dark-green: #047857;
+            --blue: #10b981;
+            --amber: #f59e0b;
+            --red: #ef4444;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --panel-bg: rgba(255, 255, 255, 0.92);
+            --panel-border: rgba(15, 23, 42, 0.08);
+            --card-radius: 14px;
+            --glass-blur: 18px;
+            --shadow-light: 0 14px 36px rgba(15, 23, 42, 0.08);
+            --shadow-hover: 0 22px 52px rgba(15, 23, 42, 0.13);
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            background: #ffffff;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: 2rem 1.25rem 3rem;
+        }
+
+        .app-wrap {
+            max-width: 1680px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .glass-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: var(--card-radius);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            box-shadow: var(--shadow-light);
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(4, 120, 87, 0.16);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.25rem;
+            padding: 1.25rem 1.35rem;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 1rem;
+            z-index: 10;
+        }
+
+        .brand h1 {
+            font-size: 1.9rem;
+            margin: 0;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: 0;
+        }
+
+        .brand p {
+            margin: 0;
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.65rem;
+            align-items: center;
+        }
+
+        .form-control, .btn-icon {
+            border-radius: 12px;
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            background-color: var(--white);
+            transition: all 0.18s ease;
+        }
+
+        .form-control {
+            min-width: 320px;
+            height: 44px;
+            font-weight: 600;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(52, 211, 153, 0.16);
+            border-color: var(--green);
+        }
+
+        .btn-icon {
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 16px;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+        }
+
+        .btn-icon:hover {
+            background-color: var(--dark-green);
+            color: var(--white);
+            border-color: var(--dark-green);
+            transform: translateY(-1px);
+        }
+
+        .btn-icon.active {
+            background-color: var(--dark-green);
+            color: var(--white);
+            border-color: var(--dark-green);
+        }
+
+        .filter-btn.active {
+            background-color: var(--blue);
+            border-color: var(--blue);
+            color: var(--white);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .summary-card {
+            padding: 1.35rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--green), var(--blue));
+        }
+
+        .summary-card .label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .summary-card .value {
+            font-size: 2.3rem;
+            margin-top: 0.35rem;
+            font-weight: 800;
+            color: var(--dark-green);
+            line-height: 1;
+        }
+
+        .schools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.1rem;
+            margin-top: 0.25rem;
+        }
+
+        .school-card {
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 168px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .school-content {
+            flex: 1;
+            padding-bottom: 0.9rem;
+        }
+
+        .school-title {
+            font-weight: 700;
+            font-size: 1.08rem;
+            color: var(--text-dark);
+            line-height: 1.35;
+            min-height: 2.7rem;
+            padding-right: 4.25rem;
+            overflow-wrap: anywhere;
+        }
+
+        .school-sub {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            margin-top: 0.65rem;
+            margin-bottom: 0.85rem;
+            font-weight: 700;
+        }
+
+        .card-bottom-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            padding-top: 0.85rem;
+            border-top: 1px solid rgba(15, 23, 42, 0.08);
+        }
+
+        .last-update {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .last-update strong {
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .school-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .date-card {
+            padding: 1rem 1.1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            border-radius: 10px;
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            box-shadow: none;
+            transition: background-color 0.18s ease, border-color 0.18s ease;
+        }
+
+        .date-card:hover {
+            background: #f8fafc;
+            border-color: rgba(4, 120, 87, 0.18);
+        }
+
+        .date-left {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .date-pill {
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            background: #ecfdf5;
+            font-weight: 700;
+            color: var(--dark-green);
+            border: 1px solid rgba(4, 120, 87, 0.18);
+            font-size: 0.9rem;
+        }
+
+        .date-info {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+        }
+
+        .view-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            color: var(--text-dark);
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .view-small:hover {
+            background-color: var(--green);
+            color: var(--white);
+        }
+
+        .btn-close {
+            box-shadow: none;
+            opacity: 0.65;
+            transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+            transform: scale(1.04);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .new-data-star {
+            color: var(--amber);
+            animation: pulse 1s infinite;
+        }
+
+        .active-data-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #047857;
+            background: rgba(52, 211, 153, 0.16);
+            border: 1px solid rgba(4, 120, 87, 0.18);
+            border-radius: 999px;
+            padding: 0.32rem 0.58rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .school-card > .active-data-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 2;
+        }
+
+        .active-data-badge i {
+            font-size: 0.95rem;
+        }
+
+        .audit-btn {
+            border: none;
+            background: transparent;
+            font-size: 1.2rem;
+        }
+
+        .audit-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .modal-content {
+            border-radius: 14px;
+            background: var(--white);
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            box-shadow: 0 20px 56px rgba(15,23,42,0.18);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+            padding: 1.1rem 1.25rem;
+            background: #ffffff;
+        }
+
+        .modal-title {
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .modal-body {
+            padding: 1.25rem;
+            background: #ffffff;
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(15, 23, 42, 0.08);
+            padding: 0.9rem 1.25rem;
+            background: #ffffff;
+        }
+
+        .table thead th {
+            background: #f8fafc;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+            font-size: 0.75rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .table tbody td {
+            border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 0.7rem 0.5rem;
+            vertical-align: middle;
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .modal-footer .btn-secondary {
+            background: #f8fafc;
+            border-color: rgba(15, 23, 42, 0.1);
+            color: var(--text-dark);
+            font-weight: 700;
+            border-radius: 10px;
+            padding: 0.45rem 0.9rem;
+        }
+
+        .report-audit-btn-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .muted { color: var(--text-muted); }
+        .green { color: var(--green); }
+        .dark-green { color: var(--dark-green); }
+
+        @media (max-width: 900px) {
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1.25rem;
+                position: static;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 560px) {
+            body { padding: 1rem; }
+            .summary-grid { grid-template-columns: repeat(1, 1fr); }
+            .controls { width: 100%; flex-direction: column; align-items: stretch;}
+            .form-control { min-width: 100%; width: 100%; }
+            .schools-grid { grid-template-columns: 1fr; }
+            .card-bottom-bar { align-items: flex-start; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrap">
+        <div class="topbar glass-card">
+            <div class="brand">
+                <h1>Report</h1>
+            </div>
+
+            <div class="controls ms-auto" style="flex-wrap: wrap; justify-content: flex-end;">
+                <input id="searchBox"
+                        type="text"
+                        placeholder="Search School ID..."
+                        class="form-control" />
+
+                <div class="btn-group" role="group" aria-label="Sorting controls">
+                    <button id="sortLatestBtn" class="btn btn-icon active" title="Sort by Latest Update"><i class="bi bi-clock-history"></i></button>
+                    <button id="sortHighestBtn" class="btn btn-icon" title="Sort by Highest Total"><i class="bi bi-sort-down"></i></button>
+                    <button id="sortLowestBtn" class="btn btn-icon" title="Sort by Lowest Total"><i class="bi bi-sort-up"></i></button>
+                    <button class="btn btn-icon filter-btn active" data-filter="all" title="Show All Schools"><i class="bi bi-grid-3x3-gap"></i></button>
+                    <button class="btn btn-icon filter-btn" data-filter="active" title="Show Active Data Schools"><i class="bi bi-database-fill-check"></i></button>
+                    <button class="btn btn-icon filter-btn" data-filter="inactive" title="Show Inactive Data Schools"><i class="bi bi-database-x"></i></button>
+                </div>
+
+                <button id="refreshBtn" class="btn btn-icon" title="Refresh"><i class="bi bi-arrow-clockwise"></i></button>
+            </div>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-card glass-card">
+                <div class="label">Total Schools</div>
+                <div id="totalSchools" class="value">0</div>
+            </div>
+            <div class="summary-card glass-card">
+                <div class="label">Total Staff Records</div>
+                <div id="totalStaff" class="value">0</div>
+            </div>
+            <div class="summary-card glass-card">
+                <div class="label">Total Student Records</div>
+                <div id="totalStudents" class="value">0</div>
+            </div>
+            <div class="summary-card glass-card">
+                <div class="label">Grand Total Records</div>
+                <div id="grandTotal" class="value">0</div>
+            </div>
+        </div>
+
+        <div id="schoolsContainer" class="schools-grid"></div>
+    </div>
+
+    <div class="modal fade" id="schoolModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-building me-2 green"></i> <span id="modalSchoolId" class="dark-green">School</span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="dateCards"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dateModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-list-check me-2 green"></i> <span id="modalDateTitle" class="dark-green">Details</span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="report-audit-btn-container">
+                        <button id="auditReportBtn" class="btn btn-sm btn-success" data-school="" data-date=""><i class="bi bi-check-circle"></i> Audit All Records for this Date</button>
+                    </div>
+                    <table class="table table-sm table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Key</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dateDetails"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import {
+            getDatabase,
+            ref,
+            onValue,
+            update
+        } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+        import { firebaseConfig } from "../Database/Database.js";
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+
+        signInAnonymously(auth).then(() => {
+            console.log("Anonymous sign-in successful.");
+        }).catch((error) => {
+            console.error("Anonymous sign-in failed:", error);
+
+        });
+
+        const totalSchoolsEl = document.getElementById('totalSchools');
+        const totalStaffEl = document.getElementById('totalStaff');
+        const totalStudentsEl = document.getElementById('totalStudents');
+        const grandTotalEl = document.getElementById('grandTotal');
+        const schoolsContainer = document.getElementById('schoolsContainer');
+        const modalSchoolId = document.getElementById('modalSchoolId');
+        const dateCards = document.getElementById('dateCards');
+        const searchBox = document.getElementById('searchBox');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const modalDateTitle = document.getElementById('modalDateTitle');
+        const dateDetails = document.getElementById('dateDetails');
+        const sortLatestBtn = document.getElementById('sortLatestBtn');
+        const sortHighestBtn = document.getElementById('sortHighestBtn');
+        const sortLowestBtn = document.getElementById('sortLowestBtn');
+        const auditReportBtn = document.getElementById('auditReportBtn');
+
+        let workdoneData = {};
+        let activeDataSummary = {};
+        let searchQuery = '';
+        let activeFilter = 'all';
+        let currentSort = 'latest';
+        let currentModalSchoolId = null;
+
+        function formatDate(input) {
+            let d;
+            if (!input) return '-';
+
+            if (/^\d{4}-\d{2}-\d{2}$/.test(input)) {
+                const parts = input.split('-');
+
+                d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+            } else {
+                d = new Date(input);
+            }
+            if (isNaN(d.getTime())) return input;
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = d.toLocaleString('en-US', { month: 'short' });
+            const year = d.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
+
+        function formatTime(input) {
+            if (!input) return '-';
+            const d = new Date(input);
+            if (isNaN(d.getTime())) return input;
+
+            return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+        }
+
+        function escapeHtml(s) {
+            if (typeof s !== 'string') return s;
+            return s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+        }
+
+        function getSchoolStatus(school) {
+            let latest = null;
+            let isCompletelyAudited = true;
+
+            const staffRecords = Object.values(school.STAFF || {});
+            const studentRecords = Object.values(school.STUDENT || {});
+            const records = [...staffRecords, ...studentRecords];
+
+            records.forEach(r => {
+
+                if (r && r.deletedAt) {
+                    const t = new Date(r.deletedAt);
+                    if (!isNaN(t.getTime())) {
+                        if (!latest || t > latest) {
+                            latest = t;
+                        }
+                    }
+
+                    if (r.auditStatus !== true) {
+                        isCompletelyAudited = false;
+                    }
+                }
+            });
+
+            return {
+                latest: latest ? latest.toISOString() : null,
+                isCompletelyAudited: isCompletelyAudited
+            };
+        }
+
+        function buildActiveDataSummary(masterData) {
+            const summary = {};
+
+            Object.keys(masterData || {}).forEach(schoolName => {
+                const schoolNode = masterData[schoolName] || {};
+                let students = 0;
+                let staff = 0;
+
+                Object.keys(schoolNode || {}).forEach(schoolID => {
+                    const schoolIDNode = schoolNode[schoolID] || {};
+                    students += Object.keys(schoolIDNode.STUDENT || {}).length;
+                    staff += Object.keys(schoolIDNode.STAFF || {}).length;
+                });
+
+                const total = students + staff;
+                if (total > 0) {
+                    summary[schoolName] = { students, staff, total };
+                }
+            });
+
+            return summary;
+        }
+
+        onValue(ref(db, 'workdone'), (snapshot) => {
+            workdoneData = snapshot.exists() ? snapshot.val() : {};
+
+            renderDashboard();
+
+            if (currentModalSchoolId && document.getElementById('schoolModal').classList.contains('show')) {
+                openSchoolModal(currentModalSchoolId, false);
+            }
+
+        }, (error) => {
+            console.error("Firebase 'workdone' data fetch failed:", error);
+            schoolsContainer.innerHTML = '<div class="text-danger text-center w-100 p-4">Error loading data. Check console for details.</div>';
+        });
+
+        onValue(ref(db, 'DATA-MASTER'), (snapshot) => {
+            activeDataSummary = buildActiveDataSummary(snapshot.exists() ? snapshot.val() : {});
+            renderDashboard();
+        }, (error) => {
+            console.error("Firebase 'DATA-MASTER' data fetch failed:", error);
+        });
+
+        function renderDashboard() {
+
+            const sids = Object.keys(workdoneData || {});
+            let totalSchools = 0;
+            let totalStaff = 0;
+            let totalStudents = 0;
+            schoolsContainer.innerHTML = '';
+
+            const filteredSids = sids.filter(sid => {
+                const matchesSearch = !searchQuery || sid.toLowerCase().includes(searchQuery.toLowerCase());
+                const hasActiveData = !!activeDataSummary[sid];
+                const matchesActiveFilter =
+                    activeFilter === 'all' ||
+                    (activeFilter === 'active' && hasActiveData) ||
+                    (activeFilter === 'inactive' && !hasActiveData);
+
+                return matchesSearch && matchesActiveFilter;
+            });
+
+            filteredSids.sort((a, b) => {
+                const schoolA = workdoneData[a] || {};
+                const schoolB = workdoneData[b] || {};
+
+                const staffA_keys = Object.keys(schoolA.STAFF || {});
+                const studentA_keys = Object.keys(schoolA.STUDENT || {});
+                const staffB_keys = Object.keys(schoolB.STAFF || {});
+                const studentB_keys = Object.keys(schoolB.STUDENT || {});
+
+                const totalA = staffA_keys.length + studentA_keys.length;
+                const totalB = staffB_keys.length + studentB_keys.length;
+
+                if (currentSort === 'latest') {
+                    const statusA = getSchoolStatus(schoolA);
+                    const statusB = getSchoolStatus(schoolB);
+                    const latestA = statusA.latest ? new Date(statusA.latest).getTime() : 0;
+                    const latestB = statusB.latest ? new Date(statusB.latest).getTime() : 0;
+                    return latestB - latestA;
+                } else if (currentSort === 'highest') {
+                    return totalB - totalA;
+                } else if (currentSort === 'lowest') {
+                    return totalA - totalB;
+                }
+                return 0;
+            });
+
+            totalSchools = filteredSids.length;
+
+            if (filteredSids.length === 0) {
+                schoolsContainer.innerHTML = '<div class="muted text-center w-100 p-4">No schools found matching your search.</div>';
+            }
+
+            filteredSids.forEach(sid => {
+                const school = workdoneData[sid] || {};
+                const staffCount = Object.keys(school.STAFF || {}).length;
+                const studentCount = Object.keys(school.STUDENT || {}).length;
+                const total = staffCount + studentCount;
+
+                totalStaff += staffCount;
+                totalStudents += studentCount;
+
+                const status = getSchoolStatus(school);
+                const lastUpdateText = status.latest ? `${formatDate(status.latest.split('T')[0])} - ${formatTime(status.latest)}` : '-';
+                const isCompletelyAudited = status.isCompletelyAudited;
+                const activeSummary = activeDataSummary[sid];
+                const activeHtml = activeSummary
+                    ? `<span class="active-data-badge" title="Active data available: Students ${activeSummary.students}, Staff ${activeSummary.staff}"><i class="bi bi-database-fill-check"></i>${activeSummary.total}</span>`
+                    : '';
+
+                let statusHtml;
+                if (total === 0) {
+                    statusHtml = `<span class="text-info" title="No Data"><i class="bi bi-info-circle"></i></span>`;
+                } else if (isCompletelyAudited) {
+                    statusHtml = `<span class="text-success" title="Audited"><i class="bi bi-check-circle-fill"></i></span>`;
+                } else {
+                    statusHtml = `<span class="text-warning" title="New Data"><i class="bi bi-star-fill new-data-star"></i></span>`;
+                }
+
+                const el = document.createElement('div');
+                el.className = 'school-card glass-card';
+                el.innerHTML = `
+                    ${activeHtml}
+                    <div class="school-content">
+                        <div class="school-title">${escapeHtml(sid)}</div>
+                        <div class="school-sub">Staff: ${staffCount} - Students: ${studentCount} - Total: ${total}</div>
+                    </div>
+                    <div class="card-bottom-bar">
+                        <div class="last-update">Last update: <strong>${lastUpdateText}</strong></div>
+                        <div class="school-actions">
+                            ${statusHtml}
+                            <button class="btn btn-sm btn-icon btn-view" data-school="${escapeHtml(sid)}" title="Open report"><i class="bi bi-eye"></i></button>
+                        </div>
+                    </div>
+                `;
+                schoolsContainer.appendChild(el);
+            });
+
+            const allSids = Object.keys(workdoneData || {});
+            let grandTotalStaff = 0;
+            let grandTotalStudents = 0;
+            allSids.forEach(sid => {
+                const school = workdoneData[sid] || {};
+                grandTotalStaff += Object.keys(school.STAFF || {}).length;
+                grandTotalStudents += Object.keys(school.STUDENT || {}).length;
+            });
+
+            totalSchoolsEl.textContent = allSids.length;
+            totalStaffEl.textContent = grandTotalStaff;
+            totalStudentsEl.textContent = grandTotalStudents;
+            grandTotalEl.textContent = grandTotalStaff + grandTotalStudents;
+        }
+
+        function openSchoolModal(sid, openModal = true) {
+            currentModalSchoolId = sid;
+            modalSchoolId.textContent = escapeHtml(sid);
+            const school = workdoneData[sid] || {};
+            const staff = school.STAFF || {};
+            const students = school.STUDENT || {};
+
+            const dateMap = {};
+
+            const processRecords = (records, type) => {
+                Object.keys(records || {}).forEach(key => {
+                    const rec = records[key];
+
+                    if (rec && rec.deletedAt) {
+                        const dateKey = rec.deletedAt.split('T')[0];
+                        if (!dateMap[dateKey]) dateMap[dateKey] = { staff: [], students: [] };
+
+                        if (type === 'STAFF') {
+                            dateMap[dateKey].staff.push({...rec, key, type: 'STAFF'});
+                        } else {
+                            dateMap[dateKey].students.push({...rec, key, type: 'STUDENT'});
+                        }
+                    }
+                });
+            };
+
+            processRecords(staff, 'STAFF');
+            processRecords(students, 'STUDENT');
+
+            const sortedDates = Object.keys(dateMap).sort((a, b) => new Date(b) - new Date(a));
+            let html = '';
+
+            if (sortedDates.length === 0) {
+                html = '<div class="text-center muted">No records for this school.</div>';
+            } else {
+                sortedDates.forEach(d => {
+                    const staffRecords = dateMap[d].staff;
+                    const studentRecords = dateMap[d].students;
+                    const s = staffRecords.length;
+                    const st = studentRecords.length;
+                    const total = s + st;
+
+                    const isAudited = staffRecords.every(r => r.auditStatus === true) && studentRecords.every(r => r.auditStatus === true);
+
+                    let statusIcon;
+                    if (total === 0) {
+                        statusIcon = '';
+                    } else if (isAudited) {
+                        statusIcon = `<i class="bi bi-check-circle-fill text-success" title="Audited"></i>`;
+                    } else {
+                        statusIcon = `<i class="bi bi-star-fill new-data-star text-warning" title="Not Audited"></i>`;
+                    }
+
+                    html += `
+                        <div class="date-card">
+                            <div class="date-left">
+                                <div class="date-pill">${formatDate(d)}</div>
+                                <div>
+                                    <div class="fw-bold dark-green">${total} items</div>
+                                    <div class="date-info">Staff: <strong>${s}</strong> - Students: <strong>${st}</strong></div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                ${statusIcon}
+                                <button class="view-small btn" data-school="${escapeHtml(sid)}" data-date="${escapeHtml(d)}" title="View details"><i class="bi bi-eye"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            dateCards.innerHTML = html;
+
+            if (openModal) {
+                 new bootstrap.Modal(document.getElementById('schoolModal')).show();
+            }
+        }
+
+        function openDateModal(sid, date) {
+            const school = workdoneData[sid] || {};
+
+            const allRecords = [
+                ...Object.keys(school.STAFF || {}).map(key => ({...school.STAFF[key], recordKey: key, type: 'STAFF'})),
+                ...Object.keys(school.STUDENT || {}).map(key => ({...school.STUDENT[key], recordKey: key, type: 'STUDENT'}))
+            ];
+
+            const recordsForDate = allRecords.filter(rec => rec && rec.deletedAt && rec.deletedAt.startsWith(date));
+
+            let rows = '';
+
+            if (recordsForDate.length > 0) {
+                auditReportBtn.style.display = 'inline-flex';
+                auditReportBtn.dataset.school = sid;
+                auditReportBtn.dataset.date = date;
+
+                const allAudited = recordsForDate.every(rec => rec.auditStatus === true);
+                auditReportBtn.disabled = allAudited;
+                auditReportBtn.textContent = allAudited ? 'All Records Audited' : 'Audit All Records for this Date';
+            } else {
+                auditReportBtn.style.display = 'none';
+            }
+
+            recordsForDate
+                .sort((a,b) => new Date(a.deletedAt) - new Date(b.deletedAt))
+                .forEach(rec => {
+                    const type = rec.type === 'STAFF' ? 'Staff' : 'Student';
+                    const isAudited = rec.auditStatus === true;
+
+                    const auditStatusHtml = isAudited ?
+                        `<span class="text-success fw-bold" title="Audited"><i class="bi bi-check-circle-fill"></i> Done</span>` :
+                        `<span class="text-warning" title="Pending"><i class="bi bi-x-circle-fill"></i> Pending</span>`;
+
+                    rows += `
+                        <tr>
+                            <td>${type}</td>
+                            <td>${escapeHtml(rec.recordKey || '-')}</td>
+                            <td>${formatTime(rec.deletedAt)}</td>
+                            <td>${auditStatusHtml}</td>
+                        </tr>
+                    `;
+            });
+
+            modalDateTitle.textContent = `School: ${escapeHtml(sid)} - ${formatDate(date)}`;
+            dateDetails.innerHTML = rows || '<tr><td colspan="4" class="muted text-center">No records.</td></tr>';
+
+            let dateModal = bootstrap.Modal.getInstance(document.getElementById('dateModal'));
+            if (!dateModal) {
+                 dateModal = new bootstrap.Modal(document.getElementById('dateModal'));
+            }
+            dateModal.show();
+        }
+
+        searchBox.addEventListener('input', (e) => {
+            searchQuery = e.target.value.trim();
+            renderDashboard();
+        });
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                activeFilter = btn.dataset.filter || 'all';
+                filterButtons.forEach(item => item.classList.remove('active'));
+                btn.classList.add('active');
+                renderDashboard();
+            });
+        });
+
+        document.getElementById('refreshBtn').addEventListener('click', () => location.reload());
+
+        function updateSort(sortType) {
+            currentSort = sortType;
+
+            document.querySelectorAll('#sortLatestBtn, #sortHighestBtn, #sortLowestBtn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`sort${sortType.charAt(0).toUpperCase() + sortType.slice(1)}Btn`).classList.add('active');
+            renderDashboard();
+        }
+        sortLatestBtn.addEventListener('click', () => updateSort('latest'));
+        sortHighestBtn.addEventListener('click', () => updateSort('highest'));
+        sortLowestBtn.addEventListener('click', () => updateSort('lowest'));
+
+        document.addEventListener('click', (e) => {
+
+            const viewBtn = e.target.closest('.btn-view');
+            if (viewBtn) {
+
+                const dateModal = bootstrap.Modal.getInstance(document.getElementById('dateModal'));
+                if (dateModal) dateModal.hide();
+                openSchoolModal(viewBtn.dataset.school);
+                return;
+            }
+
+            const viewSmallBtn = e.target.closest('.view-small');
+            if (viewSmallBtn) {
+                openDateModal(viewSmallBtn.dataset.school, viewSmallBtn.dataset.date);
+                return;
+            }
+
+            if (e.target.id === 'auditReportBtn' && !e.target.disabled) {
+                const sid = auditReportBtn.dataset.school;
+                const date = auditReportBtn.dataset.date;
+
+                if (sid && date) {
+
+                    if (!confirm(`Are you sure you want to AUDIT ALL ${sid} records for the date ${formatDate(date)}?`)) {
+                        return;
+                    }
+
+                    const school = workdoneData[sid] || {};
+                    const updates = {};
+
+                    const allRecords = [
+                        ...Object.keys(school.STAFF || {}).map(key => ({...school.STAFF[key], recordKey: key, type: 'STAFF'})),
+                        ...Object.keys(school.STUDENT || {}).map(key => ({...school.STUDENT[key], recordKey: key, type: 'STUDENT'}))
+                    ];
+
+                    const recordsToAudit = allRecords.filter(rec =>
+                        rec && rec.deletedAt && rec.deletedAt.startsWith(date) && rec.auditStatus !== true
+                    );
+
+                    recordsToAudit.forEach(rec => {
+
+                        updates[`workdone/${sid}/${rec.type}/${rec.recordKey}/auditStatus`] = true;
+                    });
+
+                    if (Object.keys(updates).length > 0) {
+                        auditReportBtn.disabled = true;
+                        auditReportBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Auditing...';
+
+                        update(ref(db), updates).then(() => {
+                            console.log(`Successfully audited ${recordsToAudit.length} records for ${sid} on ${date}.`);
+
+                            openDateModal(sid, date);
+
+                        }).catch(error => {
+                            console.error('Error auditing records:', error);
+                            alert('An error occurred during auditing. Please check the console.');
+
+                            auditReportBtn.disabled = false;
+                            auditReportBtn.innerHTML = '<i class="bi bi-check-circle"></i> Audit All Records for this Date';
+                        });
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

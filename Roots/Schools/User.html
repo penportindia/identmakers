@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>School Manager | Firebase ERP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --primary-dark: #357ABD;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --bg: #F0F4F8;
+            --card-bg: #FFFFFF;
+            --border-color: #E5E7EB;
+            --text-dark: #374151;
+            --text-light: #6B7280;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --radius-md: 8px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: none; 
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.85); 
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            z-index: 101; 
+        }
+        .navbar {
+            background: var(--card-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .navbar h1 { margin: 0; font-size: 1.5rem; font-weight: 700;}
+        .badges { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .badge {
+            padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 600;
+            display: flex; align-items: center; gap: 0.5rem; border: 1px solid transparent;
+        }
+        .badge.info { background: #E6F0FF; border-color: var(--primary); color: var(--primary); }
+        .badge.success { background: #D1FAE5; border-color: var(--success); color: var(--success); }
+        .badge.warning { background: #FFEDD5; border-color: var(--warning); color: var(--warning); }
+
+        .container { padding: 2rem 3rem; }
+        .top-actions {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; margin-bottom: 2rem; gap: 1.25rem;
+        }
+        .search-box { position: relative; flex-grow: 1; max-width: 25rem; }
+        .search-box input {
+            width: 100%; padding: 0.75rem 1rem 0.75rem 3rem; border: 1px solid var(--border-color);
+            border-radius: var(--radius-md); background: var(--card-bg); outline: none;
+        }
+        .search-box .ri-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #9CA3AF; font-size: 1.3rem;}
+        .filters { display: flex; gap: 0.5rem; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-md); border: 1px solid transparent; cursor: pointer;
+            font-weight: 600; font-size: 0.9375rem; transition: all 0.3s;
+        }
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-secondary { background: #E5E7EB; color: #4B5563; box-shadow: none; }
+        .btn-filter { background: var(--card-bg); color: var(--text-light); border: 1px solid var(--border-color); }
+        .btn-filter.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        .icon-btn { border: none; background: transparent; cursor: pointer; padding: 0.5rem; border-radius: var(--radius-md); transition: 0.3s; }
+        .icon-btn .ri-icon { font-size: 1.2rem; color: #6B7280; }
+        .icon-btn:hover { background: #F3F4F6; transform: translateY(-1px); }
+
+        table {
+            width: 100%; min-width: 900px; border-collapse: separate; border-spacing: 0;
+            background: var(--card-bg); border-radius: var(--radius-lg); overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        th, td { padding: 1rem 1.25rem; text-align: left; font-size: 0.9rem; border-bottom: 1px solid var(--border-color); }
+        th { background: #F9FAFB; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; }
+        .status-chip { padding: 0.4rem 0.8rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
+        .status-active { background: #D1FAE5; color: var(--success); }
+        .status-inactive { background: #FFEDD5; color: var(--warning); }
+
+        .modal {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none;
+            align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.5);
+            z-index: 100; backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: var(--card-bg); padding: 2rem; border-radius: 1.25rem;
+            width: 90%; max-width: 48rem; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.4s;
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
+        .close-btn { cursor: pointer; font-size: 2rem; color: #9CA3AF; transition: 0.2s; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+        .form-group { display: flex; flex-direction: column; position: relative; }
+        .form-group label { margin-bottom: 0.3rem; font-size: 0.875rem; font-weight: 600; color: var(--text-light); }
+        .form-group input, .form-group select {
+            width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border-color);
+            border-radius: var(--radius-md); outline: none; font-size: 1rem; background: #F9FAFB;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); background: var(--card-bg); box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2); }
+        .form-group input.is-invalid { border-color: var(--danger); }
+        .form-actions { margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem; }
+        
+        .id-input-group input { border-right: none !important; }
+        .id-input-group button { 
+            height: 48px; width: 48px; border: 1px solid var(--border-color); border-left: none;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0; background-color: #F9FAFB;
+        }
+        
+        @media (max-width: 900px) {
+            .navbar { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+            .container { padding: 1.5rem; }
+            .top-actions { flex-direction: column; align-items: stretch; }
+            .search-box { max-width: 100%; }
+        }
+    </style>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+        import { firebaseConfig } from '../Database/Database.js'; 
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let schoolData = [];
+        let editUserId = null;
+        let currentFilter = "ALL";
+        const byId = id => document.getElementById(id);
+        const saveButton = byId("saveButton");
+        const mainLoader = byId("mainLoader");
+        const userIdInput = byId("userid");
+        const lockIcon = byId("lockIcon");
+
+        if (userIdInput) {
+            userIdInput.maxLength = 7;
+            userIdInput.addEventListener('input', () => {
+                userIdInput.value = userIdInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 7);
+            });
+        }
+
+        const validatePhone = (phone) => /^\d{10}$/.test(phone.trim());
+        const generatePassword = () => Math.random().toString(36).substring(2, 10).toUpperCase();
+        async function generateUniqueFourDigitId() {
+            let newUserId;
+            let isDuplicate = true;
+            let attempts = 0;
+
+            while (isDuplicate && attempts < 1000) {
+                const digits = String(Math.floor(Math.random() * 9000) + 1000).padStart(4, '0');
+                newUserId = `ENR${digits}`;
+
+                isDuplicate = schoolData.some(r => r.userid === newUserId);
+                attempts++;
+
+                if (!isDuplicate) return newUserId;
+            }
+            openMessageModal("System Error", "❌ Failed to generate a unique School ID after many attempts.");
+            return null;
+        }
+
+        window.toggleUserIdEdit = function(event) {
+            event.preventDefault();
+            
+            if (userIdInput.readOnly) {
+                userIdInput.readOnly = false;
+                userIdInput.style.backgroundColor = "var(--card-bg)";
+                userIdInput.classList.remove('is-invalid');
+                lockIcon.className = "ri-unlock-line ri-icon";
+                lockIcon.style.color = "var(--success)";
+                byId("lockBtn").title = "ID is unlocked. Click to lock.";
+                userIdInput.maxLength = 7;
+            } else {
+                userIdInput.readOnly = true;
+                userIdInput.style.backgroundColor = "#F9FAFB";
+                lockIcon.className = "ri-lock-line ri-icon";
+                lockIcon.style.color = "var(--text-light)";
+                byId("lockBtn").title = "ID is locked. Click to edit.";
+            }
+        }
+
+        function toggleLoader(show) {
+            mainLoader.style.display = show ? 'flex' : 'none';
+            document.body.style.overflow = show ? "hidden" : "auto";
+        }
+
+        function openMessageModal(title, message, isConfirm = false, onConfirm = null) {
+            const modal = byId("messageModal");
+            const buttonsEl = byId("messageButtons");
+            byId("messageTitle").textContent = title;
+            byId("messageText").textContent = message;
+            buttonsEl.innerHTML = '';
+
+            const closeBtn = document.createElement('button');
+            closeBtn.className = "btn btn-secondary";
+            closeBtn.textContent = isConfirm ? 'Cancel' : 'Close';
+            closeBtn.onclick = closeMessageModal;
+            buttonsEl.appendChild(closeBtn);
+
+            if (isConfirm) {
+                const confirmBtn = document.createElement('button');
+                confirmBtn.className = "btn btn-danger";
+                confirmBtn.textContent = 'Confirm Delete';
+                confirmBtn.onclick = () => { closeMessageModal(); if (onConfirm) onConfirm(); };
+                buttonsEl.appendChild(confirmBtn);
+            }
+            modal.style.display = "flex";
+            document.body.style.overflow = "hidden";
+        }
+
+        window.closeMessageModal = function() {
+            byId("messageModal").style.display = "none";
+            if(byId("userModal").style.display !== "flex") {
+                document.body.style.overflow = "auto";
+            }
+        }
+
+        window.openModal = async function() {
+            byId("userModal").style.display = "flex";
+            document.body.style.overflow = "hidden";
+            byId("modalTitle").textContent = editUserId ? "Edit School Details" : "Add New School";
+            
+            if (!editUserId) {
+                saveButton.innerHTML = `<span class="loader" style="margin-right: 0.5rem; display: inline-block;"></span> Generating ID...`;
+                saveButton.disabled = true;
+
+                const generatedId = await generateUniqueFourDigitId();
+                userIdInput.value = generatedId || "ERROR";
+                
+                saveButton.disabled = false;
+                saveButton.innerHTML = 'Save Details';
+            }
+            userIdInput.readOnly = true;
+            userIdInput.style.backgroundColor = "#F9FAFB";
+            lockIcon.className = "ri-lock-line ri-icon";
+            lockIcon.style.color = "var(--text-light)";
+            byId("lockBtn").title = "ID is locked. Click to edit.";
+        }
+
+        window.closeModal = function() {
+            byId("userModal").style.display = "none";
+            if(byId("messageModal").style.display !== "flex") {
+                document.body.style.overflow = "auto";
+            }
+            clearForm();
+        }
+
+        function clearForm() {
+            byId("name").value = "";
+            byId("address").value = "";
+            byId("phone").value = "";
+            userIdInput.value = "";
+            byId("password").value = "";
+            byId("status").value = "ACTIVE";
+            byId("showPasswordIcon").className = "ri-eye-line ri-icon"; 
+            byId("password").type = "password"; 
+            editUserId = null;
+            document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            saveButton.textContent = 'Save Details';
+            saveButton.disabled = false;
+            byId("nameSuggestion").innerHTML = "";
+            byId("nameSuggestion").style.display = "none";
+        }
+        
+        window.togglePasswordVisibility = function() {
+            const passwordInput = byId("password");
+            const icon = byId("showPasswordIcon");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.className = "ri-eye-off-line ri-icon";
+            } else {
+                passwordInput.type = "password";
+                icon.className = "ri-eye-line ri-icon";
+            }
+        }
+
+        function fetchData() {
+            toggleLoader(true); 
+            const schoolsRef = ref(db, "schools");
+            onValue(schoolsRef, (snapshot) => {
+                const data = snapshot.exists() ? snapshot.val() : {};
+                schoolData = Object.keys(data).map(key => data[key]);
+                updateCounts();
+                renderTable(schoolData);
+                toggleLoader(false); 
+            }, (error) => {
+                toggleLoader(false); 
+                openMessageModal("Error", "❌ Data fetching error: Check network or Firebase rules.");
+            });
+        }
+
+        function updateCounts() {
+            const total = schoolData.length;
+            const active = schoolData.filter(r => r.status === "ACTIVE").length;
+            const inactive = total - active;
+            byId("userCount").innerText = total;
+            byId("activeCount").innerText = active;
+            byId("inactiveCount").innerText = inactive;
+        }
+
+        function renderTable(data) {
+            const tbody = byId("tableBody");
+            tbody.innerHTML = "";
+            const filteredData = data.filter(row => currentFilter === "ALL" || row.status === currentFilter);
+
+            if (filteredData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color: var(--text-light);">No records found matching the criteria.</td></tr>`;
+                return;
+            }
+
+            filteredData.forEach(row => {
+                const statusClass = row.status === "ACTIVE" ? "status-active" : "status-inactive";
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${row.name}</td>
+                    <td>${row.address}</td>
+                    <td>${row.phone}</td>
+                    <td>${row.userid}</td>
+                    <td>${row.password}</td>
+                    <td><span class="status-chip ${statusClass}">${row.status}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="icon-btn" onclick='window.editRow("${row.userid}")' title="Edit"><i class="ri-edit-line ri-icon"></i></button>
+                            <button class="icon-btn" onclick='window.deleteRow("${row.userid}")' title="Delete"><i class="ri-delete-bin-line ri-icon"></i></button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        window.searchTable = function () {
+            const term = byId("searchBox").value.toLowerCase().trim();
+            const filtered = schoolData.filter(r =>
+                r.name.toLowerCase().includes(term) ||
+                r.address.toLowerCase().includes(term) ||
+                r.phone.includes(term) ||
+                r.userid.toLowerCase().includes(term)
+            );
+            renderTable(filtered);
+        }
+
+        window.filterTable = function (filter) {
+            currentFilter = filter;
+            document.querySelectorAll(".btn-filter").forEach(btn => btn.classList.remove("active"));
+            byId("btn-" + filter).classList.add("active");
+            renderTable(schoolData);
+        }
+
+        window.saveUser = async function() {
+            saveButton.disabled = true;
+            saveButton.innerHTML = `<span class="loader" style="margin-right: 0.5rem; display: inline-block;"></span> Saving...`; 
+
+            try {
+                const name = byId("name").value.trim().toUpperCase();
+                const address = byId("address").value.trim().toUpperCase();
+                const phone = byId("phone").value.trim();
+                const status = byId("status").value;
+                let userid = userIdInput.value.trim();
+                let password = byId("password").value.trim();
+                const isEditing = !!editUserId;
+
+                document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+
+                let isValid = true;
+                if (!name) { byId("name").classList.add('is-invalid'); isValid = false; }
+                if (!address) { byId("address").classList.add('is-invalid'); isValid = false; }
+                if (!phone || !validatePhone(phone)) { byId("phone").classList.add('is-invalid'); isValid = false; }
+                
+                const idRegex = /^ENR\d{4}$/;
+                if (!userid || !idRegex.test(userid)) { 
+                     userIdInput.classList.add('is-invalid'); 
+                     openMessageModal("Validation Error", "❌ User ID must be in 'ENRXXXX' (4-digit) format.");
+                     return;
+                }
+
+                if (!isValid) {
+                    openMessageModal("Missing/Invalid Fields", `⚠️ Please ensure all required fields are filled correctly.`);
+                    return;
+                }
+
+                const duplicate = schoolData.find(r =>
+                    (r.name === name || r.phone === phone) && r.userid !== editUserId
+                );
+                if (duplicate) {
+                    openMessageModal("Duplicate Error", "❌ Duplicate entry! Same School Name or Phone already exists.");
+                    return;
+                }
+
+                if (userid !== editUserId || !isEditing) {
+                    const idDuplicate = schoolData.find(r => r.userid === userid);
+                    if (idDuplicate) {
+                         userIdInput.classList.add('is-invalid'); 
+                         openMessageModal("ID Error", `❌ The ID ${userid} is already taken. Please enter a unique 4-digit ID or lock the field to auto-generate.`);
+                         return;
+                    }
+                }
+                
+                const oldSchoolData = isEditing ? schoolData.find(r => r.userid === editUserId) : null;
+                let updates = {};
+                let successMessage;
+
+
+                if (!isEditing) {
+
+                    if (!password) password = generatePassword();
+                    successMessage = 'added';
+                } else {
+
+                    if (!password) password = oldSchoolData.password;
+                    successMessage = 'updated';
+
+                    if (userid !== editUserId && oldSchoolData) {
+                         updates[`/schools/${editUserId}`] = null; 
+                    }
+                }
+                
+                const finalData = { name, address, phone, userid, password, status };
+                updates[`/schools/${userid}`] = finalData;
+                await update(ref(db, '/'), updates);
+
+                openMessageModal("Success", `✅ School ${successMessage} successfully!`);
+                closeModal();
+                
+            } catch (err) {
+                console.error("Save Error:", err);
+                openMessageModal("Error", "❌ Error saving data. Details: " + err.message);
+            } finally {
+                 saveButton.disabled = false;
+                 saveButton.innerHTML = 'Save Details';
+            }
+        }
+
+        window.editRow = function (userid) {
+            const row = schoolData.find(r => r.userid === userid);
+            if (!row) { openMessageModal("Error", "❌ School record not found."); return; }
+            
+            byId("name").value = row.name;
+            byId("address").value = row.address;
+            byId("phone").value = row.phone;
+            userIdInput.value = row.userid;
+            byId("password").value = row.password;
+            byId("status").value = row.status;
+            editUserId = row.userid;
+            openModal();
+        }
+
+        window.deleteRow = function (userid) {
+            const row = schoolData.find(r => r.userid === userid);
+            if (!row) { openMessageModal("Error", "❌ School record not found."); return; }
+
+            const confirmAction = async () => {
+                toggleLoader(true);
+                try {
+                    await remove(ref(db, "schools/" + userid));
+                    openMessageModal("Success", "✅ School deleted successfully.");
+                } catch (err) {
+                    openMessageModal("Error", "❌ Error deleting data.");
+                } finally {
+                    toggleLoader(false);
+                }
+            };
+            openMessageModal(
+                "Confirm Deletion",
+                `Are you sure you want to delete school: ${row.name} (ID: ${userid})?`,
+                true,
+                confirmAction
+            );
+        }
+        window.onload = () => { 
+            window.openModal = openModal;
+            window.closeModal = closeModal;
+            window.saveUser = saveUser;
+            window.closeMessageModal = closeMessageModal;
+            window.togglePasswordVisibility = togglePasswordVisibility;
+            window.searchTable = searchTable; 
+            window.filterTable = filterTable; 
+            window.editRow = editRow;
+            window.deleteRow = deleteRow;
+
+            fetchData(); 
+            filterTable("ALL"); 
+        };
+    </script>
+</head>
+
+<body>
+    <div class="loading-overlay" id="mainLoader">
+        <div class="loader" style="width: 40px; height: 40px;"></div>
+    </div>
+    
+    <div class="navbar">
+        <h1>School Manager</h1>
+        <div class="badges">
+            <div class="badge info"><i class="ri-group-line ri-icon"></i><span id="userCount">0</span> Total</div>
+            <div class="badge success"><i class="ri-checkbox-circle-line ri-icon"></i><span id="activeCount">0</span> Active</div>
+            <div class="badge warning"><i class="ri-pause-circle-line ri-icon"></i><span id="inactiveCount">0</span> Inactive</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="top-actions">
+            <div class="search-box">
+                <i class="ri-search-line ri-icon"></i>
+                <input id="searchBox" placeholder="Search by name, phone or ID..." oninput="searchTable()" />
+            </div>
+            <div class="filters">
+                <button id="btn-ALL" class="btn btn-filter active" onclick="filterTable('ALL')">All</button>
+                <button id="btn-ACTIVE" class="btn btn-filter" onclick="filterTable('ACTIVE')">Active</button>
+                <button id="btn-INACTIVE" class="btn btn-filter" onclick="filterTable('INACTIVE')">Inactive</button>
+            </div>
+            <button class="btn btn-primary" onclick="window.openModal()">
+                <i class="ri-add-line ri-icon"></i> Add New School
+            </button>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>School Name</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>User ID</th>
+                        <th>Password</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding:30px;">Loading data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal" id="userModal" onclick="if(event.target.id === 'userModal') closeModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">School Details Form</h2>
+                <span class="close-btn" onclick="window.closeModal()">&times;</span>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="name">School Name *</label>
+                    <input id="name" placeholder="Enter school name" required />
+                    <div id="nameSuggestion"></div> 
+                </div>
+                <div class="form-group">
+                    <label for="address">Address *</label>
+                    <input id="address" placeholder="Enter address" required />
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone * (10 Digits)</label>
+                    <input id="phone" type="text" placeholder="Enter 10-digit phone number" required maxlength="10" />
+                </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status">
+                        <option value="ACTIVE">ACTIVE</option>
+                        <option value="INACTIVE">INACTIVE</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userid">User ID (ENRXXXX)</label>
+                    <div class="id-input-group" style="display: flex; align-items: center;">
+                        <input id="userid" placeholder="Auto-generated" readonly maxlength="7" pattern="^ENR\d{4}$" title="Must follow ENR1234 format" 
+                               style="flex-grow: 1; border-top-right-radius: 0; border-bottom-right-radius: 0; text-transform: uppercase;" />
+                        
+                        <button id="lockBtn" class="icon-btn" onclick="toggleUserIdEdit(event)" title="ID is locked. Click to edit.">
+                            <i id="lockIcon" class="ri-lock-line ri-icon"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="position: relative;">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" placeholder="Auto-generated if empty" style="padding-right: 3rem;" />
+                    <i id="showPasswordIcon" class="ri-eye-line ri-icon" 
+                       onclick="togglePasswordVisibility()" 
+                       style="position: absolute; right: 1rem; bottom: 0.8rem; cursor: pointer; color: var(--text-light); font-size: 1.3rem;">
+                    </i>
+                </div>
+                
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="window.closeModal()">Cancel</button>
+                <button class="btn btn-primary" id="saveButton" onclick="window.saveUser()">
+                    Save Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="messageModal" onclick="if(event.target.id === 'messageModal') closeMessageModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="messageTitle">Message</h3>
+                <span class="close-btn" onclick="window.closeMessageModal()">&times;</span>
+            </div>
+            <p id="messageText"></p>
+            <div class="flex justify-end gap-3 form-actions" id="messageButtons">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
